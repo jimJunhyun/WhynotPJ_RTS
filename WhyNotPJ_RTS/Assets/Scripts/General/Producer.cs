@@ -31,6 +31,7 @@ public class Producer : MonoBehaviour
 		yield return new WaitForSeconds(product.produceTime);
 		product.onCompleted.Invoke();
 		producing = null;
+		
 		isProducing = false;
 	}
 }

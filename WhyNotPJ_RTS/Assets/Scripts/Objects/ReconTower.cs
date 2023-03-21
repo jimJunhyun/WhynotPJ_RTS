@@ -9,7 +9,7 @@ public class ReconTower : IBuilding
 
 	public float produceTime => 3f;
 
-	public Element element => new Element(0,1, 3, 6);
+	public Element element => new Element(0,1, 4, 6);
 
 	public Action onCompleted => ()=>{ Debug.Log("정찰타워 건설 완료"); };
 }

@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   set: {fileID: 11400000, guid: fd22fd69c2ca9be4da9bce9dfccfd199, type: 2}
+  dynamicity: 2
 --- !u!114 &776838860
 MonoBehaviour:
   m_ObjectHideFlags: 0
