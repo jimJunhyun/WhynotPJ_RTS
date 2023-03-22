@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ReconTower : IBuilding
 {
-	public string name => "Б¤Вы Еёїц";
+	public string myName => "Б¤Вы Еёїц";
 
 	public float produceTime => 3f;
 

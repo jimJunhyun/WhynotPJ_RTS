@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Barricade : IBuilding
 {
-	public string name => "바리케이드";
+	public string myName => "바리케이드";
 
 	public float produceTime => 1.5f;
 

@@ -64,7 +64,7 @@ public struct Element
 
 public interface IProducable
 {
-	public string name { get;}
+	public string myName { get;}
 	public float produceTime{ get; }
 	public Element element{ get;}
 

@@ -15,6 +15,7 @@ public class EnemyBrain : MonoBehaviour
 	IProducable product = null;
 	List<Producer> produceActs = new List<Producer>(); //새로운 생산 시설이 생기면 해당 시설 생산 완료 부분에서 더해줌.
 	List<int> myPriority = new List<int>();
+	Transform playerBase;
 
 	void Examine() //할 행동 목록 결정
 	{
@@ -55,19 +56,29 @@ public class EnemyBrain : MonoBehaviour
 			}
 			if (product.element.rec > 2)
 			{
-				set.reconBias -= (product.element.rec +1) / set.recIncreaseBias / dynamicity;
+				if(playerBase == null)
+				{
+					set.reconBias -= (product.element.rec + 1) / set.initReconIncreaseBias / dynamicity;
+				}
+				else
+				{
+					set.reconBias -= (product.element.rec + 1) / set.recIncreaseBias / dynamicity;
+				}
+				
 			}
 			else
 			{
-				set.reconBias += set.recIncreaseBias * (product.element.rec + 1) * dynamicity;
+				if (playerBase == null)
+				{
+					set.reconBias += set.initReconIncreaseBias * (product.element.rec + 1) * dynamicity;
+				}
+				else
+				{
+					set.reconBias += set.recIncreaseBias * (product.element.rec + 1) * dynamicity;
+				}
 			}
 			p.SetProduct(product);
 		}
-	}
-
-	void Perceive()
-	{
-
 	}
 
 	private void Awake()
@@ -77,10 +88,10 @@ public class EnemyBrain : MonoBehaviour
 		set.defendBias = set.initDefBias;
 		set.constructBias = set.initConBias;
 		set.reconBias = set.initRecBias;
-		producable.Add(new Warrior());
+		producable.Add(new Warrior()); 
 		producable.Add(new ReconTower());
 		producable.Add(new Barricade());
-		producable.Add(new Scout());
+		producable.Add(new Scout()); 
 		produceActs = FindObjectsOfType<Producer>().OfType<Producer>().ToList().FindAll(x => !x.pSide);
 	}
 

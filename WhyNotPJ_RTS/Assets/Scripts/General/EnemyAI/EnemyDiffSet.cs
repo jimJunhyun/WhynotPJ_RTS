@@ -39,6 +39,7 @@ public class EnemyDiffSet : MonoBehaviour
 		{
 			yield return new WaitForSeconds(delSec);
 			EnemyBrain.instance.Decide();
+			EnemyPosGen.instance.FindPlaying();
 		}
 	}
 }
