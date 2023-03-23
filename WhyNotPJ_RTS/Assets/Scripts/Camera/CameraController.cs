@@ -72,7 +72,10 @@ public class CameraController : MonoBehaviour
 		{
 			delta1 = PlanePositionDelta(Input.GetTouch(0));
 			if (Input.GetTouch(0).phase == TouchPhase.Moved)
+			{
 				targetPosition += delta1 * movementMultiply;
+				camState = CameraState.MOVING;
+			}
 		}
 
 		//목표값 설정

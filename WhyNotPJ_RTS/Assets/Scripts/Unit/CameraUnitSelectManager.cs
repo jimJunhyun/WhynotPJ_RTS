@@ -35,6 +35,12 @@ public class CameraUnitSelectManager : MonoBehaviour
 			// 손가락을 뗐을 때
 			if (touch.phase == TouchPhase.Ended)
 			{
+				if (CameraController.camState == CameraState.MOVING)
+				{
+					CameraController.camState = CameraState.NONE;
+					return;
+				}
+
 				RaycastHit hit;
 				Ray ray = mainCam.ScreenPointToRay(Input.GetTouch(0).position);
 
