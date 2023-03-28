@@ -36,39 +36,35 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if(set.warBias >= selected)
 		{
-			if(EnemyBrain.instance.playerBase != null)
+			if(EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
 			{
-				con.Move(EnemyBrain.instance.playerBase);
-				Debug.Log(con.myName+"에게 공격적인 조작");
+				WholeAttack();
 			}
 			else
 			{
-				con.state = UnitState.Wait;
+				con.state = UnitState.Alert;
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
 				Debug.Log("유닛 하나 더함.");
 			}
 			Debug.Log(con.myName + " 에게 공격적인 명령.");
-			//발견한 적 본진이 있다면 그 근처로 이동
-			//발견한 적 본진이 없다면 대기 또는 경계
+			//발견한 적 본진이 있으면서, 충분한 양의 유닛을 축적하였다면 축적된 유닛 전부에게 공격 명령
+			//발견한 적 본진이 없다면 경계 상태로 축적함.
+			//모았다가 러쉬!
 		}
 		else
 		{
-			IBuilding vulBuilding = buildings.Find(x=>x.nearUnit.Count == 0);
-			if(vulBuilding == null)
-			{
-				vulBuilding = EnemyBrain.instance.GetComponent<Base>();
-			}
-			vulBuilding.nearUnit.Add(con); 
-			Vector3 rand = randomAmount * Random.insideUnitSphere;
-			rand.y = 0;
-			con.objPos = vulBuilding.pos + rand;
-			con.state = UnitState.Alert;
-			//사람이 아무도 없는 아군 건물이 있다면 그 근처로 이동
-			//사람이 아무도 없는 아군 건물이 근처에 있다면 경계 태세
-			//사람이 아무도 없는 아군 건물이 없다면 본진 주위에서 경계 태세
-			Debug.Log(con.myName + " 에게 방어적인 명령.");
+			//적이 쳐들어올만한 곳으로 방어에 유리한 유닛을 배치하려 할 것이다.
+			//그걸 이제 AI가 하도록 해보자
+
+			//자
+			//일단 쳐들어올만한 곳을 물색하는거다
+			//쳐들어오는 곳은 약한 곳이지
+			//그럼 약한 곳을 보강하는 것이 곧 방어이다.
+			//약한 곳은 그럼 어디냐
+			//어디지?
+			//...
 		}
 	}
 
@@ -76,7 +72,7 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		for (int i = 0; i < accumulations.Count; i++)
 		{
-			SamplePos(accumulations[i]);
+			accumulations[i].Move(EnemyBrain.instance.playerBase);
 		}
 		Debug.Log("총공격");
 	}
