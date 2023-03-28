@@ -12,10 +12,10 @@ public class EnemySettings : ScriptableObject
     public float initVioBias;
     public float violenceBias;
     public float vioIncreaseBias;
-    [Header("건설적")]
-    public float initConBias;
-    public float constructBias;
-    public float conIncreaseBias;
+    //[Header("건설적")]
+    //public float initConBias;
+    //public float constructBias;
+    //public float conIncreaseBias;
     [Header("방어적")]
     public float initDefBias;
     public float defendBias;
@@ -26,9 +26,47 @@ public class EnemySettings : ScriptableObject
     public float recIncreaseBias;
     public float initReconIncreaseBias;
 
-    [Header("병사를 지휘하는 속성.")]
+	public float this[int idx] 
+    {
+        get {
+            float ret = 0;
+            if(idx == 0)
+			{
+                ret = violenceBias;
+			}
+            else if(idx == 1)
+			{
+                ret = defendBias;
+			}
+            else if (idx == 2)
+            {
+                ret = reconBias;
+            }
+            return ret;
+		}
+		set
+		{
+            if (idx == 0)
+            {
+                violenceBias = value;
+            }
+            else if (idx == 1)
+            {
+                defendBias = value;
+            }
+            else if (idx == 2)
+            {
+                reconBias = value;
+            }
+        }
+    }
+
+
+	[Header("병사를 지휘하는 속성.")]
     [Header("공격적인 지휘")]
     public float warBias;
     [Header("수비적인 지휘")]
     public float passiveBias;
+    [Header("충분한 물량 판단 기준")]
+    public int adequateSoldier;
 }

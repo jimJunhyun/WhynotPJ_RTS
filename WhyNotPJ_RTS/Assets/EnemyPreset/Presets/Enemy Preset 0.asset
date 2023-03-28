@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a11268b365a5b469a9305438705f5d, type: 3}
   m_Name: Enemy Preset 0
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
-  initVioBias: 14
-  violenceBias: 14.666668
-  vioIncreaseBias: 1.8
-  initConBias: 5
-  constructBias: 25.7
+  initVioBias: 7
+  violenceBias: 36.499996
+  vioIncreaseBias: 1.5
+  initConBias: 7
+  constructBias: 35.377777
   conIncreaseBias: 0.9
-  initDefBias: 5
-  defendBias: -28.500002
+  initDefBias: 7
+  defendBias: 7
   defIncreaseBias: 1
   initRecBias: 7
-  reconBias: -25
+  reconBias: 17.399998
   recIncreaseBias: 0.5
-  warBias: 75
-  passiveBias: 15
+  initReconIncreaseBias: 1.2
+  warBias: 50
+  passiveBias: 50
+  adequateSoldier: 10

@@ -7,7 +7,6 @@ public struct Element
 {
 	public int vio;
 	public int def;
-	public int con;
 	public int rec;
 
 	public int this[int i]
@@ -21,10 +20,6 @@ public struct Element
 			if (i == 1)
 			{
 				return def;
-			}
-			if (i == 2)
-			{
-				return con;
 			}
 			else
 			{
@@ -42,10 +37,6 @@ public struct Element
 			{
 				def = value;
 			}
-			if (i == 2)
-			{
-				con = value;
-			}
 			else
 			{
 				rec = value;
@@ -53,11 +44,10 @@ public struct Element
 		}
 	}
 
-	public Element(int v, int d, int c, int r)
+	public Element(int v, int d, int r)
 	{
 		vio = v;
 		def = d;
-		con = c;
 		rec = r;
 	}
 }
@@ -69,45 +59,45 @@ public interface IProducable
 	public Element element{ get;}
 
 	public Action onCompleted{get; }
+
+	public float this[int idx]
+	{
+		get
+		{
+			float ret = 0;
+			if(idx == 0)
+				ret = element.vio;
+			if (idx == 1)
+				ret = element.def;
+			if (idx == 2)
+				ret = element.rec;
+
+			return ret;
+		}
+	}
 }
 
 public class ProdList<T> : List<T>
 	where T : IProducable
 {
 	/// <summary>
-	/// IProducable 내의 요소를 지정한 속성 순서에 따라 내림차순 정렬한다.
+	/// IProducable 내의 요소를 성향을 곱하여 내림차순 정렬한다.
 	/// </summary>
-	/// <param name="sortPrior">0 : 공격성 1 : 수비성 2 : 건설성 3 : 정찰성, 0000 = 0 = 우선도 X, 1111 = 15 = 전체 성향</param>
-	public void Sort(List<int> sortPrior)
+	public void Sort(EnemySettings set)
 	{
 		for (int i = 0; i < Count; i++)
 		{
 			for (int j = i; j < Count; j++)
 			{
 				float iComp = 0, jComp = 0;
-				for (int k = 0; k < sortPrior.Count; k++)
-				{
-					if(sortPrior[k] == 1)
-					{
-						iComp += this[i].element[k] * 2;
-						jComp += this[j].element[k] * 2;
-					}
-					if (sortPrior[k] == 2)
-					{
-						iComp += this[i].element[k] * 1.5f;
-						jComp += this[j].element[k] * 1.5f;
-					}
-					if (sortPrior[k] == 3)
-					{
-						iComp += this[i].element[k] * 1;
-						jComp += this[j].element[k] * 1;
-					}
-					if (sortPrior[k] == 4)
-					{
-						iComp += this[i].element[k] * 0;
-						jComp += this[j].element[k] * 0;
-					}
-				}
+				iComp += this[i][0] * set[0];
+				iComp += this[i][1] * set[1];
+				iComp += this[i][2] * set[2];
+
+
+				jComp += this[j][0] * set[0];
+				jComp += this[j][1] * set[1];
+				jComp += this[j][2] * set[2];
 				if (iComp < jComp)
 				{
 					T temp = this[i];

@@ -9,25 +9,32 @@ public class Scout : IUnit
 
 	public float produceTime => 0.5f;
 
-	public Element element => new Element(5, 0, 0, 5);
+	public Element element => new Element(2, 0, 0);
 
-	public Action onCompleted => () => { EnemyPosGen.instance.myControls.Add(this); Debug.Log("정찰병 생산 완료"); };
+	public Action onCompleted => () => { EnemyPosGen.instance.myControls.Add(new Scout()); Debug.Log("정찰병 생산 완료"); };
 
-	public bool underControl { get; set; }
 
-	public Vector3 pos {get; set;}
+	public Vector3 objPos {get; set;}
+	public UnitState state {get;set;} = UnitState.Wait;
+
+	public Transform target{ get;  set;}
 
 	public void Move(Vector3 to)
 	{
-		pos = to;
+		objPos = to;
 		Debug.Log(myName + "가 " + to + "로 움직였다.");
 		EnemyBrain.instance.StartCoroutine(Tester(4f));
 	}
 
+	public void Move(Transform target)
+	{
+		this.target = target;
+	}
+
 	IEnumerator Tester(float sec)
 	{
-		underControl = true;
+		state = UnitState.Moving;
 		yield return new WaitForSeconds(sec);
-		underControl = false;
+		state = UnitState.Wait;
 	}
 }
