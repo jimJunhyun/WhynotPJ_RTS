@@ -24,6 +24,26 @@ public interface IControlable
 		this.target = target;
 	}
 	public UnitState state{ get; set; }
-	public Vector3 objPos{get; set;}
+	public Vector3 objPos{
+		get
+		{ 
+			if(target == null)
+			{
+				return objPos;
+			}
+			else
+			{
+				return target.position;
+			}
+		}
+		set
+		{
+			if (target != null)
+			{
+				target = null;	
+			}
+			objPos = value;
+		}
+	}
 	public Transform target { get; set;}
 }
