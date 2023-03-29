@@ -35,8 +35,9 @@ public class FogOfWar : MonoBehaviour
 		tex = new Texture2D(mapX, mapY);
 		
 		InitMap(map);
-		UpdateMapTemp(100, 100, 5);
 		UpdateTexture(map);
+		UpdateMapTemp(100, 100, 5);
+		
 	}
 
 	public void UpdateTexture(MapData[,] map)
@@ -45,17 +46,21 @@ public class FogOfWar : MonoBehaviour
 		{
 			for (int x = 0; x < mapX; ++x)
 			{
-				Color c = Color.black;
+				Color c;
 				if (map[y, x].visiblity)
 				{
 					c = Color.clear;
-					Debug.Log("Åõ¸í»ö");
+				}
+				else
+				{
+					c = Color.black;
 				}
 				
-				tex.SetPixel(y, x, c);
+				tex.SetPixel(x, y, c);
 			}
 		}
 		mat.SetTexture("_Masker", tex);
+		//mat.
 	}
 
 	public void UpdateMapTemp(int startX, int startY, int rad)
@@ -64,9 +69,20 @@ public class FogOfWar : MonoBehaviour
 		{
 			for (int j = -rad; j <= rad; j++)
 			{
-				map[startX + i, startY + j].visiblity= true;
+				if(((i+ 0.5) * (i + 0.5) + (j + 0.5) * (j + 0.5)) - (rad * rad) <= 1)
+				{
+					map[startX + i, startY + j].visiblity = true;
+					Color c = Color.black;
+					if (map[startX + i, startY + j].visiblity)
+					{
+						c = Color.clear;
+					}
+
+					tex.SetPixel(startX + i, startY + j, c);
+				}
 			}
 		}
+		mat.SetTexture("_Masker", tex);
 	}
 
 	public void InitMap(MapData[,] map)
@@ -78,7 +94,7 @@ public class FogOfWar : MonoBehaviour
 				map[y, x].x = x;
 				map[y, x].y = y;
 				map[y, x].height = 0; //ray ½÷
-				map[y, x].visiblity = true;
+				map[y, x].visiblity = false;
 			}
 		}
 	}

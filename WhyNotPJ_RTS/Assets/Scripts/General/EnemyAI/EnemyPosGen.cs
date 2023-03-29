@@ -36,18 +36,12 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if(set.warBias >= selected)
 		{
-			if(EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
-			{
-				WholeAttack();
-			}
-			else
-			{
 				con.state = UnitState.Alert;
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
 				Debug.Log("유닛 하나 더함.");
-			}
+			
 			Debug.Log(con.myName + " 에게 공격적인 명령.");
 			//발견한 적 본진이 있으면서, 충분한 양의 유닛을 축적하였다면 축적된 유닛 전부에게 공격 명령
 			//발견한 적 본진이 없다면 경계 상태로 축적함.
@@ -76,7 +70,7 @@ public class EnemyPosGen : MonoBehaviour
 
 	public void FindPlaying()
 	{
-		if (curAccumulated >= set.adequateSoldier)
+		if (EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
 		{
 			WholeAttack();
 		}

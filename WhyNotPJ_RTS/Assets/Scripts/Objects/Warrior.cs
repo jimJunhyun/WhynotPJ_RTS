@@ -28,7 +28,7 @@ public class Warrior : IUnit
 
 	public void Move(Transform target)
 	{
-		throw new NotImplementedException();
+		Debug.Log(myName + "가 " + target.position + "로 움직였다.");
 	}
 
 	IEnumerator Tester(float sec)
