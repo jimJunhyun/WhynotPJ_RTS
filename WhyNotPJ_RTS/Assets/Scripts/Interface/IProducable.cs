@@ -54,11 +54,11 @@ public struct Element
 
 public interface IProducable
 {
-	public string myName { get;}
-	public float produceTime{ get; }
-	public Element element{ get;}
+	public string _myName { get; }
+	public float _produceTime{ get; }
+	public Element _element { get; }
 
-	public Action onCompleted{get; }
+	public Action _onCompleted { get; }
 
 	public float this[int idx]
 	{
@@ -66,11 +66,11 @@ public interface IProducable
 		{
 			float ret = 0;
 			if(idx == 0)
-				ret = element.vio;
+				ret = _element.vio;
 			if (idx == 1)
-				ret = element.def;
+				ret = _element.def;
 			if (idx == 2)
-				ret = element.rec;
+				ret = _element.rec;
 
 			return ret;
 		}
