@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ReconTower : IBuilding, IProducable
 {
+	public GameObject prefab => null;
 	public string myName => "Б¤Вы Еёїц";
 
 	public float produceTime => 3f;

@@ -71,7 +71,7 @@ public class EnemyBrain : MonoBehaviour
 					set.reconBias += set.recIncreaseBias * (biasMiddle - product.element.rec) * dynamicity;
 				}
 			}
-			p.SetProduct(product);
+			p.AddProduct(product);
 		}
 	}
 

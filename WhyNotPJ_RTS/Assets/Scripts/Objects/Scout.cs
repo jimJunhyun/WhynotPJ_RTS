@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Scout : IUnit
 {
+	public GameObject prefab => null;
 	public string myName => "Á¤Âûº´";
 
 	public float produceTime => 0.5f;

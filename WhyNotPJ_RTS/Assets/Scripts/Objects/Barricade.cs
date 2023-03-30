@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Barricade : IBuilding, IProducable
 {
+	public GameObject prefab => null;
 	public string myName => "바리케이드";
 
 	public float produceTime => 1.5f;

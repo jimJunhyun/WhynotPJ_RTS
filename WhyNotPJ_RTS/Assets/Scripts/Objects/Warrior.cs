@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Warrior : IUnit
 {
+	public GameObject prefab => null;
 	public string myName => "ภüป็";
 	public float produceTime => 1f;
 

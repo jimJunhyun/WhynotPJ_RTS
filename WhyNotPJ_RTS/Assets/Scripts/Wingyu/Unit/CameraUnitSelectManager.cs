@@ -10,20 +10,18 @@ public class CameraUnitSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitController unitController;
+    private UnitSelector unitController;
 
 	private void Awake()
 	{
 		mainCam = Camera.main;
-		unitController = GetComponent<UnitController>();
+		unitController = GetComponent<UnitSelector>();
 
 		DrawDragRectangle();
 	}
 
 	private void Update()
 	{
-		print(CameraController.camState.ToString());
-
 		// 클릭 이벤트
 		if (Input.touchCount == 1)
 		{

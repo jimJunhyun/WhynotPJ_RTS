@@ -56,6 +56,7 @@ public interface IProducable
 {
 	public string myName { get;}
 	public float produceTime{ get; }
+	public GameObject prefab { get; }
 	public Element element{ get;}
 
 	public Action onCompleted{get; }
