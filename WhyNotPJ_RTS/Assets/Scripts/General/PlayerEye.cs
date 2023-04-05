@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class EnemyEye : MonoBehaviour
+public class PlayerEye : MonoBehaviour
 {
-	public static EnemyEye instance;
-    
+    public static PlayerEye instance;
+
 	public Perceive perceived = new Perceive();
 
 	private void Awake()
 	{
 		instance = this;
 
-		perceived.InitMap(false);
+		perceived.InitMap(true);
 	}
 }

@@ -31,6 +31,7 @@ public class EnemyPosGen : MonoBehaviour
 			//정찰계열 유닛
 			//가장 가까운 미발견 지형으로 이동하도록 하기..
 			//미발견 지형이 더 넓은 방향으로 이동하도록?
+			//우선보류
 			con.Move(Vector3.zero);
 			Debug.Log("정찰적인 조작");
 		}
@@ -45,7 +46,7 @@ public class EnemyPosGen : MonoBehaviour
 			Debug.Log(con.myName + " 에게 공격적인 명령.");
 			//발견한 적 본진이 있으면서, 충분한 양의 유닛을 축적하였다면 축적된 유닛 전부에게 공격 명령
 			//발견한 적 본진이 없다면 경계 상태로 축적함.
-			//모았다가 러쉬!
+			//모았다가 러쉬
 		}
 		else
 		{

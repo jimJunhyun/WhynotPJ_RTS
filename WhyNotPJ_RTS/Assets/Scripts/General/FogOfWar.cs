@@ -2,100 +2,79 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct MapData
-{
-	public int x;
-	public int y;
-	public int height;
-	public float GetDist(int x, int y, Vector3 pos)
-	{
-		pos.y = 0;
-		Vector3 dist = pos - new Vector3(x,  0, y);
-		return dist.magnitude;
-	}
-	public bool visiblity;
-}
 
+
+/// <summary>
+/// 이건 플레이어에게 보이는 것과 관련되어있음.
+/// 
+/// 유닛쪽 스크립트에서 자신 위치가 보인다면 렌더러 관련을 전부 비활성화시키면서
+/// 자신을 안보이도록 할거임.
+/// </summary>
 public class FogOfWar : MonoBehaviour
 {
-	public int mapX = 200;
-	public int mapY = 200;
+	public static FogOfWar instance;
+
 	public Material mat;
 
-
-	MapData[,] map;
-
     Texture2D tex;
+    Texture2D earthTex;
     
 
 	private void Awake()
 	{
-		map = new MapData[mapX, mapY];
+		instance =this;
 
-		tex = new Texture2D(mapX, mapY);
-		
-		InitMap(map);
-		UpdateTexture(map);
-		UpdateMapTemp(100, 100, 5);
-		
+		tex = new Texture2D(Perceive.MAPX, Perceive.MAPY);
+		earthTex = new Texture2D(Perceive.MAPX, Perceive.MAPY);
+		InitEarth();
+		mat.SetTexture("_Masker", tex);
+		mat.SetTexture("_EarthMask", earthTex);
+		tex.Apply();
+		earthTex.Apply();
 	}
 
-	public void UpdateTexture(MapData[,] map)
+	public void InitEarth()
 	{
-		for (int y = 0; y < mapY; ++y)
+		for (int y = 0; y < Perceive.MAPY; ++y)
 		{
-			for (int x = 0; x < mapX; ++x)
+			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				Color c;
-				if (map[y, x].visiblity)
-				{
-					c = Color.clear;
-				}
-				else
-				{
-					c = Color.black;
-				}
-				
-				tex.SetPixel(x, y, c);
+				earthTex.SetPixel(y, x, Color.clear);
 			}
 		}
-		mat.SetTexture("_Masker", tex);
-		//mat.
 	}
 
-	public void UpdateMapTemp(int startX, int startY, int rad)
+	public void UpdateTexture(MapData[,] map, MapData[,] prevMap)
 	{
-		for (int i = -rad; i <= rad; i++)
+		for (int y = 0; y < Perceive.MAPY; ++y)
 		{
-			for (int j = -rad; j <= rad; j++)
+			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if(((i+ 0.5) * (i + 0.5) + (j + 0.5) * (j + 0.5)) - (rad * rad) <= 1)
+				if(map[y, x].visiblity != prevMap[y, x].visiblity)
 				{
-					map[startX + i, startY + j].visiblity = true;
-					Color c = Color.black;
-					if (map[startX + i, startY + j].visiblity)
+					Color c;
+					if (map[y, x].visiblity)
 					{
 						c = Color.clear;
+						
+					}
+					else
+					{
+						c = Color.black;
 					}
 
-					tex.SetPixel(startX + i, startY + j, c);
+					tex.SetPixel(y, x, c);
+					
+				}
+				if (map[y, x].visiblity)
+				{
+					earthTex.SetPixel(y, x, Color.black);
 				}
 			}
 		}
 		mat.SetTexture("_Masker", tex);
-	}
-
-	public void InitMap(MapData[,] map)
-	{
-		for (int y = 0; y < mapY; y++)
-		{
-			for (int x = 0; x < mapX; x++)
-			{
-				map[y, x].x = x;
-				map[y, x].y = y;
-				map[y, x].height = 0; //ray 쏴
-				map[y, x].visiblity = false;
-			}
-		}
+		mat.SetTexture("_EarthMask", earthTex);
+		tex.Apply();
+		earthTex.Apply();
 	}
 }
