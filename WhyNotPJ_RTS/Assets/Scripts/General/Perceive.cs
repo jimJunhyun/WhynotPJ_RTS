@@ -27,12 +27,15 @@ public class Perceive
 
 	public bool isPlayer;
 
+	public int ground = 8;
+
 	public MapData[,] map;
 	MapData[,] prevMap;
 
 	public void InitMap(bool isPlayer)
 	{
 		map = new MapData[MAPY, MAPX];
+		RaycastHit hit;
 		for (int y = 0; y < MAPY; y++)
 		{
 			for (int x = 0; x < MAPX; x++)
@@ -41,6 +44,13 @@ public class Perceive
 				map[y, x].y = y;
 				map[y, x].height = 0; //ray ½÷
 				map[y, x].visiblity = false;
+
+				Vector3 pos = IdxVectorToPos(new Vector2Int(x, y));
+				pos.y = 100;
+
+				Physics.Raycast(pos, Vector3.down, out hit, 200f, 1 << ground);
+				map[y, x].height = (int)hit.point.y;
+				Debug.Log($"{x} , {y} height : {map[y, x].height}");
 			}
 		}
 		prevMap = (MapData[,])map.Clone();

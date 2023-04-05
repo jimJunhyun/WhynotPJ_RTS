@@ -737,7 +737,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652108109277}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WhyNot_RTS_Map (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 4300682519783618927}
   - component: {fileID: 1795405162822191394}
   - component: {fileID: 9220298117540905458}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: "\uD3C9\uBA74.001"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 5613582290090571707}
   - component: {fileID: 6491468941215062868}
   - component: {fileID: 6620117240165126052}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: "\uD3C9\uBA74"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
