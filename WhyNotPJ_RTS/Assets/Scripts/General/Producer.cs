@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Producer : MonoBehaviour
 {
@@ -15,17 +16,27 @@ public class Producer : MonoBehaviour
 	public List<GameObject> produceQueueGameObjects = new List<GameObject>();
 
 	private float produceTime;
+	[Range(0, 1)]
+	public float progress;
+	public Image progressImg;
 
 	private void Update()
 	{
 		if (isProducing)
 		{
-			produceTime += Time.deltaTime;
+			Processing();
+		}
+	}
 
-			if (produceTime >= producing.produceTime)
-			{
-				Produce();
-			}
+	private void Processing()
+	{
+		produceTime += Time.deltaTime;
+		progress = produceTime / producing.produceTime;
+		progressImg.fillAmount = progress;
+
+		if (produceTime >= producing.produceTime)
+		{
+			Produce();
 		}
 	}
 
@@ -64,6 +75,8 @@ public class Producer : MonoBehaviour
 		producing = null;
 		isProducing = false;
 		produceTime = 0;
+		progress = 0;
+		progressImg.fillAmount = 0;
 
 		// 다음으로 생산될 유닛을 지정
 		SetProduce();
