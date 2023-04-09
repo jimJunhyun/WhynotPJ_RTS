@@ -15,8 +15,6 @@ public class UpdaterTmp : MonoBehaviour
 		Vector2 vec = Perceive.PosToIdxVector(transform.position);
         if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
 		{
-			
-			
 			if (isPlayer)
 			{
 				PlayerEye.instance.perceived.UpdateMap(prevPos, 5, false);

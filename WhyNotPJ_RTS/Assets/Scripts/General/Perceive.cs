@@ -8,10 +8,11 @@ public struct MapData
 	public int x;
 	public int y;
 	public int height;
-	public float GetDist(int x, int y, Vector3 pos)
+	public static float GetDist(Vector3 from, Vector3 to) //일단은 일직선
 	{
-		pos.y = 0;
-		Vector3 dist = pos - new Vector3(x, 0, y);
+		from.y = 0;
+		to.y = 0;
+		Vector3 dist = to - from;
 		return dist.magnitude;
 	}
 	public bool visiblity;
@@ -34,15 +35,15 @@ public class Perceive
 
 	public void InitMap(bool isPlayer)
 	{
-		map = new MapData[MAPY, MAPX];
 		RaycastHit hit;
+		map = new MapData[MAPY, MAPX];
 		for (int y = 0; y < MAPY; y++)
 		{
 			for (int x = 0; x < MAPX; x++)
 			{
 				map[y, x].x = x;
 				map[y, x].y = y;
-				map[y, x].height = 0; //ray 쏴
+				map[y, x].height = 0;
 				map[y, x].visiblity = false;
 
 				Vector3 pos = IdxVectorToPos(new Vector2Int(x, y));
@@ -50,7 +51,6 @@ public class Perceive
 
 				Physics.Raycast(pos, Vector3.down, out hit, 200f, 1 << ground);
 				map[y, x].height = (int)hit.point.y;
-				Debug.Log($"{x} , {y} height : {map[y, x].height}");
 			}
 		}
 		prevMap = (MapData[,])map.Clone();
@@ -84,6 +84,7 @@ public class Perceive
 	}
 	public void UpdateMap(Vector2Int idxXY, int rad, bool on)
 	{
+		
 		prevMap = (MapData[,])map.Clone();
 		for (int i = -rad; i <= rad; i++)
 		{
@@ -93,13 +94,52 @@ public class Perceive
 				{
 					int x = idxXY.x + i < 0 ? 0 : idxXY.x + i >= MAPX ? MAPX - 1 : idxXY.x + i;
 					int y = idxXY.y + j < 0 ? 0 : idxXY.y + j >= MAPY ? MAPY - 1 : idxXY.y + j;
+
 					if (map[y, x].visiblity != on)
 					{
 						map[y, x].visiblity = on;
 					}
+					
 				}
 			}
 		}
+		if (isPlayer)
+		{
+			FogOfWar.instance.UpdateTexture(map, prevMap);
+		}
+	}
+
+	public void AllEnableTmp()
+	{
+		for (int y = 0; y < MAPY; y++)
+		{
+			for (int x = 0; x < MAPX; x++)
+			{
+				map[y, x].visiblity = true;
+				prevMap[y, x].visiblity = true;
+			}
+		}
+	}
+
+	public void UpdateMapRecur(Vector2Int startPos, int deg, int maxDeg)
+	{
+		prevMap = (MapData[,])map.Clone();
+
+		int x = 0;
+		int y = 0;
+
+		for (int i = 0; i < 360; i++)
+		{
+			x = (int)Mathf.Cos(i * Mathf.Deg2Rad) * deg;
+			y = (int)Mathf.Sin(i * Mathf.Deg2Rad) * deg;
+
+			//********************************************************************************************
+		}
+
+
+
+		UpdateMapRecur(startPos, deg + 1, maxDeg);
+
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
@@ -119,8 +159,6 @@ public class Perceive
 	{
 		int x = (int)idx.x - MAPX / 2;
 		int z = (int)idx.y - MAPY / 2;
-		x = x < 0 ? 0 : x >= MAPX ? MAPX - 1 : x;
-		z = z < 0 ? 0 : z >= MAPY ? MAPY - 1 : z;
 		Vector3 pos = new Vector3(x, 0, z);
 		return pos;
 	}

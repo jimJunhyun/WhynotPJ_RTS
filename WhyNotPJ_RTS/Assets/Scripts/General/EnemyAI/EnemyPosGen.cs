@@ -9,13 +9,16 @@ public class EnemyPosGen : MonoBehaviour
 
 	public EnemySettings set;
 	public Transform basePos;
-	public float randomAmount;
+	public float calcApt;
+	public float calcRad;
 
 	int curAccumulated = 0;
 
 	public List<IUnit> myControls = new List<IUnit>();
 	public List<IUnit> accumulations = new List<IUnit>();
 	public List<IBuilding> buildings = new List<IBuilding>();
+
+	Vector2Int pos;
 
 	private void Awake()
 	{
@@ -50,14 +53,42 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else
 		{
-			//적이 쳐들어올만한 곳으로 방어에 유리한 유닛을 배치하려 할 것이다.
-			//그걸 이제 AI가 하도록 해보자
+			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
+			con.Move(v); 
 
-			//방어에 유리한 곳으로 배치
-			//전장에서의 핵심 지역을 파악하도록 해야 하겠다.
-			//그러려면 일단 맵을 인식시키는거부터 시작하고
-			//전장의안개를 그거에 맞게 동시에 만들어보자
+			con.state = UnitState.Alert;//완료시 상태 경계로 변경. (완료시 행동을 연결하기, 또는 선택을 코루틴으로 변경하여 반환까지 기다리게 하기??)
+			Debug.Log(con.myName + " 에게 방어적인 명령");
+
+			//본진과 충분히 가까우며 높은 곳.
+			//거리에는 반비례, 높이에는 비례
+			
 		}
+	}
+
+	public Vector2Int FindHighestHeightIdx() //높으면서 가까움을 선호함.
+	{
+		float largestH = float.MinValue;
+		/*Vector2Int v*/pos = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+		for (int y = 0; y < Perceive.MAPY; y++)
+		{
+			for (int x = 0; x < Perceive.MAPX; x++)
+			{
+				if(EnemyEye.instance.perceived.map[y, x].visiblity) 
+				{
+					float num = EnemyEye.instance.perceived.map[y, x].height * (set.heightBias / (set.distBias + 1)) - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(y, x)), EnemyBrain.instance.transform.position) * (set.distBias / (set.heightBias + 1));
+					//높이가 연산에 안들어가는듯?
+					Debug.Log($"{x} ,  {y} : {num}");
+					if (num > largestH) 
+					{
+						pos.x = y;
+						pos.y = x;
+						largestH = num;
+					}
+					
+				}
+			}
+		}
+		return pos;
 	}
 
 	public void WholeAttack()
@@ -83,5 +114,10 @@ public class EnemyPosGen : MonoBehaviour
 				SamplePos(curC);
 			}
 		}
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.DrawSphere(Perceive.IdxVectorToPos(pos), 1);
 	}
 }
