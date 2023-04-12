@@ -460,7 +460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776838857}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -65.2}
+  m_LocalPosition: {x: 0, y: 0, z: -39.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -513,6 +513,7 @@ MonoBehaviour:
   basePos: {fileID: 776838858}
   calcApt: 2.83
   calcRad: 71.8
+  sphere: {fileID: 2685444707778731161, guid: 9b28209e263ab9e44a2bea04e4584fb5, type: 3}
 --- !u!114 &776838862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,7 +789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004e9cfbd780dee47901d8d7632cfd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 1
+  isPlayer: 0
 --- !u!1 &1756659525
 GameObject:
   m_ObjectHideFlags: 0

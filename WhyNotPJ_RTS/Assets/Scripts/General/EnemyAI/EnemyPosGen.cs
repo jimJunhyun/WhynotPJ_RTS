@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,13 +13,13 @@ public class EnemyPosGen : MonoBehaviour
 	public float calcApt;
 	public float calcRad;
 
+	public GameObject sphere;
+
 	int curAccumulated = 0;
 
 	public List<IUnit> myControls = new List<IUnit>();
 	public List<IUnit> accumulations = new List<IUnit>();
 	public List<IBuilding> buildings = new List<IBuilding>();
-
-	Vector2Int pos;
 
 	private void Awake()
 	{
@@ -31,11 +32,12 @@ public class EnemyPosGen : MonoBehaviour
 		
 		if (con.element.rec >= 5f)
 		{
+			con.Move(Perceive.IdxVectorToPos(FindNearestSightless(con)));
 			//정찰계열 유닛
 			//가장 가까운 미발견 지형으로 이동하도록 하기..
 			//미발견 지형이 더 넓은 방향으로 이동하도록?
 			//우선보류
-			con.Move(Vector3.zero);
+			//con.Move(Vector3.zero);
 			Debug.Log("정찰적인 조작");
 		}
 		else if(set.warBias >= selected)
@@ -65,30 +67,57 @@ public class EnemyPosGen : MonoBehaviour
 		}
 	}
 
+	public Vector2Int FindNearestSightless(IUnit unit) //구조 개선이 필요함. 유닛에 관한거든 검사 조건에 관한거든
+	{
+		Vector2Int from = new Vector2Int(100, 100);
+		Vector2Int dest = Vector2Int.zero;
+		float smallestD = float.MaxValue;
+		//from = Perceive.PosToIdxVector(unit.transform);
+		for (int y = 0; y < Perceive.MAPY; ++y)
+		{
+			for (int x = 0; x < Perceive.MAPX; ++x)
+			{
+				if(!EnemyEye.instance.perceived.map[y, x].visiblity)
+				{
+					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
+					Debug.Log($"{x}, {y} : {dist}");
+					if (smallestD > dist)
+					{
+						dest.x = x;
+						dest.y = y;
+						smallestD = dist;
+					}
+				}
+			}
+		}
+		return dest;
+	}
+
 	public Vector2Int FindHighestHeightIdx() //높으면서 가까움을 선호함.
 	{
 		float largestH = float.MinValue;
-		/*Vector2Int v*/pos = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+		Vector2Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
 		for (int y = 0; y < Perceive.MAPY; y++)
 		{
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
 				if(EnemyEye.instance.perceived.map[y, x].visiblity) 
 				{
-					float num = EnemyEye.instance.perceived.map[y, x].height * (set.heightBias / (set.distBias + 1)) - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(y, x)), EnemyBrain.instance.transform.position) * (set.distBias / (set.heightBias + 1));
-					//높이가 연산에 안들어가는듯?
-					Debug.Log($"{x} ,  {y} : {num}");
+					float num = EnemyEye.instance.perceived.map[y, x].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num > largestH) 
 					{
-						pos.x = y;
-						pos.y = x;
+						v.x = x;
+						v.y = y;
 						largestH = num;
 					}
 					
 				}
 			}
 		}
-		return pos;
+		//Debug.Log(pos);
+		//Debug.Log($"{Perceive.IdxVectorToPos(pos)}");
+		//EditorApplication.isPaused = true;
+		return v;
 	}
 
 	public void WholeAttack()
@@ -114,10 +143,5 @@ public class EnemyPosGen : MonoBehaviour
 				SamplePos(curC);
 			}
 		}
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.DrawSphere(Perceive.IdxVectorToPos(pos), 1);
 	}
 }

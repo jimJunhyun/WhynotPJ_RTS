@@ -15,6 +15,13 @@ public struct MapData
 		Vector3 dist = to - from;
 		return dist.magnitude;
 	}
+	public static float GetDistSqr(Vector3 from, Vector3 to) //일단은 일직선
+	{
+		from.y = 0;
+		to.y = 0;
+		Vector3 dist = to - from;
+		return dist.sqrMagnitude;
+	}
 	public bool visiblity;
 }
 
@@ -157,9 +164,9 @@ public class Perceive
 	}
 	public static Vector3 IdxVectorToPos(Vector2Int idx) // Y는 필요할 경우 따로 할당.
 	{
-		int x = (int)idx.x - MAPX / 2;
-		int z = (int)idx.y - MAPY / 2;
-		Vector3 pos = new Vector3(x, 0, z);
+		int x = (int)idx.y - MAPX / 2;
+		int z = (int)idx.x - MAPY / 2;
+		Vector3 pos = new Vector3(z, 0, x);
 		return pos;
 	}
 	

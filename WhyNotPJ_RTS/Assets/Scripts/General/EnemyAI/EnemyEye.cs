@@ -15,6 +15,6 @@ public class EnemyEye : MonoBehaviour
 
 		perceived.InitMap(false);
 
-		perceived.AllEnableTmp();
+		perceived.UpdateMap(100, 100, 5, true);
 	}
 }

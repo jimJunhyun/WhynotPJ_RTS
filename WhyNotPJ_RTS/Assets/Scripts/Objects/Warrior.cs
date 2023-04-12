@@ -8,7 +8,7 @@ public class Warrior : IUnit
 	public string myName => "전사";
 	public float produceTime => 1f;
 
-	public Element element => new Element(7, 7, 0);
+	public Element element => new Element(7, 7, 7);
 
 	public Action onCompleted => ()=>{ EnemyPosGen.instance.myControls.Add(new Warrior()); Debug.Log("전사 생산 완료."); };
 
