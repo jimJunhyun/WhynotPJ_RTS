@@ -10,12 +10,14 @@ public class CameraUnitSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitSelector unitController;
+    private UnitManager unitController;
 
 	private void Awake()
 	{
 		mainCam = Camera.main;
-		unitController = GetComponent<UnitSelector>();
+
+		// 유닛매니저 생성,, 추후 선언 위치 변경 필요
+		unitController = new UnitManager();
 
 		DrawDragRectangle();
 	}
@@ -44,7 +46,7 @@ public class CameraUnitSelectManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit, Mathf.Infinity, unitLayer))
 				{
-					if (hit.transform.TryGetComponent(out TestUnit unit))
+					if (hit.transform.TryGetComponent(out ISelectable unit))
 					{
 						unitController.ClickSelectUnit(unit);
 					}
@@ -128,9 +130,9 @@ public class CameraUnitSelectManager : MonoBehaviour
 
 	private void SelectUnits()
 	{
-		foreach (TestUnit unit in unitController.unitList)
+		foreach (ISelectable unit in unitController.unitList)
 		{
-			if (dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))
+			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.WorldPos)))
 			{
 				unitController.DragSelectUnit(unit);
 			}

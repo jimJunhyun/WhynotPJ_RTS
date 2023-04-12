@@ -5,32 +5,33 @@ using UnityEngine.AI;
 /// <summary>
 /// 유닛 선택 기능을 테스트하기 위한 임시 유닛 클래스. 추후 바뀔 수 있다.
 /// </summary>
-public class TestUnit : MonoBehaviour, IUnit
+public class TestUnit : UnitDefault
 {
 	// IUnit
-	public GameObject prefab => gameObject;
-	public string myName => "테스트 유닛";
+	public override GameObject prefab => gameObject;
+	public override string myName => "테스트 유닛";
 
-	public float produceTime => 1f;
+	public override float produceTime => 1f;
 
-	public Element element => new Element(1, 1, 1);
+	public override Element element => new Element(1, 1, 1);
 
-	public Action onCompleted => () => Debug.Log("유닛이 생산됬어여");
+	public override Action onCompleted => () => Debug.Log("유닛이 생산되다");
 
-	public UnitState state { get; set; } = UnitState.Wait;
-	public Vector3 objPos { get; set; }
-	public Transform target { get; set; }
+	public override UnitState state { get; set; } = UnitState.Wait;
+	public override Vector3 objPos { get; set; }
+	public override Transform target { get; set; }
 
+	public override bool CanDragSelect => true;
 
 	// Original
 	[SerializeField] private GameObject marker;
 
-	public void SelectUnit()
+	public override void OnSelectUnit()
 	{
 		marker.SetActive(true);
 	}
 
-	public void DeselectUnit()
+	public override void OnDeselectUnit()
 	{
 		marker.SetActive(false);
 	}

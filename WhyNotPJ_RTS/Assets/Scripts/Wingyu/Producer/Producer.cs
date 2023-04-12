@@ -1,24 +1,19 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Producer : MonoBehaviour
 {
-	public TestUnit testUnit;
+	public UnitDefault testUnit;
     public IProducable producing;
 	public bool isProducing = false;
 	public bool pSide = false;
 
 	public Queue<IProducable> produceQueue = new Queue<IProducable>();
 
-	public List<GameObject> produceQueueGameObjects = new List<GameObject>();
-
 	private float produceTime;
-	[Range(0, 1)]
-	public float progress;
-	public Image progressImg;
+	private float progress;
+	public float Progress => progress;
 
 	private void Update()
 	{
@@ -32,7 +27,6 @@ public class Producer : MonoBehaviour
 	{
 		produceTime += Time.deltaTime;
 		progress = produceTime / producing.produceTime;
-		progressImg.fillAmount = progress;
 
 		if (produceTime >= producing.produceTime)
 		{
@@ -47,7 +41,6 @@ public class Producer : MonoBehaviour
 	public void AddProduct(IProducable pro)
 	{
 		produceQueue.Enqueue(pro);
-		produceQueueGameObjects.Add(pro.prefab);
 
 		if (!isProducing) // 현재 생산되는 유닛이 없을 시 유닛 생산 시작
 			SetProduce();
@@ -65,18 +58,16 @@ public class Producer : MonoBehaviour
 	{
 		if (producing == null) return;
 
-		produceQueueGameObjects.RemoveAt(0);
-
 		// 유닛을 생산
-		IProducable product = Instantiate(producing.prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
-		product.onCompleted?.Invoke();
-		UnitSelector.instance.unitList.Add(product as TestUnit);
+		IProducable finProduct = Instantiate(producing.prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		finProduct.onCompleted?.Invoke();
+		UnitManager.Instance.unitList.Add(finProduct as UnitDefault);
 
+		// 변수 초기화
 		producing = null;
 		isProducing = false;
 		produceTime = 0;
 		progress = 0;
-		progressImg.fillAmount = 0;
 
 		// 다음으로 생산될 유닛을 지정
 		SetProduce();
@@ -87,7 +78,7 @@ public class Producer : MonoBehaviour
 		// 유닛이 생산될 위치를 반환
 		int angle = UnityEngine.Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
-		pos += transform.position;
+		pos += transform.position + new Vector3(0, 0.5f, 0);
 		return pos;
 	}
 }

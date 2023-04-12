@@ -20,6 +20,11 @@ public class Scout : IUnit
 
 	public Transform target{ get;  set;}
 
+	public IProducable Instantiate(Vector3 position = default, Quaternion rotation = default)
+	{
+		return null;
+	}
+
 	public void Move(Vector3 to)
 	{
 		objPos = to;
