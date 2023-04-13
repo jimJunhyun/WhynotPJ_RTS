@@ -8,18 +8,14 @@ using UnityEngine.AI;
 public class TestUnit : UnitDefault
 {
 	// IUnit
-	public override GameObject prefab => gameObject;
-	public override string myName => "테스트 유닛";
+	public override GameObject _prefab => gameObject;
+	public override string _myName => "테스트 유닛";
 
-	public override float produceTime => 1f;
+	public override float _produceTime => 1f;
 
-	public override Element element => new Element(1, 1, 1);
+	public override Element _element => new Element(1, 1, 1);
 
-	public override Action onCompleted => () => Debug.Log("유닛이 생산되다");
-
-	public override UnitState state { get; set; } = UnitState.Wait;
-	public override Vector3 objPos { get; set; }
-	public override Transform target { get; set; }
+	public override Action _onCompleted => () => Debug.Log("유닛이 생산되다");
 
 	public override bool CanDragSelect => true;
 

@@ -3,17 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnitDefault : MonoBehaviour, IUnit, ISelectable
+public abstract class UnitDefault : MonoBehaviour, ISelectable, IProducable
 {
-	public abstract string myName { get; }
-	public abstract float produceTime { get; }
-	public abstract GameObject prefab { get; }
-	public abstract Element element { get; }
-	public abstract Action onCompleted { get; }
-
-	public abstract UnitState state { get; set; }
-	public abstract Vector3 objPos { get; set; }
-	public abstract Transform target { get; set; }
+	public abstract string _myName { get; }
+	public abstract float _produceTime { get; }
+	public abstract GameObject _prefab { get; }
+	public abstract Element _element { get; }
+	public abstract Action _onCompleted { get; }
 
 	public abstract bool CanDragSelect { get; }
 	public Vector3 WorldPos => transform.position;

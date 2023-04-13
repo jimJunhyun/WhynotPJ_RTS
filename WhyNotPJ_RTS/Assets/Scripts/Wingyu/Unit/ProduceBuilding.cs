@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 {
-	public List<IUnit> nearUnit { get; set; }
 	public Vector3 scale { get; set; }
 	public Vector3 pos { get; set; }
 
