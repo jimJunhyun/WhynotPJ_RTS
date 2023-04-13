@@ -80,7 +80,6 @@ public class EnemyPosGen : MonoBehaviour
 				if(!EnemyEye.instance.perceived.map[y, x].visiblity)
 				{
 					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
-					Debug.Log($"{x}, {y} : {dist}");
 					if (smallestD > dist)
 					{
 						dest.x = x;

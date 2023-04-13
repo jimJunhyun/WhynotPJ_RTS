@@ -12,20 +12,20 @@ public class UpdaterTmp : MonoBehaviour
 	}
 	void Update()
     {
-		Vector2 vec = Perceive.PosToIdxVector(transform.position);
+		Vector2Int vec = Perceive.PosToIdxVector(transform.position);
         if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
 		{
 			if (isPlayer)
 			{
-				PlayerEye.instance.perceived.UpdateMap(prevPos, 5, false);
-				prevPos = Perceive.PosToIdxVector(transform.position);
-				PlayerEye.instance.perceived.UpdateMap(prevPos, 5, true);
+				PlayerEye.instance.perceived.UpdateMap(prevPos, 15, false);
+				prevPos = vec;
+				PlayerEye.instance.perceived.UpdateMapRecur(prevPos, 15, true);
 				Debug.Log("플레이어 시야 새로고침됨.");
 			}
 			else
 			{
-				EnemyEye.instance.perceived.UpdateMap(prevPos, 5, true);
-				
+				prevPos = vec;
+				EnemyEye.instance.perceived.UpdateMapRecur(prevPos, 5, true);
 			}
 			
 			

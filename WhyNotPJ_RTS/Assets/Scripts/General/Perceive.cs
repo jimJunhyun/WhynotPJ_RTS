@@ -128,29 +128,46 @@ public class Perceive
 		}
 	}
 
-	public void UpdateMapRecur(Vector2Int startPos, int deg, int maxDeg)
+	public void UpdateMapRecur(Vector2Int startPos, int distance, bool isOn)
 	{
 		prevMap = (MapData[,])map.Clone();
 
-		int x = 0;
-		int y = 0;
-
-		for (int i = 0; i < 360; i++)
+		for (int i = -1; i <= 1; i++)
 		{
-			x = (int)Mathf.Cos(i * Mathf.Deg2Rad) * deg;
-			y = (int)Mathf.Sin(i * Mathf.Deg2Rad) * deg;
-
-			//********************************************************************************************
+			for (int j = -1; j <= 1; j++)
+			{
+				Debug.Log("최초 위치 : " + map[startPos.y, startPos.x].height);
+				UpdateMapRayRecur(startPos, distance, new Vector2Int(i, j), map[startPos.y, startPos.x].height, isOn);
+			}
+			
 		}
-
-
-
-		UpdateMapRecur(startPos, deg + 1, maxDeg);
 
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
 		}
+	}
+
+	void UpdateMapRayRecur(Vector2Int pos, int distance, Vector2Int angle, int height, bool isOn)
+	{
+		if(distance > 0 && pos.x > 0 && pos.x < MAPX - 1 && pos.y > 0 && pos.y < MAPY - 1 && map[pos.y, pos.x].height <= height)
+		{
+			map[pos.y, pos.x].visiblity = isOn;
+			map[pos.y + 1, pos.x].visiblity = isOn;
+			map[pos.y - 1, pos.x].visiblity = isOn;
+			//map[pos.y, pos.x + 1].visiblity = true;
+			//map[pos.y + 1, pos.x+1].visiblity = true;
+			//map[pos.y - 1, pos.x+1].visiblity = true;
+			//map[pos.y, pos.x-1].visiblity = true;
+			//map[pos.y + 1, pos.x-1].visiblity = true;
+			//map[pos.y - 1, pos.x-1].visiblity = true;
+			pos.x += angle.x; 
+			pos.y += angle.y; //해봤자 8방향이 가능한 전부가 됨.
+
+			UpdateMapRayRecur(pos, distance - 1, angle, height, isOn);
+		}
+		
+		
 	}
 
 	public static Vector2Int PosToIdxVector(Vector3 pos)
