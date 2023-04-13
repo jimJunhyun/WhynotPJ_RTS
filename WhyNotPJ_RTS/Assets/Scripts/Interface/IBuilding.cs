@@ -4,8 +4,6 @@ using UnityEngine;
 
 public interface IBuilding
 {
-    public List<IUnit>  nearUnit { get; set;}
-
     public Vector3 scale { get; }
-    public Vector3 pos { get;set;} // ÇöÀ§Ä¡. ³ªÁß¿¡ °Ç¹° ¿Å±â±â°¡ ³ª¿Ã¼öµµ?
+    public Vector3 pos { get;set;} // ï¿½ï¿½ï¿½ï¿½Ä¡. ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ç¹ï¿½ ï¿½Å±ï¿½â°¡ ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½?
 }

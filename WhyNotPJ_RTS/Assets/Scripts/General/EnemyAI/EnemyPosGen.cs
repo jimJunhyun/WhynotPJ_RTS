@@ -1,5 +1,7 @@
+using Core;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,12 +11,15 @@ public class EnemyPosGen : MonoBehaviour
 
 	public EnemySettings set;
 	public Transform basePos;
-	public float randomAmount;
+	public float calcApt;
+	public float calcRad;
+
+	public GameObject sphere;
 
 	int curAccumulated = 0;
 
-	public List<IUnit> myControls = new List<IUnit>();
-	public List<IUnit> accumulations = new List<IUnit>();
+	public List<UnitController> myControls = new List<UnitController>();
+	public List<UnitController> accumulations = new List<UnitController>();
 	public List<IBuilding> buildings = new List<IBuilding>();
 
 	private void Awake()
@@ -22,78 +27,131 @@ public class EnemyPosGen : MonoBehaviour
 		instance = this;
 	}
 
-	public void SamplePos(IUnit con)
+	public void SamplePos(UnitController con)
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
-		
-		if (con.element.rec >= 5f)
+
+		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
+
+
+		if (con._element.rec >= 5f)
 		{
-			//Á¤Âû°è¿­ À¯´Ö
-			//°¡Àå °¡±î¿î ¹Ì¹ß°ß ÁöÇüÀ¸·Î ÀÌµ¿ÇÏµµ·Ï ÇÏ±â..
-			//¹Ì¹ß°ß ÁöÇüÀÌ ´õ ³ÐÀº ¹æÇâÀ¸·Î ÀÌµ¿ÇÏµµ·Ï?
-			con.Move(Vector3.zero);
-			Debug.Log("Á¤ÂûÀûÀÎ Á¶ÀÛ");
+			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
+			//ï¿½ï¿½ï¿½ï¿½ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ï±ï¿½..
+			//ï¿½Ì¹ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ïµï¿½ï¿½ï¿½?
+			//con.unitMove.SetTargetPosition(Vector3.zero);
+			//ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½
+			//con.Move(Vector3.zero);
+			Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 		}
 		else if(set.warBias >= selected)
 		{
 			if(EnemyBrain.instance.playerBase != null)
 			{
-				con.Move(EnemyBrain.instance.playerBase);
-				Debug.Log(con.myName+"¿¡°Ô °ø°ÝÀûÀÎ Á¶ÀÛ");
+				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+				Debug.Log(con._myName + "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 			}
 			else
 			{
-				con.state = UnitState.Wait;
+				con.ChangeState(State.Alert);
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
-				Debug.Log("À¯´Ö ÇÏ³ª ´õÇÔ.");
+				Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½.");
 			}
-			Debug.Log(con.myName + " ¿¡°Ô °ø°ÝÀûÀÎ ¸í·É.");
-			//¹ß°ßÇÑ Àû º»ÁøÀÌ ÀÖ´Ù¸é ±× ±ÙÃ³·Î ÀÌµ¿
-			//¹ß°ßÇÑ Àû º»ÁøÀÌ ¾ø´Ù¸é ´ë±â ¶Ç´Â °æ°è
+			Debug.Log(con.name + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
+			//ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½é¼­, ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+			//ï¿½ï¿½Ò´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 		else
 		{
-			IBuilding vulBuilding = buildings.Find(x=>x.nearUnit.Count == 0);
-			if(vulBuilding == null)
-			{
-				vulBuilding = EnemyBrain.instance.GetComponent<Base>();
-			}
-			vulBuilding.nearUnit.Add(con); 
-			Vector3 rand = randomAmount * Random.insideUnitSphere;
-			rand.y = 0;
-			con.objPos = vulBuilding.pos + rand;
-			con.state = UnitState.Alert;
-			//»ç¶÷ÀÌ ¾Æ¹«µµ ¾ø´Â ¾Æ±º °Ç¹°ÀÌ ÀÖ´Ù¸é ±× ±ÙÃ³·Î ÀÌµ¿
-			//»ç¶÷ÀÌ ¾Æ¹«µµ ¾ø´Â ¾Æ±º °Ç¹°ÀÌ ±ÙÃ³¿¡ ÀÖ´Ù¸é °æ°è ÅÂ¼¼
-			//»ç¶÷ÀÌ ¾Æ¹«µµ ¾ø´Â ¾Æ±º °Ç¹°ÀÌ ¾ø´Ù¸é º»Áø ÁÖÀ§¿¡¼­ °æ°è ÅÂ¼¼
-			Debug.Log(con.myName + " ¿¡°Ô ¹æ¾îÀûÀÎ ¸í·É.");
+			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
+
+			con.ChangeState(State.Alert); //ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. (ï¿½Ï·ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½, ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½??)
+			Debug.Log(con.name + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
+			//ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½ï¿½, ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+			
 		}
+	}
+
+	public Vector2Int FindNearestSightless(UnitController unit) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Ñ°Åµï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½ï¿½ï¿½Ñ°Åµï¿½
+	{
+		Vector2Int from = new Vector2Int(100, 100);
+		Vector2Int dest = Vector2Int.zero;
+		float smallestD = float.MaxValue;
+		//from = Perceive.PosToIdxVector(unit.transform);
+		for (int y = 0; y < Perceive.MAPY; ++y)
+		{
+			for (int x = 0; x < Perceive.MAPX; ++x)
+			{
+				if(!EnemyEye.instance.perceived.map[y, x].visiblity)
+				{
+					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
+					if (smallestD > dist)
+					{
+						dest.x = x;
+						dest.y = y;
+						smallestD = dist;
+					}
+				}
+			}
+		}
+		return dest;
+	}
+
+	public Vector2Int FindHighestHeightIdx() //ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½.
+	{
+		float largestH = float.MinValue;
+		Vector2Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+		for (int y = 0; y < Perceive.MAPY; y++)
+		{
+			for (int x = 0; x < Perceive.MAPX; x++)
+			{
+				if(EnemyEye.instance.perceived.map[y, x].visiblity) 
+				{
+					float num = EnemyEye.instance.perceived.map[y, x].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					if (num > largestH) 
+					{
+						v.x = x;
+						v.y = y;
+						largestH = num;
+					}
+					
+				}
+			}
+		}
+		//Debug.Log(pos);
+		//Debug.Log($"{Perceive.IdxVectorToPos(pos)}");
+		//EditorApplication.isPaused = true;
+		return v;
 	}
 
 	public void WholeAttack()
 	{
 		for (int i = 0; i < accumulations.Count; i++)
 		{
-			SamplePos(accumulations[i]);
+			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 		}
-		Debug.Log("ÃÑ°ø°Ý");
+		Debug.Log("ï¿½Ñ°ï¿½ï¿½ï¿½");
 	}
 
 	public void FindPlaying()
 	{
-		if (curAccumulated >= set.adequateSoldier)
+		if (EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
 		{
 			WholeAttack();
 		}
 		else if (myControls.Count > 0)
 		{
-			IUnit curC = myControls.Find((x) => { return x.state == UnitState.Wait; });
+			/*UnitController curC = myControls.Find((x) => { return x.CurrentState == ; });
 			if (curC != null)
 			{
 				SamplePos(curC);
-			}
+			}*/
 		}
 	}
 }

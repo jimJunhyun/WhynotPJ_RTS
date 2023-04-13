@@ -24,23 +24,23 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / item.produceTime;
+		progress = produceTime / item._produceTime;
 
-		if (produceTime >= item.produceTime)
+		if (produceTime >= item._produceTime)
 		{
 			Produce();
 		}
 	}
 
 	/// <summary>
-	/// »ý»êÇÒ À¯´ÖÀ» ´ë±â¸ñ·Ï Queue¿¡ Ãß°¡
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Queueï¿½ï¿½ ï¿½ß°ï¿½
 	/// </summary>
 	/// <param name="pro"></param>
 	public void AddProduct(IProducable pro)
 	{
 		produceQueue.Enqueue(pro);
 
-		if (!isProducing) // ÇöÀç »ý»êµÇ´Â À¯´ÖÀÌ ¾øÀ» ½Ã À¯´Ö »ý»ê ½ÃÀÛ
+		if (!isProducing) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			SetProduce();
 	} 
 
@@ -56,24 +56,24 @@ public class Producer : MonoBehaviour
 	{
 		if (item == null) return;
 
-		// À¯´ÖÀ» »ý»ê
-		IProducable finProduct = Instantiate(item.prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
-		finProduct.onCompleted?.Invoke();
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		IProducable finProduct = Instantiate(item._prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		finProduct._onCompleted?.Invoke();
 		UnitManager.Instance.unitList.Add(finProduct as UnitDefault);
 
-		// º¯¼ö ÃÊ±âÈ­
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 		item = null;
 		isProducing = false;
 		produceTime = 0;
 		progress = 0;
 
-		// ´ÙÀ½À¸·Î »ý»êµÉ À¯´ÖÀ» ÁöÁ¤
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		SetProduce();
 	}
 
 	private Vector3 SetSpawnPoint()
 	{
-		// À¯´ÖÀÌ »ý»êµÉ À§Ä¡¸¦ ¹ÝÈ¯
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È¯
 		int angle = Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
 		pos += transform.position + new Vector3(0, 0.5f, 0);
