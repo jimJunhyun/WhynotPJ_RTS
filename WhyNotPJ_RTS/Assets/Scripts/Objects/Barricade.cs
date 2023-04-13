@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class Barricade : IBuilding, IProducable
 {
-	public string myName = "¹Ù¸®ÄÉÀÌµå";
+	public GameObject prefab => null;
+	public string myName => "ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½Ìµï¿½";
 
 	public float produceTime = 1.5f;
 
 	public Element element = new Element(0, 9, 7);
 
-	public Action onCompleted = () => { Debug.Log("¹Ù¸®ÄÉÀÌµå °Ç¼³ ¿Ï·á"); };
-    //À§Ã³·³ »ó¼ö·Î Á÷Á¢ ÀÔ·ÂÇÏ°Å³ª SerializesField µîÀ¸·Î ¿¡µðÅÍ¿¡¼­ ÀÔ·Â
-    public string _myName => myName;
+	public Action onCompleted = () => { Debug.Log("ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ç¼ï¿½ ï¿½Ï·ï¿½"); };
+
+	public GameObject _prefab => null;
+	public string _myName => myName;
     public float _produceTime => produceTime;
     public Element _element => element;
     public Action _onCompleted => onCompleted;

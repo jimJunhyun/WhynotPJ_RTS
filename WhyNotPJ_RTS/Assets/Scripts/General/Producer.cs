@@ -1,37 +1,82 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Producer : MonoBehaviour
 {
-    public IProducable producing;
+    public IProducable item;
 	public bool isProducing = false;
 	public bool pSide = false;
 
-	public void SetProduct(IProducable pro)
-	{
-		
-		producing = pro;
-		Produce();
-	} 
+	public Queue<IProducable> produceQueue = new Queue<IProducable>();
 
-    void Produce()
+	private float produceTime;
+	private float progress;
+	public float Progress => progress;
+
+	private void Update()
 	{
-		if (!isProducing && producing != null)
+		if (isProducing)
 		{
-			StartCoroutine(DelayMake(producing));
+			Processing();
 		}
-		
 	}
 
-	IEnumerator DelayMake(IProducable product)
+	private void Processing()
 	{
-		isProducing = true;
-		yield return new WaitForSeconds(product._produceTime);
-		product._onCompleted.Invoke();
-		producing = null;
+		produceTime += Time.deltaTime;
+		progress = produceTime / item._produceTime;
+
+		if (produceTime >= item._produceTime)
+		{
+			Produce();
+		}
+	}
+
+	/// <summary>
+	/// ������ ������ ����� Queue�� �߰�
+	/// </summary>
+	/// <param name="pro"></param>
+	public void AddProduct(IProducable pro)
+	{
+		produceQueue.Enqueue(pro);
+
+		if (!isProducing) // ���� ����Ǵ� ������ ���� �� ���� ���� ����
+			SetProduce();
+	} 
+
+	private void SetProduce()
+	{
+		if (produceQueue.Count == 0) return;
 		
+		item = produceQueue.Dequeue();
+		isProducing = true;
+	}
+
+    private void Produce()
+	{
+		if (item == null) return;
+
+		// ������ ����
+		IProducable finProduct = Instantiate(item._prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		finProduct._onCompleted?.Invoke();
+		UnitManager.Instance.unitList.Add(finProduct as UnitDefault);
+
+		// ���� �ʱ�ȭ
+		item = null;
 		isProducing = false;
+		produceTime = 0;
+		progress = 0;
+
+		// �������� ����� ������ ����
+		SetProduce();
+	}
+
+	private Vector3 SetSpawnPoint()
+	{
+		// ������ ����� ��ġ�� ��ȯ
+		int angle = Random.Range(0, 361);
+		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
+		pos += transform.position + new Vector3(0, 0.5f, 0);
+		return pos;
 	}
 }

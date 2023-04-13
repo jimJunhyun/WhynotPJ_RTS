@@ -38,8 +38,9 @@ public class UnitController : MonoBehaviour, IProducable
     private Dictionary<State, IUnitState> stateDictionary = null;
     private IUnitState currentState;
     public IUnitState CurrentState => currentState;
+	public GameObject _prefab => null;
 
-    private void Awake()
+	private void Awake()
     {
         stateDictionary = new Dictionary<State, IUnitState>();
         Transform stateTrm = transform.Find("States");

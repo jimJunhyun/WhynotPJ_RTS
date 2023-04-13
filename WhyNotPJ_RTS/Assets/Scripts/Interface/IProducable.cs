@@ -54,10 +54,11 @@ public struct Element
 
 public interface IProducable
 {
-	public string _myName { get; }
+	public string _myName { get;}
 	public float _produceTime{ get; }
-	public Element _element { get; }
+	public Element _element{ get;}
 	public Action _onCompleted { get; }
+	public GameObject _prefab { get; }
 
 	public float this[int idx]
 	{
