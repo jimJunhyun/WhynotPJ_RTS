@@ -4,10 +4,6 @@ using UnityEngine.AI;
 
 public class UnitMove : MonoBehaviour
 {
-    [Header("기본 스탯: 이동 속도"), SerializeField]
-    private float moveSpeed;
-    [Header("감속 속도"), SerializeField]
-    private float decelSpeed;
     private NavMeshHit hit;
     private NavMeshAgent navMeshAgent;
     private NavMeshPath path;
@@ -18,7 +14,15 @@ public class UnitMove : MonoBehaviour
         path = new NavMeshPath();
     }
 
-    private void Update()
+    public void SetTargetPosition(Vector3 pos)
+    {
+        if (navMeshAgent.CalculatePath(pos, path))
+        {
+            navMeshAgent.SetDestination(pos);
+        }
+    }
+
+    public void SetAreaSpeed(float moveSpeed)
     {
         if (navMeshAgent.velocity.sqrMagnitude >= 0.1f)
         {
@@ -27,7 +31,7 @@ public class UnitMove : MonoBehaviour
             switch (hit.mask)
             {
                 case 8:
-                    navMeshAgent.speed = decelSpeed;
+                    navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
 
                     break;
                 default:
@@ -35,14 +39,6 @@ public class UnitMove : MonoBehaviour
 
                     break;
             }
-        }
-    }
-
-    public void SetTargetPosition(Vector3 pos)
-    {
-        if (navMeshAgent.CalculatePath(pos, path))
-        {
-            navMeshAgent.SetDestination(pos);
         }
     }
 }

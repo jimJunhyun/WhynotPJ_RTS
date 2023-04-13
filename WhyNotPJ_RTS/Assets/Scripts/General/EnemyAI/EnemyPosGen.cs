@@ -27,22 +27,22 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
 
-		IUnit currentState = con.GetStateScript();
+		IUnitState currentState = con.CurrentState;
 		
 		if (con._element.rec >= 5f)
 		{
 			//정찰계열 유닛
 			//가장 가까운 미발견 지형으로 이동하도록 하기..
 			//미발견 지형이 더 넓은 방향으로 이동하도록?
-			con.unitMove.SetTargetPosition(Vector3.zero);
+			//con.unitMove.SetTargetPosition(Vector3.zero);
 			Debug.Log("정찰적인 조작");
 		}
 		else if(set.warBias >= selected)
 		{
 			if(EnemyBrain.instance.playerBase != null)
 			{
-				con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
-				Debug.Log(con._myName+"에게 공격적인 조작");
+				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+				Debug.Log(con._myName + "에게 공격적인 조작");
 			}
 			else
 			{
@@ -52,7 +52,7 @@ public class EnemyPosGen : MonoBehaviour
 				myControls.Remove(con);
 				Debug.Log("유닛 하나 더함.");
 			}
-			Debug.Log(con._myName + " 에게 공격적인 명령.");
+			Debug.Log(con._myName + "에게 공격적인 명령.");
 			//발견한 적 본진이 있다면 그 근처로 이동
 			//발견한 적 본진이 없다면 대기 또는 경계
 		}
@@ -93,11 +93,11 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			UnitController curC = myControls.Find((x) => { return x.IsCurrentState(State.Wait); });
+			/*UnitController curC = myControls.Find((x) => { return x.CurrentState == ; });
 			if (curC != null)
 			{
 				SamplePos(curC);
-			}
+			}*/
 		}
 	}
 }

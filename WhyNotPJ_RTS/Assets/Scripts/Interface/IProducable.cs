@@ -57,7 +57,6 @@ public interface IProducable
 	public string _myName { get; }
 	public float _produceTime{ get; }
 	public Element _element { get; }
-
 	public Action _onCompleted { get; }
 
 	public float this[int idx]

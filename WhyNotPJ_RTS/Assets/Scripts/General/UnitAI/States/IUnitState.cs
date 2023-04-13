@@ -16,7 +16,7 @@ namespace Core
     }
 }
 
-public interface IUnit
+public interface IUnitState
 {
     public void OnEnterState();
 

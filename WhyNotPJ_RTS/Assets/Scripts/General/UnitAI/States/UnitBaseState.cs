@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnitBase : IUnit
+public abstract class UnitBaseState : IUnitState
 {
     protected UnitController unitController;
     protected UnitMove unitMove;

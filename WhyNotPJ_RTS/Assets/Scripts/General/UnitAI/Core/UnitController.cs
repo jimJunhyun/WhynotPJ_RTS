@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour, IProducable
 {
-    [SerializeField]
+    #region Unit Attributes
+    [Header("Unit Attributes"), SerializeField]
     private string myName;
     [SerializeField]
     private float produceTime;
@@ -18,21 +19,34 @@ public class UnitController : MonoBehaviour, IProducable
     public float _produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);
     public Action _onCompleted => onCompleted;
+    #endregion
 
-    private Dictionary<State, IUnit> stateDictionary = null;
-    private IUnit currentState;
+    #region Unit Status
+    public static float detectRange = 5f;
+    [Header("Unit Status")]
+    public float attackPower;
+    public float attackSpeed;
+    public float attackRange;
+    public float defensePenetration;
+    [Space(20)]
+    public float healthPoint;
+    public float defensePower;
+    [Space(20)]
+    public float moveSpeed;
+    #endregion
 
-    [HideInInspector]
-    public UnitMove unitMove;
+    private Dictionary<State, IUnitState> stateDictionary = null;
+    private IUnitState currentState;
+    public IUnitState CurrentState => currentState;
 
     private void Awake()
     {
-        stateDictionary = new Dictionary<State, IUnit>();
+        stateDictionary = new Dictionary<State, IUnitState>();
         Transform stateTrm = transform.Find("States");
 
         foreach (State state in Enum.GetValues(typeof(State)))
         {
-            IUnit stateScript = stateTrm.GetComponent($"Unit{state}State") as IUnit;
+            IUnitState stateScript = stateTrm.GetComponent($"Unit{state}State") as IUnitState;
 
             if (stateScript == null)
             {
@@ -44,8 +58,6 @@ public class UnitController : MonoBehaviour, IProducable
             stateScript.SetUp(transform);
             stateDictionary.Add(state, stateScript);
         }
-
-        unitMove = GetComponent<UnitMove>();
     }
 
     private void Start()
@@ -65,15 +77,5 @@ public class UnitController : MonoBehaviour, IProducable
         currentState = stateDictionary[type];
 
         currentState?.OnEnterState();
-    }
-
-    public bool IsCurrentState(State type)
-    {
-        return stateDictionary[type] == currentState;
-    }
-
-    public IUnit GetStateScript()
-    {
-        return currentState;
     }
 }
