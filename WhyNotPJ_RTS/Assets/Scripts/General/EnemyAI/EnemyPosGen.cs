@@ -31,11 +31,12 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
 
-		IUnitState currentState = con.CurrentState;
-		
+		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
+
+
 		if (con._element.rec >= 5f)
 		{
-			con.Move(Perceive.IdxVectorToPos(FindNearestSightless(con)));
+			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
 			//�����迭 ����
 			//���� ����� �̹߰� �������� �̵��ϵ��� �ϱ�..
 			//�̹߰� ������ �� ���� �������� �̵��ϵ���?
@@ -53,13 +54,13 @@ public class EnemyPosGen : MonoBehaviour
 			}
 			else
 			{
-				con.state = State.Alert;
+				con.ChangeState(State.Alert);
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
 				Debug.Log("���� �ϳ� ����.");
-			
-			Debug.Log(con.myName + " ���� �������� ����.");
+			}
+			Debug.Log(con.name + " ���� �������� ����.");
 			//�߰��� �� ������ �����鼭, ����� ���� ������ �����Ͽ��ٸ� ������ ���� ���ο��� ���� ����
 			//�߰��� �� ������ ���ٸ� ��� ���·� ������.
 			//��Ҵٰ� ����
@@ -67,10 +68,9 @@ public class EnemyPosGen : MonoBehaviour
 		else
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
-			con.Move(v); 
 
-			con.state = UnitState.Alert;//�Ϸ�� ���� ���� ����. (�Ϸ�� �ൿ�� �����ϱ�, �Ǵ� ������ �ڷ�ƾ���� �����Ͽ� ��ȯ���� ��ٸ��� �ϱ�??)
-			Debug.Log(con.myName + " ���� ������� ����");
+			con.ChangeState(State.Alert); //�Ϸ�� ���� ���� ����. (�Ϸ�� �ൿ�� �����ϱ�, �Ǵ� ������ �ڷ�ƾ���� �����Ͽ� ��ȯ���� ��ٸ��� �ϱ�??)
+			Debug.Log(con.name + " ���� ������� ����");
 
 			//������ ����� ������ ���� ��.
 			//�Ÿ����� �ݺ��, ���̿��� ���
@@ -78,7 +78,7 @@ public class EnemyPosGen : MonoBehaviour
 		}
 	}
 
-	public Vector2Int FindNearestSightless(IUnit unit) //���� ������ �ʿ���. ���ֿ� ���Ѱŵ� �˻� ���ǿ� ���Ѱŵ�
+	public Vector2Int FindNearestSightless(UnitController unit) //���� ������ �ʿ���. ���ֿ� ���Ѱŵ� �˻� ���ǿ� ���Ѱŵ�
 	{
 		Vector2Int from = new Vector2Int(100, 100);
 		Vector2Int dest = Vector2Int.zero;
@@ -134,7 +134,7 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		for (int i = 0; i < accumulations.Count; i++)
 		{
-			accumulations[i].Move(EnemyBrain.instance.playerBase);
+			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 		}
 		Debug.Log("�Ѱ���");
 	}

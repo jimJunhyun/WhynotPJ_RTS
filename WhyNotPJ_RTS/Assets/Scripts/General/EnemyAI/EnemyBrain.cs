@@ -81,7 +81,6 @@ public class EnemyBrain : MonoBehaviour
 		set.violenceBias = set.initVioBias;
 		set.defendBias = set.initDefBias;
 		set.reconBias = set.initRecBias;
-		producable.Add(new Warrior());
 		producable.Add(new ReconTower());
 		producable.Add(new Barricade());
 		producable.Add(new Scout());

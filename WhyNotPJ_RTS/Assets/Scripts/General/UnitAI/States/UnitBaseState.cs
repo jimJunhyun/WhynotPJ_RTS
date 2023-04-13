@@ -5,8 +5,8 @@ using UnityEngine;
 
 public abstract class UnitBaseState : IUnitState
 {
-    protected UnitController unitController;
-    protected UnitMove unitMove;
+    public UnitController unitController;
+    public UnitMove unitMove;
 
     public abstract void OnEnterState();
 
