@@ -28,8 +28,8 @@ public class Producer : MonoBehaviour
 	IEnumerator DelayMake(IProducable product)
 	{
 		isProducing = true;
-		yield return new WaitForSeconds(product.produceTime);
-		product.onCompleted.Invoke();
+		yield return new WaitForSeconds(product._produceTime);
+		product._onCompleted.Invoke();
 		producing = null;
 		
 		isProducing = false;

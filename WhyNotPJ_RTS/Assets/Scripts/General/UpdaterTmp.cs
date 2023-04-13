@@ -25,7 +25,7 @@ public class UpdaterTmp : MonoBehaviour
 			else
 			{
 				prevPos = vec;
-				EnemyEye.instance.perceived.UpdateMapRecur(prevPos, 5, true);
+				EnemyEye.instance.perceived.UpdateMapRecur(prevPos, 15, true);
 			}
 			
 			

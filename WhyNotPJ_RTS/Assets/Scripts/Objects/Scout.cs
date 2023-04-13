@@ -3,38 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scout : IUnit
+public class Scout : MonoBehaviour, IProducable
 {
-	public string myName => "정찰병";
+    [SerializeField]
+    private string myName;
+    [SerializeField]
+    private float produceTime;
+    [SerializeField]
+    private int vio, def, rec;
+    private Action onCompleted;
 
-	public float produceTime => 0.5f;
-
-	public Element element => new Element(2, 0, 0);
-
-	public Action onCompleted => () => { EnemyPosGen.instance.myControls.Add(new Scout()); Debug.Log("정찰병 생산 완료"); };
-
-
-	public Vector3 objPos {get; set;}
-	public UnitState state {get;set;} = UnitState.Wait;
-
-	public Transform target{ get;  set;}
-
-	public void Move(Vector3 to)
-	{
-		objPos = to;
-		Debug.Log(myName + "가 " + to + "로 움직였다.");
-		EnemyBrain.instance.StartCoroutine(Tester(4f));
-	}
-
-	public void Move(Transform target)
-	{
-		this.target = target;
-	}
-
-	IEnumerator Tester(float sec)
-	{
-		state = UnitState.Moving;
-		yield return new WaitForSeconds(sec);
-		state = UnitState.Wait;
-	}
+    string IProducable._myName => myName;
+    float IProducable._produceTime => produceTime;
+    public Element _element => new Element(vio, def, rec);
+    Action IProducable._onCompleted => onCompleted;
 }

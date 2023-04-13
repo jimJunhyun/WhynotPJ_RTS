@@ -1,3 +1,4 @@
+using Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -17,8 +18,8 @@ public class EnemyPosGen : MonoBehaviour
 
 	int curAccumulated = 0;
 
-	public List<IUnit> myControls = new List<IUnit>();
-	public List<IUnit> accumulations = new List<IUnit>();
+	public List<UnitController> myControls = new List<UnitController>();
+	public List<UnitController> accumulations = new List<UnitController>();
 	public List<IBuilding> buildings = new List<IBuilding>();
 
 	private void Awake()
@@ -26,48 +27,58 @@ public class EnemyPosGen : MonoBehaviour
 		instance = this;
 	}
 
-	public void SamplePos(IUnit con)
+	public void SamplePos(UnitController con)
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
-		
-		if (con.element.rec >= 5f)
+
+		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
+
+
+		if (con._element.rec >= 5f)
 		{
-			con.Move(Perceive.IdxVectorToPos(FindNearestSightless(con)));
-			//Á¤Âû°è¿­ À¯´Ö
-			//°¡Àå °¡±î¿î ¹Ì¹ß°ß ÁöÇüÀ¸·Î ÀÌµ¿ÇÏµµ·Ï ÇÏ±â..
-			//¹Ì¹ß°ß ÁöÇüÀÌ ´õ ³ÐÀº ¹æÇâÀ¸·Î ÀÌµ¿ÇÏµµ·Ï?
-			//¿ì¼±º¸·ù
+			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
+			//ï¿½ï¿½ï¿½ï¿½ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ï±ï¿½..
+			//ï¿½Ì¹ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ïµï¿½ï¿½ï¿½?
+			//con.unitMove.SetTargetPosition(Vector3.zero);
+			//ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½
 			//con.Move(Vector3.zero);
-			Debug.Log("Á¤ÂûÀûÀÎ Á¶ÀÛ");
+			Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 		}
 		else if(set.warBias >= selected)
 		{
-				con.state = UnitState.Alert;
+			if(EnemyBrain.instance.playerBase != null)
+			{
+				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+				Debug.Log(con._myName + "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+			}
+			else
+			{
+				con.ChangeState(State.Alert);
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
-				Debug.Log("À¯´Ö ÇÏ³ª ´õÇÔ.");
-			
-			Debug.Log(con.myName + " ¿¡°Ô °ø°ÝÀûÀÎ ¸í·É.");
-			//¹ß°ßÇÑ Àû º»ÁøÀÌ ÀÖÀ¸¸é¼­, ÃæºÐÇÑ ¾çÀÇ À¯´ÖÀ» ÃàÀûÇÏ¿´´Ù¸é ÃàÀûµÈ À¯´Ö ÀüºÎ¿¡°Ô °ø°Ý ¸í·É
-			//¹ß°ßÇÑ Àû º»ÁøÀÌ ¾ø´Ù¸é °æ°è »óÅÂ·Î ÃàÀûÇÔ.
-			//¸ð¾Ò´Ù°¡ ·¯½¬
+				Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½.");
+			}
+			Debug.Log(con.name + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
+			//ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½é¼­, ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+			//ï¿½ï¿½Ò´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 		else
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
-			con.Move(v); 
 
-			con.state = UnitState.Alert;//¿Ï·á½Ã »óÅÂ °æ°è·Î º¯°æ. (¿Ï·á½Ã Çàµ¿À» ¿¬°áÇÏ±â, ¶Ç´Â ¼±ÅÃÀ» ÄÚ·çÆ¾À¸·Î º¯°æÇÏ¿© ¹ÝÈ¯±îÁö ±â´Ù¸®°Ô ÇÏ±â??)
-			Debug.Log(con.myName + " ¿¡°Ô ¹æ¾îÀûÀÎ ¸í·É");
+			con.ChangeState(State.Alert); //ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. (ï¿½Ï·ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½, ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½??)
+			Debug.Log(con.name + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
-			//º»Áø°ú ÃæºÐÈ÷ °¡±î¿ì¸ç ³ôÀº °÷.
-			//°Å¸®¿¡´Â ¹Ýºñ·Ê, ³ôÀÌ¿¡´Â ºñ·Ê
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
+			//ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½ï¿½, ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 			
 		}
 	}
 
-	public Vector2Int FindNearestSightless(IUnit unit) //±¸Á¶ °³¼±ÀÌ ÇÊ¿äÇÔ. À¯´Ö¿¡ °üÇÑ°Åµç °Ë»ç Á¶°Ç¿¡ °üÇÑ°Åµç
+	public Vector2Int FindNearestSightless(UnitController unit) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Ñ°Åµï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½ï¿½ï¿½Ñ°Åµï¿½
 	{
 		Vector2Int from = new Vector2Int(100, 100);
 		Vector2Int dest = Vector2Int.zero;
@@ -92,7 +103,7 @@ public class EnemyPosGen : MonoBehaviour
 		return dest;
 	}
 
-	public Vector2Int FindHighestHeightIdx() //³ôÀ¸¸é¼­ °¡±î¿òÀ» ¼±È£ÇÔ.
+	public Vector2Int FindHighestHeightIdx() //ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½.
 	{
 		float largestH = float.MinValue;
 		Vector2Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
@@ -123,9 +134,9 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		for (int i = 0; i < accumulations.Count; i++)
 		{
-			accumulations[i].Move(EnemyBrain.instance.playerBase);
+			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 		}
-		Debug.Log("ÃÑ°ø°Ý");
+		Debug.Log("ï¿½Ñ°ï¿½ï¿½ï¿½");
 	}
 
 	public void FindPlaying()
@@ -136,11 +147,11 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			IUnit curC = myControls.Find((x) => { return x.state == UnitState.Wait; });
+			/*UnitController curC = myControls.Find((x) => { return x.CurrentState == ; });
 			if (curC != null)
 			{
 				SamplePos(curC);
-			}
+			}*/
 		}
 	}
 }
