@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public class Units
+{
+}
+
 /// <summary>
 /// 유닛 선택 기능을 테스트하기 위한 유닛 선택 컨트롤 클래스. 추후 개선 필요.
 /// </summary>
@@ -11,11 +15,7 @@ public class UnitManager
 	public static UnitManager Instance;
 
     private List<UnitDefault> selectedUnitList;		// 선택된 유닛 리스트
-	public List<UnitDefault> SelectedUnitList
-	{
-		get { return selectedUnitList; }
-		set { selectedUnitList = value; }
-	}
+	public List<UnitDefault> SelectedUnitList => selectedUnitList;
     public List<UnitDefault> unitList;				// 게임상에 존재하는 모든 유닛 리스트
 
 	public UnitManager()
@@ -61,8 +61,8 @@ public class UnitManager
 		}
 		else
 		{
-			newUnit.OnSelectUnit();
 			selectedUnitList.Add(newUnit);
+			newUnit.OnSelectUnit();
 		}
 	}
 

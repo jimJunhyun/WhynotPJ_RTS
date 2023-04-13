@@ -572,7 +572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734f6ae5c5d1e0342844cf218343b4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  producer: {fileID: 0}
   unitList:
   - {fileID: 1815088460164482093, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
   - {fileID: 9033351263872499444, guid: 37ce10b2caf82ce44b128135cbe4bf90, type: 3}
@@ -1677,7 +1676,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 2012424276}
   movementMultiply: 0.08
-  movementTime: 0.1
+  movementTime: 0.3
   zoomTime: 0.05
   currentZoomValue: -6
   minZoomValue: -20
