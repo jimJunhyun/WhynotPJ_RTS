@@ -46,7 +46,7 @@ public class CameraUnitSelectManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit, Mathf.Infinity, unitLayer))
 				{
-					if (hit.transform.TryGetComponent(out ISelectable unit))
+					if (hit.transform.TryGetComponent(out UnitDefault unit))
 					{
 						unitController.ClickSelectUnit(unit);
 					}
@@ -130,7 +130,7 @@ public class CameraUnitSelectManager : MonoBehaviour
 
 	private void SelectUnits()
 	{
-		foreach (ISelectable unit in unitController.unitList)
+		foreach (UnitDefault unit in unitController.unitList)
 		{
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.WorldPos)))
 			{

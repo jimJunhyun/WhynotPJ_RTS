@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,10 @@ public class ProduceBuildingUI : MonoBehaviour
 		{
 			print(i);
 			Button button = Instantiate(buttonPrefab, contentTrm);
-			button.onClick.AddListener(() => proB.AddQueue(proB.unitList[i - 1]));
+			button.GetComponentInChildren<TextMeshProUGUI>().text = proB.unitList[i].gameObject.name;
+
+			int number = i;
+			button.onClick.AddListener(() => proB.AddQueue(proB.unitList[number]));
 		}
 	}
 }

@@ -11,7 +11,7 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 	public bool CanDragSelect => false;
 	public Vector3 WorldPos => transform.position;
 
-	[SerializeField] private Producer producer;
+	private Producer producer;
 
 	public List<UnitDefault> unitList = new List<UnitDefault>();
 
@@ -20,6 +20,7 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 	private void Awake()
 	{
 		proUI.MakeButton(unitList.Count, this);
+		producer = gameObject.AddComponent<Producer>();
 	}
 
 	public void AddQueue<T>(T unit) where T : IProducable

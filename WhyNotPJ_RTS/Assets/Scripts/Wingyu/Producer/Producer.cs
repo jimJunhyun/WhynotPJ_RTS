@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Producer : MonoBehaviour
 {
-	public UnitDefault testUnit;
-    public IProducable producing;
+    public IProducable item;
 	public bool isProducing = false;
 	public bool pSide = false;
 
@@ -26,9 +24,9 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / producing.produceTime;
+		progress = produceTime / item.produceTime;
 
-		if (produceTime >= producing.produceTime)
+		if (produceTime >= item.produceTime)
 		{
 			Produce();
 		}
@@ -50,21 +48,21 @@ public class Producer : MonoBehaviour
 	{
 		if (produceQueue.Count == 0) return;
 		
-		producing = produceQueue.Dequeue();
+		item = produceQueue.Dequeue();
 		isProducing = true;
 	}
 
     private void Produce()
 	{
-		if (producing == null) return;
+		if (item == null) return;
 
 		// 유닛을 생산
-		IProducable finProduct = Instantiate(producing.prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		IProducable finProduct = Instantiate(item.prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
 		finProduct.onCompleted?.Invoke();
 		UnitManager.Instance.unitList.Add(finProduct as UnitDefault);
 
 		// 변수 초기화
-		producing = null;
+		item = null;
 		isProducing = false;
 		produceTime = 0;
 		progress = 0;
@@ -76,7 +74,7 @@ public class Producer : MonoBehaviour
 	private Vector3 SetSpawnPoint()
 	{
 		// 유닛이 생산될 위치를 반환
-		int angle = UnityEngine.Random.Range(0, 361);
+		int angle = Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
 		pos += transform.position + new Vector3(0, 0.5f, 0);
 		return pos;
