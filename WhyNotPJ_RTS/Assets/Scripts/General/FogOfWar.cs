@@ -39,7 +39,7 @@ public class FogOfWar : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				earthTex.SetPixel(y, x, Color.clear);
+				earthTex.SetPixel(y, Perceive.MAPX - x, Color.clear);
 			}
 		}
 	}
@@ -63,12 +63,12 @@ public class FogOfWar : MonoBehaviour
 						c = Color.black;
 					}
 
-					tex.SetPixel(y, x, c);
+					tex.SetPixel(y,Perceive.MAPX - x, c);
 					
 				}
 				if (map[y, x].visiblity)
 				{
-					earthTex.SetPixel(y, x, Color.black);
+					earthTex.SetPixel( y,Perceive.MAPX - x, Color.black);
 				}
 			}
 		}

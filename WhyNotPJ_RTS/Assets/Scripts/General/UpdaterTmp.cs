@@ -12,7 +12,7 @@ public class UpdaterTmp : MonoBehaviour
 	}
 	void Update()
     {
-		Vector2Int vec = Perceive.PosToIdxVector(transform.position);
+		Vector2Int vec =  Perceive.PosToIdxVector(transform.position);
         if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
 		{
 			if (isPlayer)
@@ -20,7 +20,7 @@ public class UpdaterTmp : MonoBehaviour
 				PlayerEye.instance.perceived.UpdateMap(prevPos, 15, false);
 				prevPos = vec;
 				PlayerEye.instance.perceived.UpdateMapRecur(prevPos, 15, true);
-				Debug.Log("플레이어 시야 새로고침됨.");
+				Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
 			}
 			else
 			{

@@ -29,7 +29,7 @@ public class Producer : MonoBehaviour
 	{
 		isProducing = true;
 		yield return new WaitForSeconds(product._produceTime);
-		product._onCompleted.Invoke();
+		product._onCompleted?.Invoke();
 		producing = null;
 		
 		isProducing = false;

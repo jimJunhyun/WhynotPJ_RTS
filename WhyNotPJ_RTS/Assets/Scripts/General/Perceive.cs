@@ -132,14 +132,10 @@ public class Perceive
 	{
 		prevMap = (MapData[,])map.Clone();
 
-		for (int i = -1; i <= 1; i++)
+		for (int i = 0; i < 360; ++i)
 		{
-			for (int j = -1; j <= 1; j++)
-			{
-				Debug.Log("최초 위치 : " + map[startPos.y, startPos.x].height);
-				UpdateMapRayRecur(startPos, distance, new Vector2Int(i, j), map[startPos.y, startPos.x].height, isOn);
-			}
-			
+				//Debug.Log("최초 위치 : " + startPos);
+			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x].height, isOn);
 		}
 
 		if (isPlayer)
@@ -148,32 +144,32 @@ public class Perceive
 		}
 	}
 
-	void UpdateMapRayRecur(Vector2Int pos, int distance, Vector2Int angle, int height, bool isOn)
+	void UpdateMapRayRecur(Vector2Int pos, int distance, int angle, int height, bool isOn)
 	{
-		if(distance > 0 && pos.x > 0 && pos.x < MAPX - 1 && pos.y > 0 && pos.y < MAPY - 1 && map[pos.y, pos.x].height <= height)
+		float xAccumulate = 0;
+		float yAccumulate = 0;
+		float xInc = Mathf.Cos(angle * Mathf.Deg2Rad);
+		float yInc = Mathf.Sin(angle * Mathf.Deg2Rad);
+		int xIdx = 0, yIdx = 0;
+		for (int i = 0; i < distance; i++)
 		{
-			map[pos.y, pos.x].visiblity = isOn;
-			map[pos.y + 1, pos.x].visiblity = isOn;
-			map[pos.y - 1, pos.x].visiblity = isOn;
-			//map[pos.y, pos.x + 1].visiblity = true;
-			//map[pos.y + 1, pos.x+1].visiblity = true;
-			//map[pos.y - 1, pos.x+1].visiblity = true;
-			//map[pos.y, pos.x-1].visiblity = true;
-			//map[pos.y + 1, pos.x-1].visiblity = true;
-			//map[pos.y - 1, pos.x-1].visiblity = true;
-			pos.x += angle.x; 
-			pos.y += angle.y; //해봤자 8방향이 가능한 전부가 됨.
-
-			UpdateMapRayRecur(pos, distance - 1, angle, height, isOn);
+			yIdx = pos.y + (int)yAccumulate;
+			xIdx = pos.x + (int)xAccumulate;
+			xIdx = xIdx < 0 ? 0 : xIdx >= MAPX ? MAPX - 1 : xIdx;
+			yIdx = yIdx < 0 ? 0 : yIdx >= MAPY ? MAPY - 1 : yIdx;
+			if(map[yIdx, xIdx].visiblity != isOn && map[yIdx, xIdx].height <= height)
+			{
+				map[yIdx, xIdx].visiblity = isOn;
+			}
+			yAccumulate += yInc;
+			xAccumulate += xInc;
 		}
-		
-		
 	}
 
 	public static Vector2Int PosToIdxVector(Vector3 pos)
 	{
 		int x = (int)pos.x + MAPX / 2;
-		int y = (int)pos.z + MAPY / 2;
+		int y = -(int)pos.z + MAPY / 2;
 		x = x < 0 ? 0 : x >= MAPX ? MAPX - 1 : x;
 		y = y < 0 ? 0 : y >= MAPY ? MAPY - 1 : y;
 		Vector2Int idx = new Vector2Int(y, x);
@@ -181,10 +177,11 @@ public class Perceive
 	}
 	public static Vector3 IdxVectorToPos(Vector2Int idx) // Y는 필요할 경우 따로 할당.
 	{
-		int x = (int)idx.y - MAPX / 2;
-		int z = (int)idx.x - MAPY / 2;
-		Vector3 pos = new Vector3(z, 0, x);
+		float x = idx.y - MAPX / 2;
+		float z =  - idx.x + MAPY / 2;
+		Vector3 pos = new Vector3(x, 0, z);
 		return pos;
 	}
+	
 	
 }

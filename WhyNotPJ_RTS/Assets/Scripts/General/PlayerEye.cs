@@ -8,6 +8,7 @@ public class PlayerEye : MonoBehaviour
 
 	public Perceive perceived = new Perceive();
 
+
 	private void Awake()
 	{
 		instance = this;
