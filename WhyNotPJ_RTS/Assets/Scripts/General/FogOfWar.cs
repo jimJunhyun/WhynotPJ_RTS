@@ -50,10 +50,10 @@ public class FogOfWar : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if(map[y, x].visiblity != prevMap[y, x].visiblity)
+				if((map[y, x].visiblity <= 0 && prevMap[y, x].visiblity > 0) || (map[y, x].visiblity > 0 && prevMap[y, x].visiblity <= 0))
 				{
 					Color c;
-					if (map[y, x].visiblity)
+					if (map[y, x].visiblity > 0)
 					{
 						c = Color.clear;
 						
@@ -66,7 +66,7 @@ public class FogOfWar : MonoBehaviour
 					tex.SetPixel(y,Perceive.MAPX - x, c);
 					
 				}
-				if (map[y, x].visiblity)
+				if (map[y, x].visiblity > 0)
 				{
 					earthTex.SetPixel( y,Perceive.MAPX - x, Color.black);
 				}

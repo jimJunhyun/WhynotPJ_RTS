@@ -77,7 +77,7 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if(!EnemyEye.instance.perceived.map[y, x].visiblity)
+				if(EnemyEye.instance.perceived.map[y, x].visiblity <= 0)
 				{
 					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
 					if (smallestD > dist)
@@ -100,7 +100,7 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
-				if(EnemyEye.instance.perceived.map[y, x].visiblity) 
+				if(EnemyEye.instance.perceived.map[y, x].visiblity > 0) 
 				{
 					float num = EnemyEye.instance.perceived.map[y, x].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num > largestH) 

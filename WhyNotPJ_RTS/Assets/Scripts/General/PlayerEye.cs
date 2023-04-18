@@ -15,4 +15,9 @@ public class PlayerEye : MonoBehaviour
 
 		perceived.InitMap(true);
 	}
+
+	private void LateUpdate()
+	{
+		perceived.UpdateMap();
+	}
 }

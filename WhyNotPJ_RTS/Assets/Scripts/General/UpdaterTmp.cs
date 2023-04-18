@@ -9,23 +9,29 @@ public class UpdaterTmp : MonoBehaviour
 	private void Awake()
 	{
 		prevPos = Perceive.PosToIdxVector(transform.position);
+		
+	}
+
+	private void Start()
+	{
+		PlayerEye.instance.perceived.AddOnUpd(prevPos, 15);
 	}
 	void Update()
     {
 		Vector2Int vec =  Perceive.PosToIdxVector(transform.position);
-        if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
+        if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1) //이거를 바꿔야 하겠는데?
 		{
 			if (isPlayer)
 			{
-				PlayerEye.instance.perceived.UpdateMap(prevPos, 15, false);
+				PlayerEye.instance.perceived.AddOffUpd(prevPos, 15);
 				prevPos = vec;
-				PlayerEye.instance.perceived.UpdateMapRecur(prevPos, 15, true);
+				PlayerEye.instance.perceived.AddOnUpd(prevPos, 15);
 				Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
 			}
 			else
 			{
 				prevPos = vec;
-				EnemyEye.instance.perceived.UpdateMapRecur(prevPos, 15, true);
+				EnemyEye.instance.perceived.AddOnUpd(prevPos, 15);
 			}
 			
 			
