@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnitBaseState : IUnitState
+public abstract class UnitBaseState : MonoBehaviour, IUnitState
 {
+    [HideInInspector]
     public UnitController unitController;
+    [HideInInspector]
     public UnitMove unitMove;
 
     public abstract void OnEnterState();

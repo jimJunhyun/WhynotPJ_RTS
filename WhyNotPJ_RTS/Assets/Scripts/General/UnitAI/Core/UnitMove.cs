@@ -6,6 +6,7 @@ public class UnitMove : MonoBehaviour
 {
     private NavMeshHit hit;
     private NavMeshAgent navMeshAgent;
+    public NavMeshAgent NavMeshAgent => navMeshAgent;
     private NavMeshPath path;
 
     private void Start()
@@ -24,21 +25,18 @@ public class UnitMove : MonoBehaviour
 
     public void SetAreaSpeed(float moveSpeed)
     {
-        if (navMeshAgent.velocity.sqrMagnitude >= 0.1f)
+        navMeshAgent.SamplePathPosition(NavMesh.AllAreas, 1, out hit);
+
+        switch (hit.mask)
         {
-            navMeshAgent.SamplePathPosition(NavMesh.AllAreas, 1, out hit);
+            case 8:
+                navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
 
-            switch (hit.mask)
-            {
-                case 8:
-                    navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
+                break;
+            default:
+                navMeshAgent.speed = moveSpeed;
 
-                    break;
-                default:
-                    navMeshAgent.speed = moveSpeed;
-
-                    break;
-            }
+                break;
         }
     }
 }
