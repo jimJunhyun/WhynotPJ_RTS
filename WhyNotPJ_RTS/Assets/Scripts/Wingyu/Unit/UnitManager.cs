@@ -14,28 +14,36 @@ public class UnitManager
 {
 	public static UnitManager Instance;
 
-    private List<UnitDefault> selectedUnitList;		// 선택된 유닛 리스트
-	public List<UnitDefault> SelectedUnitList => selectedUnitList;
-    public List<UnitDefault> unitList;				// 게임상에 존재하는 모든 유닛 리스트
+    public	List<ISelectable> unitList;			// 게임상에 존재하는 모든 유닛 리스트
+    private List<ISelectable> selectedList;		// 선택된 유닛 리스트
+	public	List<UnitController> SelectedUnitList => ( // 선택된 모든 유닛 중에서 UnitController 타입인 유닛만 찾아서 반환
+		from unit in selectedList
+		where unit.GetType() == typeof(UnitController) 
+		select unit as UnitController
+		).ToList();
 
 	public UnitManager()
 	{
-		Instance = Instance == null ? this : Instance;
-		selectedUnitList = new List<UnitDefault>();
-		unitList = new List<UnitDefault>();
-		GameObject.FindObjectsOfType<UnitDefault>().ToList().ForEach(unit => unitList.Add(unit));
+		if (Instance == null)
+		{
+			Instance = this;
+		}
+
+		selectedList = new List<ISelectable>();
+		unitList = new List<ISelectable>();
+		unitList = GameObject.FindObjectsOfType<UnitController>().ToList<ISelectable>();
 	}
 
 	// 클릭을 통한 유닛 선택
-	public void ClickSelectUnit(UnitDefault newUnit)
+	public void ClickSelectUnit(ISelectable newUnit)
 	{
 		SelectUnit(newUnit);
 	}
 
 	// 드래그를 통한 유닛 선택
-	public void DragSelectUnit(UnitDefault newUnit)
+	public void DragSelectUnit(ISelectable newUnit)
 	{
-		if (!selectedUnitList.Contains(newUnit))
+		if (!selectedList.Contains(newUnit))
 		{
 			SelectUnit(newUnit);
 		}
@@ -44,32 +52,32 @@ public class UnitManager
 	// 유닛 모두 선택 해제
 	public void DeselectAll()
 	{
-		for (int i = 0; i < selectedUnitList.Count; ++i)
+		for (int i = 0; i < selectedList.Count; ++i)
 		{
-			selectedUnitList[i].OnDeselectUnit();
+			selectedList[i].OnDeselectUnit();
 		}
 
-		selectedUnitList.Clear();
+		selectedList.Clear();
 	}
 
 	// 매개변수로 받아온 유닛을 선택
-	private void SelectUnit(UnitDefault newUnit)
+	private void SelectUnit(ISelectable newUnit)
 	{
-		if (selectedUnitList.Contains(newUnit))
+		if (selectedList.Contains(newUnit))
 		{
 			DeselectUnit(newUnit);
 		}
 		else
 		{
-			selectedUnitList.Add(newUnit);
+			selectedList.Add(newUnit);
 			newUnit.OnSelectUnit();
 		}
 	}
 
 	// 매개변수로 받아온 유닛을 선택 해제
-	private void DeselectUnit(UnitDefault newUnit)
+	private void DeselectUnit(ISelectable newUnit)
 	{
 		newUnit.OnDeselectUnit();
-		selectedUnitList.Remove(newUnit);
+		selectedList.Remove(newUnit);
 	}
 }

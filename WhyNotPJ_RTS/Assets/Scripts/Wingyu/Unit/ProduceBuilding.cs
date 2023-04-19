@@ -12,13 +12,13 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 
 	private Producer producer;
 
-	public List<UnitDefault> unitList = new List<UnitDefault>();
+	public List<UnitController> unitList = new List<UnitController>();
 
-	public ProduceBuildingUI proUI;
+	public ProduceBuildingUI producerUI;
 
 	private void Awake()
 	{
-		proUI.MakeButton(unitList.Count, this);
+		producerUI.MakeButton(unitList.Count, this);
 		producer = gameObject.AddComponent<Producer>();
 	}
 
@@ -29,11 +29,11 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 
 	public void OnDeselectUnit()
 	{
-		
+		producerUI.ShowUI(false);
 	}
 
 	public void OnSelectUnit()
 	{
-		print("Selected");
+		producerUI.ShowUI(true);
 	}
 }

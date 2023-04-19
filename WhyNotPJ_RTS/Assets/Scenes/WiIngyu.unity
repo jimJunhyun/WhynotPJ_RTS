@@ -573,9 +573,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitList:
-  - {fileID: 1815088460164482093, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
-  - {fileID: 9033351263872499444, guid: 37ce10b2caf82ce44b128135cbe4bf90, type: 3}
-  proUI: {fileID: 398008909}
+  - {fileID: 1603064792, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
+  - {fileID: 8363615371241731141, guid: 37ce10b2caf82ce44b128135cbe4bf90, type: 3}
+  producerUI: {fileID: 398008909}
 --- !u!114 &398008909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1796,10 +1796,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 56666086}
     m_Modifications:
-    - target: {fileID: 1815088460164482089, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 1815088460164482091, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
       propertyPath: m_RootOrder
       value: 0
