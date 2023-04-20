@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraUnitSelectManager : MonoBehaviour
+public class CameraSelectManager : MonoBehaviour
 {
     [SerializeField] private LayerMask unitLayer;
 	[SerializeField] private RectTransform dragRectangle;	// 마우스로 드래그한 범위를 가시화하는 Image UI의 RectTransform
@@ -10,14 +10,14 @@ public class CameraUnitSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitManager unitManager;
+    private UnitSelectManager unitManager;
 
 	private void Awake()
 	{
 		mainCam = Camera.main;
 
 		// 유닛매니저 생성,, 추후 선언 위치 변경 필요
-		unitManager = new UnitManager();
+		unitManager = new UnitSelectManager();
 
 		DrawDragRectangle();
 	}

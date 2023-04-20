@@ -51,9 +51,11 @@ public class Producer : MonoBehaviour
 	{
 		if (item == null) return;
 
-		IProducable finProduct = Instantiate(item._prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
+		obj.transform.position = SetSpawnPoint();
+		IProducable finProduct = obj.GetComponent<IProducable>();
 		finProduct._onCompleted?.Invoke();
-		UnitManager.Instance.unitList.Add(finProduct as UnitController);
+		UnitSelectManager.Instance.unitList.Add(finProduct as UnitController);
 
 		item = null;
 		isProducing = false;

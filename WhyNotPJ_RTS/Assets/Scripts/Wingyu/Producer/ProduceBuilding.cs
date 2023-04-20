@@ -18,7 +18,6 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 
 	private void Awake()
 	{
-		producerUI.MakeButton(unitList.Count, this);
 		producer = gameObject.AddComponent<Producer>();
 	}
 
@@ -27,13 +26,15 @@ public class ProduceBuilding : MonoBehaviour, IBuilding, ISelectable
 		producer.AddProduct(unit);
 	}
 
-	public void OnDeselectUnit()
-	{
-		producerUI.ShowUI(false);
-	}
-
 	public void OnSelectUnit()
 	{
+		producerUI.SetButton(unitList.Count, this);
 		producerUI.ShowUI(true);
+	}
+
+	public void OnDeselectUnit()
+	{
+		producerUI.UnsetButton();
+		producerUI.ShowUI(false);
 	}
 }

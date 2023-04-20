@@ -10,9 +10,9 @@ public class Units
 /// <summary>
 /// 유닛 선택 기능을 테스트하기 위한 유닛 선택 컨트롤 클래스. 추후 개선 필요.
 /// </summary>
-public class UnitManager
+public class UnitSelectManager
 {
-	public static UnitManager Instance;
+	public static UnitSelectManager Instance;
 
     public	List<ISelectable> unitList;			// 게임상에 존재하는 모든 유닛 리스트
     private List<ISelectable> selectedList;		// 선택된 유닛 리스트
@@ -22,7 +22,7 @@ public class UnitManager
 		select unit as UnitController
 		).ToList();
 
-	public UnitManager()
+	public UnitSelectManager()
 	{
 		if (Instance == null)
 		{
