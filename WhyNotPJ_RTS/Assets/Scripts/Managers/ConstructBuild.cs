@@ -17,6 +17,7 @@ public class ConstructBuild : MonoBehaviour
 	const float BRIDGEYSCALE = 0.5f;
 	const int GROUNDLAYERMASK = 1 << 8;
 
+	const float RAYDIST = 1.5f; //모델 키
 	const float RAYGAP = 1.2f; //모델 지름
 
 
@@ -42,6 +43,7 @@ public class ConstructBuild : MonoBehaviour
 		startPos.y = PlayerEye.instance.perceived.map[sIdx.y, sIdx.x].height;
 		endPos.y = PlayerEye.instance.perceived.map[eIdx.y, eIdx.x].height;
 		// 클릭시스템과 병합 시 제거
+
 		Vector3 dir = endPos - startPos;
 		Vector3 pos = (startPos + endPos) / 2;
 		float dist = dir.magnitude;
@@ -86,12 +88,29 @@ public class ConstructBuild : MonoBehaviour
 		startPos.y -= BRIDGEYSCALE / 2 - bridgeYErr;
 		if(Physics.BoxCast(startPos, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
 		{
+			Debug.Log("걸리는 것 발견됨.");
 			return false;
 		}
-		for (int i = 0; i < length; i++)
+		while(!Approximate(startPos, endPos, 0.5f))
 		{
+			startPos += dir.normalized * RAYGAP;
+			
+			if(!Physics.Raycast(startPos, Vector3.down, RAYDIST * 5, GROUNDLAYERMASK))
+			{
+				return true; 
+			}
 
 		}
-		return true;
+		return false;
+	}
+
+	bool Approximate(float a, float b, float err)
+	{
+		return Mathf.Abs(a - b) < err;
+	}
+
+	bool Approximate(Vector3 a, Vector3 b, float err)
+	{
+		return Approximate(a.x, b.x, err) && Approximate(a.y, b.y , err) && Approximate(a.z, b.z, err);
 	}
 }
