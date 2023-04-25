@@ -22,18 +22,23 @@ public struct MapData
 		Vector3 dist = to - from;
 		return dist.sqrMagnitude;
 	}
-	public int visiblity; // bool 에서 int 로 바꿈으로서 가만히 있는 놈의 시야 등을 관리하기 편해짐.
+
+	//이거 지울거임.
+	public int visiblity; 
+	// bool 에서 int 로 바꿈으로서 가만히 있는 놈의 시야 등을 관리하기 편해짐.
 	//프레임도 괜찮음. 상식적인 속도로 움직인다는 가정 하에 현상황 기준 90 이상의 프레임을 내더라.
 	//비상식적인 속도로 움직이면 애매해지는데, 일단 그렇게 움직이지는 않는다.
+
+	public bool emptyVal;
 }
 
 public struct MapUpdateBhv
 {
 	Perceive.UpdMaps updateDel;
-	Vector2Int startPos;
+	Vector3Int startPos;
 	int distance;
 
-	public MapUpdateBhv(Perceive.UpdMaps upd, Vector2Int pos, int dist)
+	public MapUpdateBhv(Perceive.UpdMaps upd, Vector3Int pos, int dist)
 	{
 		updateDel = upd;
 		startPos = pos;
@@ -55,6 +60,10 @@ public struct MapUpdateBhv
 /// 끄기를 먼저 한 뒤 키기를 진행함으로서, 깜박거림을 없앰.
 /// 그러기 위해서 맵 새로고침을 구조체로 만들고, 이것을 사용하여 킴과 끔의 리스트를 만듬.
 /// 업데이트가 필요하면 그 킴과 끔을 실행시키는 것으로 함. = UpdateMap()
+/// 
+/// 
+/// 일단 복층 구조가 존재할 경우 그것을 우선적으로 계산함.
+/// 그리고 복층 구조가 존재하지 않은 곳에서 다시 계산함.
 /// </summary>
 
 public class Perceive
@@ -63,15 +72,18 @@ public class Perceive
 
 	public const int MAPX = 200;
 	public const int MAPY = 200;
+	public static MapData[,,] fullMap; //여기에 지형 관련 정보를 모두 저장.
 
 	public bool isPlayer;
 
 	public int ground = 8;
 
-	public MapData[,] map;
-	MapData[,] prevMap;
 
-	public delegate void UpdMaps(Vector2Int startPos, int dist);
+	//int로 변경할것임.
+	public MapData[,,] map; //여기에는 보이는 상태 관련 정보만 저장.
+	MapData[,,] prevMap; //여기에는 이전의 보이는 상태 관련 정보를 저장.
+
+	public delegate void UpdMaps(Vector3Int startPos, int dist);
 
 	List<MapUpdateBhv> ons = new List<MapUpdateBhv>();
 	List<MapUpdateBhv> offs = new List<MapUpdateBhv>();
@@ -80,24 +92,31 @@ public class Perceive
 	public void InitMap(bool isPlayer)
 	{
 		RaycastHit hit;
-		map = new MapData[MAPY, MAPX];
+		map = new MapData[MAPY, MAPX, 2];
 		for (int y = 0; y < MAPY; y++)
 		{
 			for (int x = 0; x < MAPX; x++)
 			{
-				map[y, x].x = x;
-				map[y, x].y = y;
-				map[y, x].height = 0;
-				map[y, x].visiblity = 0;
+				map[y, x, 0].x = x;
+				map[y, x, 0].y = y;
+				map[y, x, 0].height = 0;
+				map[y, x, 0].visiblity = 0;
+				map[y, x, 0].emptyVal = false;
+				map[y, x, 1].x = x;
+				map[y, x, 1].y = y;
+				map[y, x, 1].height = 0;
+				map[y, x, 1].visiblity = 1;
+				map[y, x, 1].emptyVal = true;
 
-				Vector3 pos = IdxVectorToPos(new Vector2Int(x, y));
+
+				Vector3 pos = IdxVectorToPos(new Vector3Int(x, y));
 				pos.y = 100;
 
 				Physics.Raycast(pos, Vector3.down, out hit, 200f, 1 << ground);
-				map[y, x].height = (int)hit.point.y;
+				map[y, x, 0].height = (int)hit.point.y;
 			}
 		}
-		prevMap = (MapData[,])map.Clone();
+		prevMap = (MapData[,,])map.Clone();
 		this.isPlayer = isPlayer;
 	}
 
@@ -107,8 +126,8 @@ public class Perceive
 		{
 			for (int x = 0; x < MAPX; x++)
 			{
-				map[y, x].visiblity = int.MaxValue / 2;
-				prevMap[y, x].visiblity = int.MaxValue / 2;
+				map[y, x, 0].visiblity = int.MaxValue / 2;
+				prevMap[y, x, 0].visiblity = int.MaxValue / 2;
 			}
 		}
 	}
@@ -128,13 +147,13 @@ public class Perceive
 		}
 	}
 
-	public void AddOnUpd(Vector2Int startPos, int dist)
+	public void AddOnUpd(Vector3Int startPos, int dist)
 	{
 		MapUpdateBhv h = new MapUpdateBhv(UpdateMapRecurOn, startPos, dist);
 		ons.Add(h);
 	}
 
-	public void AddOffUpd(Vector2Int startPos, int dist)
+	public void AddOffUpd(Vector3Int startPos, int dist)
 	{
 		MapUpdateBhv h = new MapUpdateBhv(UpdateMapRecurOff, startPos, dist);
 		offs.Add(h);
@@ -159,13 +178,13 @@ public class Perceive
 		offs.Clear();
 	}
 
-	void UpdateMapRecurOn(Vector2Int startPos, int distance)
+	void UpdateMapRecurOn(Vector3Int startPos, int distance)
 	{
-		prevMap = (MapData[,])map.Clone();
+		prevMap = (MapData[,,])map.Clone();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x].height, true);
+			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x, startPos.z].height, true);
 		}
 
 		if (isPlayer)
@@ -174,13 +193,13 @@ public class Perceive
 		}
 	}
 
-	void UpdateMapRecurOff(Vector2Int startPos, int distance)
+	void UpdateMapRecurOff(Vector3Int startPos, int distance)
 	{
-		prevMap = (MapData[,])map.Clone();
+		prevMap = (MapData[,,])map.Clone();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x].height, false);
+			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x, startPos.z].height, false);
 		}
 
 		if (isPlayer)
@@ -189,7 +208,7 @@ public class Perceive
 		}
 	}
 
-	void UpdateMapRayRecur(Vector2Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
+	void UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
 	{
 		float xAccumulate = 0;
 		float yAccumulate = 0;
@@ -202,12 +221,22 @@ public class Perceive
 			xIdx = pos.x + (int)xAccumulate;
 			xIdx = xIdx < 0 ? 0 : xIdx >= MAPX ? MAPX - 1 : xIdx;
 			yIdx = yIdx < 0 ? 0 : yIdx >= MAPY ? MAPY - 1 : yIdx;
-			if(map[yIdx, xIdx].height > height + HEIGHTTHRESHOLD)
+			MapData examiner = map[yIdx, xIdx, 1].emptyVal ? map[yIdx, xIdx, 0] : map[yIdx, xIdx, 1];
+			if (examiner.height > height + HEIGHTTHRESHOLD)
 				break;
 			if(isOn)
-				map[yIdx, xIdx].visiblity += 1;
+				examiner.visiblity += 1;
 			else
-				map[yIdx, xIdx].visiblity -= 1;
+				examiner.visiblity -= 1;
+
+			if(map[yIdx, xIdx, 1].emptyVal)
+			{
+				map[yIdx, xIdx, 0] = examiner;
+			}
+			else
+			{
+				map[yIdx, xIdx, 1] = examiner;
+			}
 
 			yAccumulate += yInc;
 			xAccumulate += xInc;
@@ -215,16 +244,18 @@ public class Perceive
 	}
 	#endregion
 
-	public static Vector2Int PosToIdxVector(Vector3 pos)
+	public static Vector3Int PosToIdxVector(Vector3 pos) //층은 따로 할당
 	{
 		int x = (int)pos.x + MAPX / 2;
 		int y = -(int)pos.z + MAPY / 2;
 		x = x < 0 ? 0 : x >= MAPX ? MAPX - 1 : x;
 		y = y < 0 ? 0 : y >= MAPY ? MAPY - 1 : y;
-		Vector2Int idx = new Vector2Int(y, x);
+		
+		
+		Vector3Int idx = new Vector3Int(y, x);
 		return idx;
 	}
-	public static Vector3 IdxVectorToPos(Vector2Int idx) // Y는 필요할 경우 따로 할당.
+	public static Vector3 IdxVectorToPos(Vector3Int idx) // Y는 필요할 경우 따로 할당.
 	{
 		float x = idx.y - MAPX / 2;
 		float z =  - idx.x + MAPY / 2;

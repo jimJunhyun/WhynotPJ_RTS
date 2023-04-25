@@ -44,16 +44,18 @@ public class FogOfWar : MonoBehaviour
 		}
 	}
 
-	public void UpdateTexture(MapData[,] map, MapData[,] prevMap)
+	public void UpdateTexture(MapData[,,] map, MapData[,,] prevMap)
 	{
 		for (int y = 0; y < Perceive.MAPY; ++y)
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if((map[y, x].visiblity <= 0 && prevMap[y, x].visiblity > 0) || (map[y, x].visiblity > 0 && prevMap[y, x].visiblity <= 0))
+				MapData examiner = map[y, x, 1].emptyVal ? map[y, x, 0] : map[y, x, 1];
+				MapData prevExaminer = prevMap[y, x, 1].emptyVal ? prevMap[y, x, 0] : prevMap[y, x, 1];
+				if ((examiner.visiblity <= 0 && prevExaminer.visiblity > 0) || (examiner.visiblity > 0 && prevExaminer.visiblity <= 0))
 				{
 					Color c;
-					if (map[y, x].visiblity > 0)
+					if (examiner.visiblity > 0)
 					{
 						c = Color.clear;
 						
@@ -66,7 +68,7 @@ public class FogOfWar : MonoBehaviour
 					tex.SetPixel(y,Perceive.MAPX - x, c);
 					
 				}
-				if (map[y, x].visiblity > 0)
+				if (examiner.visiblity > 0)
 				{
 					earthTex.SetPixel( y,Perceive.MAPX - x, Color.black);
 				}

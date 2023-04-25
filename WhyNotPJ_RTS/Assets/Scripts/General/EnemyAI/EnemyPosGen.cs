@@ -67,19 +67,20 @@ public class EnemyPosGen : MonoBehaviour
 		}
 	}
 
-	public Vector2Int FindNearestSightless(UnitController unit)
+	public Vector3Int FindNearestSightless(UnitController unit)
 	{
-		Vector2Int from = new Vector2Int(100, 100);
-		Vector2Int dest = Vector2Int.zero;
+		Vector3Int from = new Vector3Int(100, 100);
+		Vector3Int dest = Vector3Int.zero;
 		float smallestD = float.MaxValue;
 		//from = Perceive.PosToIdxVector(unit.transform);
 		for (int y = 0; y < Perceive.MAPY; ++y)
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if(EnemyEye.instance.perceived.map[y, x].visiblity <= 0)
+				MapData examiner = EnemyEye.instance.perceived.map[y, x, 1].emptyVal ? EnemyEye.instance.perceived.map[y, x, 0] : EnemyEye.instance.perceived.map[y, x, 1];
+				if (examiner.visiblity <= 0)
 				{
-					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
+					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector3Int(x, y)));
 					if (smallestD > dist)
 					{
 						dest.x = x;
@@ -92,17 +93,18 @@ public class EnemyPosGen : MonoBehaviour
 		return dest;
 	}
 
-	public Vector2Int FindHighestHeightIdx()
+	public Vector3Int FindHighestHeightIdx()
 	{
 		float largestH = float.MinValue;
-		Vector2Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+		Vector3Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
 		for (int y = 0; y < Perceive.MAPY; y++)
 		{
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
-				if(EnemyEye.instance.perceived.map[y, x].visiblity > 0) 
+				MapData examiner = EnemyEye.instance.perceived.map[y, x, 1].emptyVal ? EnemyEye.instance.perceived.map[y, x, 0] : EnemyEye.instance.perceived.map[y, x, 1];
+				if (examiner.visiblity > 0) 
 				{
-					float num = EnemyEye.instance.perceived.map[y, x].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					float num = examiner.height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num > largestH) 
 					{
 						v.x = x;

@@ -15,7 +15,7 @@ public class EnemyEye : MonoBehaviour
 
 		perceived.InitMap(false);
 
-		perceived.AddOnUpd(new Vector2Int(100, 100), 5);
+		//perceived.AddOnUpd(new Vector2Int(100, 100), 5);
 	}
 
 	private void LateUpdate()

@@ -38,10 +38,10 @@ public class ConstructBuild : MonoBehaviour
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
 	{
 		// 클릭시스템과 병합 시 제거
-		Vector2Int sIdx = Perceive.PosToIdxVector(startPos);
-		Vector2Int eIdx = Perceive.PosToIdxVector(endPos);
-		startPos.y = PlayerEye.instance.perceived.map[sIdx.y, sIdx.x].height;
-		endPos.y = PlayerEye.instance.perceived.map[eIdx.y, eIdx.x].height;
+		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
+		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
+		startPos.y = PlayerEye.instance.perceived.map[sIdx.y, sIdx.x, sIdx.z].height;
+		endPos.y = PlayerEye.instance.perceived.map[eIdx.y, eIdx.x, eIdx.z].height;
 		// 클릭시스템과 병합 시 제거
 
 		Vector3 dir = endPos - startPos;
@@ -85,24 +85,32 @@ public class ConstructBuild : MonoBehaviour
 	bool BridgeExamine(Vector3 startPos, Vector3 endPos, float length)
 	{
 		Vector3 dir = endPos - startPos;
-		startPos.y -= BRIDGEYSCALE / 2 - bridgeYErr;
-		if(Physics.BoxCast(startPos, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
+		Vector3 boxOrigin = startPos;
+		boxOrigin.y -= BRIDGEYSCALE / 2 - bridgeYErr;
+		if(Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
 		{
-			Debug.Log("걸리는 것 발견됨.");
+			//Debug.Log("걸리는 것 발견됨.");
 			return false;
 		}
+		startPos.y += BRIDGEYSCALE / 2;
 		while(!Approximate(startPos, endPos, 0.5f))
 		{
 			startPos += dir.normalized * RAYGAP;
-			
-			if(!Physics.Raycast(startPos, Vector3.down, RAYDIST * 5, GROUNDLAYERMASK))
+			if(!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK))
 			{
+				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
 				return true; 
 			}
-
+			else
+			{
+				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.red, 1000f);
+			}
 		}
 		return false;
 	}
+
+	//여기에 높이를 판단해서 맵에 넣어줘야함.
+	//우선 맵의 데이터 저장시스템을 변경할 필요가 있어보임.
 
 	bool Approximate(float a, float b, float err)
 	{

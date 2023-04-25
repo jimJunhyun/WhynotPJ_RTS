@@ -5,7 +5,7 @@ using UnityEngine;
 public class UpdaterTmp : MonoBehaviour
 {
 	public bool isPlayer; //양 측중 한 측을 찾아서 발견해 전달해줄 예정. 아직 IUnit 수정사항이 미완이라 보류중.
-	Vector2Int prevPos;
+	Vector3Int prevPos;
 	private void Awake()
 	{
 		prevPos = Perceive.PosToIdxVector(transform.position);
@@ -18,8 +18,8 @@ public class UpdaterTmp : MonoBehaviour
 	}
 	void Update()
     {
-		Vector2Int vec =  Perceive.PosToIdxVector(transform.position);
-        if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1) //이거를 바꿔야 하겠는데?
+		Vector3Int vec =  Perceive.PosToIdxVector(transform.position);
+        if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
 		{
 			if (isPlayer)
 			{
