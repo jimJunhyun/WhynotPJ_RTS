@@ -31,7 +31,7 @@ public class BridgeRender : MonoBehaviour
 
 	public void Gen(float leng)
 	{
-		mat.mainTextureScale = new Vector2(1, leng / 10);
+		mat.SetTextureScale("_MainTex", new Vector2(1, leng / 10));
 		
 		bridgeUnder[0].transform.localScale = new Vector3(100, 35 * leng / 3, 100);
 		bridgeUnder[1].transform.localPosition = Vector3.forward * (leng / 2);

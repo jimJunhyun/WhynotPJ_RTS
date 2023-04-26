@@ -255,7 +255,6 @@ public class Perceive
 						map[yIdx, xIdx, 1] -= 1;
 					}
 				}
-				//여기 무언가 추가
 			}
 			else
 			{
