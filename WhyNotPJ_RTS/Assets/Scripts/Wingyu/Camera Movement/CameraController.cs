@@ -24,13 +24,19 @@ public class CameraController : MonoBehaviour
 	[SerializeField] private float movementTime;			//움직임 러프 값
 
 	[Header("Zoom")]
-	[Range(0.01f, 1f)]
+	[Range(0.01f, 1f)][Tooltip("줌 민감도")]
 	[SerializeField] private float zoomTime;
-	[SerializeField] private int currentZoomValue;
-	[SerializeField] private int minZoomValue;
-	[SerializeField] private int maxZoomValue;
+	[Range(1, 20)]
+	[SerializeField] private int zoomSensitive = 1;
+	[SerializeField] private float currentZoomValue;
+	[SerializeField] private float minZoomValue;
+	[SerializeField] private float maxZoomValue;
 	private Vector3 zoomAmount;                             //카메라의 각도에 따라 자동으로 지정
 	private float zoom = 0;
+
+	[Header("Rotate")]
+	[Range(0.01f, 1f)][Tooltip("회전 민감도")]
+	[SerializeField] private float rotateSensitive = 0.1f;
 
 	[Header("Target Values")]
 	public float cameraYOffset = 0;
@@ -90,7 +96,6 @@ public class CameraController : MonoBehaviour
 	//줌인 & 줌아웃
 	private void ZoomInOut()
 	{
-
 		if (Input.touchCount >= 2)
 		{
 			Touch touch1 = Input.GetTouch(0);
@@ -106,17 +111,19 @@ public class CameraController : MonoBehaviour
 			Vector3 zoomPos2b = touch2.position - touch2.deltaPosition;
 
 			zoom += 1 - Vector3.Distance(zoomPos1, zoomPos2) / Vector3.Distance(zoomPos1b, zoomPos2b);
+			if (Mathf.Abs(zoom) < 0.01f)
+				zoom = 0;
 
-			currentZoomValue -= (int)zoom;
+			currentZoomValue -= zoom * zoomSensitive;
 
-			if ((int)zoom != 0)
+			if (zoom != 0)
 				zoom = 0;
 
 			currentZoomValue = Mathf.Clamp(currentZoomValue, minZoomValue, maxZoomValue);
 			targetZoomPosition = zoomAmount * currentZoomValue;
 
 			if (pos2b != pos2)
-				transform.RotateAround(transform.position, Vector3.up, Vector3.SignedAngle(pos2 - pos1, pos2b - pos1b, plane.normal) * 0.1f);
+				transform.RotateAround(transform.position, Vector3.up, Vector3.SignedAngle(pos2 - pos1, pos2b - pos1b, plane.normal) * rotateSensitive);
 		}
 		else 
 			zoom = 0;

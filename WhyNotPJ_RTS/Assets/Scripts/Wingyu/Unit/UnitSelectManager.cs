@@ -37,6 +37,8 @@ public class UnitSelectManager
 	// 클릭을 통한 유닛 선택
 	public void ClickSelectUnit(ISelectable newUnit)
 	{
+		if (selectedList.Count > 1 || !selectedList.Contains(newUnit))
+			DeselectAll();
 		SelectUnit(newUnit);
 	}
 

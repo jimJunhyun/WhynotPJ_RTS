@@ -1744,9 +1744,11 @@ MonoBehaviour:
   movementMultiply: 0.08
   movementTime: 0.3
   zoomTime: 0.05
+  zoomSensitive: 5
   currentZoomValue: -6
   minZoomValue: -20
   maxZoomValue: -4
+  rotateSensitive: 0.2
   cameraYOffset: 0.5
   targetPosition: {x: 0, y: 0, z: 0}
   targetZoomPosition: {x: 0, y: 0, z: 0}

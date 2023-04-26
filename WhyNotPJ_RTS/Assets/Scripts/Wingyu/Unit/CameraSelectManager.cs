@@ -12,6 +12,8 @@ public class CameraSelectManager : MonoBehaviour
     private Camera mainCam;
     private UnitSelectManager unitManager;
 
+	private bool isMoved = false;
+
 	private void Awake()
 	{
 		mainCam = Camera.main;
@@ -32,12 +34,22 @@ public class CameraSelectManager : MonoBehaviour
 			//드래그 연산
 			DragSelect(touch);
 
+			if (touch.phase == TouchPhase.Moved)
+			{
+				isMoved = true;
+			}
 			// 손가락을 뗐을 때
 			if (touch.phase == TouchPhase.Ended)
 			{
 				if (CameraController.camState == CameraState.MOVING)
 				{
 					CameraController.camState = CameraState.NONE;
+					return;
+				}
+
+				if (isMoved)
+				{
+					isMoved = false;
 					return;
 				}
 
@@ -130,6 +142,7 @@ public class CameraSelectManager : MonoBehaviour
 
 	private void SelectUnits()
 	{
+		unitManager.DeselectAll();
 		foreach (UnitController unit in unitManager.unitList)
 		{
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.WorldPos)))
