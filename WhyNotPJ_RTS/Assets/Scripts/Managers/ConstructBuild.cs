@@ -40,10 +40,10 @@ public class ConstructBuild : MonoBehaviour
 		// 클릭시스템과 병합 시 제거
 		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
 		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
-		startPos.y = PlayerEye.instance.perceived.map[sIdx.y, sIdx.x, sIdx.z].height;
-		endPos.y = PlayerEye.instance.perceived.map[eIdx.y, eIdx.x, eIdx.z].height;
+		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
+		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
 		// 클릭시스템과 병합 시 제거
-
+		
 		Vector3 dir = endPos - startPos;
 		Vector3 pos = (startPos + endPos) / 2;
 		float dist = dir.magnitude;
@@ -86,10 +86,11 @@ public class ConstructBuild : MonoBehaviour
 	{
 		Vector3 dir = endPos - startPos;
 		Vector3 boxOrigin = startPos;
-		boxOrigin.y -= BRIDGEYSCALE / 2 - bridgeYErr;
-		if(Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
+		boxOrigin.y += BRIDGEYSCALE / 2 + bridgeYErr;
+		Debug.DrawRay(boxOrigin, dir, Color.red, 1000f);
+		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
 		{
-			//Debug.Log("걸리는 것 발견됨.");
+			Debug.Log("걸리는 것 발견됨.");
 			return false;
 		}
 		startPos.y += BRIDGEYSCALE / 2;
@@ -106,6 +107,7 @@ public class ConstructBuild : MonoBehaviour
 				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.red, 1000f);
 			}
 		}
+		Debug.Log("키보다 작음.");
 		return false;
 	}
 

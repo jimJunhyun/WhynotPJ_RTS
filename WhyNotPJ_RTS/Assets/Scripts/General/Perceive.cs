@@ -24,7 +24,7 @@ public struct MapData
 	}
 
 	//이거 지울거임.
-	public int visiblity; 
+	//public int visiblity; 
 	// bool 에서 int 로 바꿈으로서 가만히 있는 놈의 시야 등을 관리하기 편해짐.
 	//프레임도 괜찮음. 상식적인 속도로 움직인다는 가정 하에 현상황 기준 90 이상의 프레임을 내더라.
 	//비상식적인 속도로 움직이면 애매해지는데, 일단 그렇게 움직이지는 않는다.
@@ -72,16 +72,16 @@ public class Perceive
 
 	public const int MAPX = 200;
 	public const int MAPY = 200;
-	public static MapData[,,] fullMap; //여기에 지형 관련 정보를 모두 저장.
+	public static MapData[,,] fullMap = new MapData[MAPY, MAPX, 2]; //여기에 지형 관련 정보를 모두 저장.
 
 	public bool isPlayer;
 
-	public int ground = 8;
+	public const int GROUNDMASK =1 <<  8;
 
 
-	//int로 변경할것임.
-	public MapData[,,] map; //여기에는 보이는 상태 관련 정보만 저장.
-	MapData[,,] prevMap; //여기에는 이전의 보이는 상태 관련 정보를 저장.
+	//int로 변경할것임. (vis를 빼는 느낌)
+	public int[,,] map; //여기에는 보이는 상태 관련 정보만 저장.
+	int[,,] prevMap; //여기에는 이전의 보이는 상태 관련 정보를 저장.
 
 	public delegate void UpdMaps(Vector3Int startPos, int dist);
 
@@ -89,35 +89,47 @@ public class Perceive
 	List<MapUpdateBhv> offs = new List<MapUpdateBhv>();
 
 
-	public void InitMap(bool isPlayer)
+	public static void InitMap()
 	{
 		RaycastHit hit;
-		map = new MapData[MAPY, MAPX, 2];
 		for (int y = 0; y < MAPY; y++)
 		{
 			for (int x = 0; x < MAPX; x++)
 			{
-				map[y, x, 0].x = x;
-				map[y, x, 0].y = y;
-				map[y, x, 0].height = 0;
-				map[y, x, 0].visiblity = 0;
-				map[y, x, 0].emptyVal = false;
-				map[y, x, 1].x = x;
-				map[y, x, 1].y = y;
-				map[y, x, 1].height = 0;
-				map[y, x, 1].visiblity = 1;
-				map[y, x, 1].emptyVal = true;
+				fullMap[y, x, 0].x = x;
+				fullMap[y, x, 0].y = y;
+				fullMap[y, x, 0].height = 0;
+				fullMap[y, x, 0].emptyVal = false;
+				fullMap[y, x, 1].x = x;
+				fullMap[y, x, 1].y = y;
+				fullMap[y, x, 1].height = 0;
+				fullMap[y, x, 1].emptyVal = true;
 
 
 				Vector3 pos = IdxVectorToPos(new Vector3Int(x, y));
 				pos.y = 100;
 
-				Physics.Raycast(pos, Vector3.down, out hit, 200f, 1 << ground);
-				map[y, x, 0].height = (int)hit.point.y;
+				Physics.Raycast(pos, Vector3.down, out hit, 200f, GROUNDMASK);
+				fullMap[y, x, 0].height = (int)hit.point.y;
 			}
 		}
-		prevMap = (MapData[,,])map.Clone();
-		this.isPlayer = isPlayer;
+	}
+
+	public void ResetMap(bool isP)
+	{
+		map = new int[MAPY, MAPX, 2];
+		prevMap = new int[MAPY, MAPX, 2];
+		for (int y = 0; y < MAPY; y++)
+		{
+			for (int x = 0; x < MAPX; x++)
+			{
+				map[y, x, 0] = 0;
+				map[y, x, 1] = 0;
+				prevMap[y, x, 1] = 0;
+				prevMap[y, x, 1] = 0;
+			}
+		}
+		isPlayer = isP;
 	}
 
 	public void AllEnableTmp()
@@ -126,8 +138,8 @@ public class Perceive
 		{
 			for (int x = 0; x < MAPX; x++)
 			{
-				map[y, x, 0].visiblity = int.MaxValue / 2;
-				prevMap[y, x, 0].visiblity = int.MaxValue / 2;
+				map[y, x, 0] = 1;
+				prevMap[y, x, 0] = 1;
 			}
 		}
 	}
@@ -180,11 +192,11 @@ public class Perceive
 
 	void UpdateMapRecurOn(Vector3Int startPos, int distance)
 	{
-		prevMap = (MapData[,,])map.Clone();
+		prevMap = (int[,,])map.Clone();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x, startPos.z].height, true);
+			UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
 		}
 
 		if (isPlayer)
@@ -195,11 +207,11 @@ public class Perceive
 
 	void UpdateMapRecurOff(Vector3Int startPos, int distance)
 	{
-		prevMap = (MapData[,,])map.Clone();
+		prevMap = (int[,,])map.Clone();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, map[startPos.y, startPos.x, startPos.z].height, false);
+			UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
 		}
 
 		if (isPlayer)
@@ -221,23 +233,36 @@ public class Perceive
 			xIdx = pos.x + (int)xAccumulate;
 			xIdx = xIdx < 0 ? 0 : xIdx >= MAPX ? MAPX - 1 : xIdx;
 			yIdx = yIdx < 0 ? 0 : yIdx >= MAPY ? MAPY - 1 : yIdx;
-			MapData examiner = map[yIdx, xIdx, 1].emptyVal ? map[yIdx, xIdx, 0] : map[yIdx, xIdx, 1];
-			if (examiner.height > height + HEIGHTTHRESHOLD)
+			if (fullMap[yIdx, xIdx, 0].height <= height + HEIGHTTHRESHOLD)
+			{
+				if (isOn)
+				{
+					map[yIdx, xIdx, 0] += 1;
+				}
+				else
+				{
+					map[yIdx, xIdx, 0] -= 1;
+				}
+
+				if (!fullMap[yIdx, xIdx, 1].emptyVal && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
+				{
+					if (isOn)
+					{
+						map[yIdx, xIdx, 1] += 1;
+					}
+					else
+					{
+						map[yIdx, xIdx, 1] -= 1;
+					}
+				}
+				//여기 무언가 추가
+			}
+			else
+			{
 				break;
-			if(isOn)
-				examiner.visiblity += 1;
-			else
-				examiner.visiblity -= 1;
-
-			if(map[yIdx, xIdx, 1].emptyVal)
-			{
-				map[yIdx, xIdx, 0] = examiner;
 			}
-			else
-			{
-				map[yIdx, xIdx, 1] = examiner;
-			}
-
+			
+				
 			yAccumulate += yInc;
 			xAccumulate += xInc;
 		}
@@ -251,13 +276,13 @@ public class Perceive
 		x = x < 0 ? 0 : x >= MAPX ? MAPX - 1 : x;
 		y = y < 0 ? 0 : y >= MAPY ? MAPY - 1 : y;
 		
-		
 		Vector3Int idx = new Vector3Int(y, x);
 		return idx;
 	}
 	public static Vector3 IdxVectorToPos(Vector3Int idx) // Y는 필요할 경우 따로 할당.
 	{
 		float x = idx.y - MAPX / 2;
+		//float y = fullMap[idx.y, idx.x, idx.z].height;
 		float z =  - idx.x + MAPY / 2;
 		Vector3 pos = new Vector3(x, 0, z);
 		return pos;

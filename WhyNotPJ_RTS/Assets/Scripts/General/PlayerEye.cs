@@ -13,7 +13,7 @@ public class PlayerEye : MonoBehaviour
 	{
 		instance = this;
 
-		perceived.InitMap(true);
+		perceived.ResetMap(true);
 	}
 
 	private void LateUpdate()

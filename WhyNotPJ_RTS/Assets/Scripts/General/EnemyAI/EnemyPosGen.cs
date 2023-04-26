@@ -77,8 +77,12 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				MapData examiner = EnemyEye.instance.perceived.map[y, x, 1].emptyVal ? EnemyEye.instance.perceived.map[y, x, 0] : EnemyEye.instance.perceived.map[y, x, 1];
-				if (examiner.visiblity <= 0)
+				int floor = 0;
+				if(!Perceive.fullMap[y, x, 1].emptyVal)
+				{
+					floor = 1;
+				}
+				if (EnemyEye.instance.perceived.map[y, x, floor] <= 0)
 				{
 					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector3Int(x, y)));
 					if (smallestD > dist)
@@ -101,10 +105,14 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
-				MapData examiner = EnemyEye.instance.perceived.map[y, x, 1].emptyVal ? EnemyEye.instance.perceived.map[y, x, 0] : EnemyEye.instance.perceived.map[y, x, 1];
-				if (examiner.visiblity > 0) 
+				int floor = 0;
+				if (!Perceive.fullMap[y, x, 1].emptyVal)
 				{
-					float num = examiner.height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					floor = 1;
+				}
+				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
+				{
+					float num = Perceive.fullMap[y, x, floor].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num > largestH) 
 					{
 						v.x = x;
