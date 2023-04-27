@@ -44,35 +44,44 @@ public class FogOfWar : MonoBehaviour
 		}
 	}
 	public void UpdateBridgeTexture(BridgeRender bridge, Vector2Int fromPos, int rad)
-	{
-		Texture2D t = new Texture2D((int)bridge.length, 15);
-
-
-		for (int y = fromPos.y-rad; y <fromPos.y + rad; y++)
+	{ 
+		Texture2D t = new Texture2D(100, 100);
+		//Vector3 bPos = Perceive.IdxVectorToPos(bridge.pos);
+		for (int y = fromPos.y-rad; y < fromPos.y + rad; y++)
 		{
 			for (int x = fromPos.x- rad; x < fromPos.x + rad; x++)
 			{
-				if(bridge.pos.x + (int)bridge.length > x && bridge.pos.y + (int)bridge.length > y && bridge.pos.x - (int)bridge.length < x && bridge.pos.y - (int)bridge.length < y)
+				if(x * x + y * y <= rad * rad)
 				{
-					//둥그렇게에서 그 거리를 구하기.
-					Vector2Int v = new Vector2Int(y, x);
-					v -= fromPos;
-					if (v.sqrMagnitude <= 1.2f && v.sqrMagnitude >= 0.8f)
+					Vector3 p = Perceive.IdxVectorToPos(new Vector3Int(y, x, 0));
+					int cx = Mathf.Clamp(bridge.pos.x - (int)p.x, 0, 100);
+					int cy = Mathf.Clamp(bridge.pos.y - (int)p.y, 0, 100);
+					t.SetPixel(cy, cx, Color.blue);
+					if (x > bridge.pos.x - rad && x < bridge.pos.x + rad && y > bridge.pos.y - rad && y < bridge.pos.y + rad)
 					{
-						t.SetPixel(y, x, Color.clear);
 					}
-					else
-					{
-						t.SetPixel(y, x, Color.black);
-					}
+
 				}
+				//Vector3 v = Perceive.IdxVectorToPos(new Vector3Int(y, x));
 				
+					
+					//둥그렇게에서 그 거리를 구하기.
+					//Vector2Int v = new Vector2Int(y, x);
+					//v -= fromPos;
+					//if (v.sqrMagnitude <= rad * rad * 1.2)
+					//{
+					//	t.SetPixel(y, x, Color.clear);
+					//}
+					//else
+					//{
+					//	t.SetPixel(y, x, Color.black);
+					//}
 			}
 		}
 		
 
 		t.Apply();
-		Graphics.CopyTexture(t, bridge.mat.GetTexture("_MaskTex"));
+		bridge.mat.SetTexture("_Masker", t);
 	}
 
 	public void UpdateTexture(int[,,] map, int[,,] prevMap)

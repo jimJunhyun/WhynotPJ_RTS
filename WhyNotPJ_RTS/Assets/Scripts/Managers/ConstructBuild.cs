@@ -54,8 +54,7 @@ public class ConstructBuild : MonoBehaviour
 				BridgeRender b = Instantiate(bridge);
 				b.transform.position = pos;
 				b.transform.LookAt(endPos);
-				Vector3Int p = Perceive.PosToIdxVector(pos);
-				p.z = 1;
+				Vector3Int p = new Vector3Int((int)startPos.x, (int)startPos.y, (int)startPos.z);
 				b.Gen(dist, p);
 			}
 			else

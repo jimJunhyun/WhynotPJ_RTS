@@ -41,5 +41,7 @@ public class BridgeRender : MonoBehaviour
 		bridgeUnder[0].transform.localScale = new Vector3(100, 35 * leng / 3, 100);
 		bridgeUnder[1].transform.localPosition = Vector3.forward * (leng / 2);
 		bridgeUnder[2].transform.localPosition = -Vector3.forward * (leng / 2);
+
+		FogOfWar.instance.UpdateBridgeTexture(this,new Vector2Int(100, 100), 78);
 	}
 }
