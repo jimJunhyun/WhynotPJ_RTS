@@ -43,6 +43,37 @@ public class FogOfWar : MonoBehaviour
 			}
 		}
 	}
+	public void UpdateBridgeTexture(BridgeRender bridge, Vector2Int fromPos, int rad)
+	{
+		Texture2D t = new Texture2D((int)bridge.length, 15);
+
+
+		for (int y = fromPos.y-rad; y <fromPos.y + rad; y++)
+		{
+			for (int x = fromPos.x- rad; x < fromPos.x + rad; x++)
+			{
+				if(bridge.pos.x + (int)bridge.length > x && bridge.pos.y + (int)bridge.length > y && bridge.pos.x - (int)bridge.length < x && bridge.pos.y - (int)bridge.length < y)
+				{
+					//둥그렇게에서 그 거리를 구하기.
+					Vector2Int v = new Vector2Int(y, x);
+					v -= fromPos;
+					if (v.sqrMagnitude <= 1.2f && v.sqrMagnitude >= 0.8f)
+					{
+						t.SetPixel(y, x, Color.clear);
+					}
+					else
+					{
+						t.SetPixel(y, x, Color.black);
+					}
+				}
+				
+			}
+		}
+		
+
+		t.Apply();
+		Graphics.CopyTexture(t, bridge.mat.GetTexture("_MaskTex"));
+	}
 
 	public void UpdateTexture(int[,,] map, int[,,] prevMap)
 	{
@@ -50,15 +81,10 @@ public class FogOfWar : MonoBehaviour
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				int floor = 0;
-				if(!Perceive.fullMap[y, x, 1].emptyVal)
-				{
-					floor = 1;
-				}
-				if ((map[y, x, floor] <= 0 && prevMap[y, x, floor] > 0) || (map[y, x, floor] > 0 && prevMap[y, x, floor] <= 0))
+				if ((map[y, x, 0] <= 0 && prevMap[y, x, 0] > 0) || (map[y, x, 0] > 0 && prevMap[y, x, 0] <= 0))
 				{
 					Color c;
-					if (map[y, x, floor] > 0)
+					if (map[y, x, 0] > 0)
 					{
 						c = Color.clear;
 						
@@ -71,7 +97,7 @@ public class FogOfWar : MonoBehaviour
 					tex.SetPixel(y,Perceive.MAPX - x, c);
 					
 				}
-				if (map[y, x, floor] > 0)
+				if (map[y, x, 0] > 0)
 				{
 					earthTex.SetPixel( y,Perceive.MAPX - x, Color.black);
 				}
