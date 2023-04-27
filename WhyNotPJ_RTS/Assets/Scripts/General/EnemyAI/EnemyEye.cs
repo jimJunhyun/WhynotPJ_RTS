@@ -13,10 +13,13 @@ public class EnemyEye : MonoBehaviour
 	{
 		instance = this;
 
-		perceived.InitMap(false);
+		perceived.ResetMap(false);
 
-		perceived.UpdateMap(100, 100, 5, true);
+		//perceived.AddOnUpd(new Vector2Int(100, 100), 5);
 	}
 
-
+	private void LateUpdate()
+	{
+		perceived.UpdateMap();
+	}
 }

@@ -19,9 +19,9 @@ public class EnemyBrain : MonoBehaviour
 	[HideInInspector]
 	public Transform playerBase;
 
-	void Examine() //할 행동 목록 결정
+	void Examine() //할 행동 목록 결정		   
 	{
-		//myPriority = CalcRank(new List<float>(){ set.violenceBias, set.defendBias, set.constructBias, set.reconBias });
+		//상대 유닛 인식한 후에 그거에 맞게 성향 변동이 있을 예정
 		producable.Sort(set);
 		product = producable[0];
 	}
