@@ -42,6 +42,7 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
 
     //test
     public GameObject marker;
+    public bool isSelect = false;
 
     // ISelectable
 	public bool CanDragSelect => true;
@@ -95,11 +96,13 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
 	{
         //test
         marker.SetActive(true);
+        isSelect = true;
 	}
 
 	public void OnDeselectUnit()
 	{
         //test
         marker.SetActive(false);
+        isSelect = false;
 	}
 }

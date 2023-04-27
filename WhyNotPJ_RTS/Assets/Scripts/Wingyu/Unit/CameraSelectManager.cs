@@ -12,8 +12,6 @@ public class CameraSelectManager : MonoBehaviour
     private Camera mainCam;
     private UnitSelectManager unitManager;
 
-	private bool isMoved = false;
-
 	private void Awake()
 	{
 		mainCam = Camera.main;
@@ -34,10 +32,6 @@ public class CameraSelectManager : MonoBehaviour
 			//드래그 연산
 			DragSelect(touch);
 
-			if (touch.phase == TouchPhase.Moved)
-			{
-				isMoved = true;
-			}
 			// 손가락을 뗐을 때
 			if (touch.phase == TouchPhase.Ended)
 			{
@@ -47,16 +41,10 @@ public class CameraSelectManager : MonoBehaviour
 					return;
 				}
 
-				if (isMoved)
-				{
-					isMoved = false;
-					return;
-				}
-
 				RaycastHit hit;
 				Ray ray = mainCam.ScreenPointToRay(Input.GetTouch(0).position);
 
-				if (Physics.Raycast(ray, out hit, Mathf.Infinity, unitLayer))
+				if (Physics.Raycast(ray, out hit, 100f, unitLayer))
 				{
 					if (hit.transform.TryGetComponent(out ISelectable unit))
 					{
@@ -140,6 +128,9 @@ public class CameraSelectManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// dragRect의 범위 내에 있는 유닛을 선택하는 함수
+	/// </summary>
 	private void SelectUnits()
 	{
 		unitManager.DeselectAll();
