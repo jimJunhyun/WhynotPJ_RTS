@@ -12,6 +12,14 @@ public class UnitListUI : MonoBehaviour
 
     private float _curHeight = 0;
 
+    [SerializeField] private float _enterSpeed = 2f;
+
+    [SerializeField] private bool _isEnter = false;
+    [SerializeField] private bool _isActivate = false;
+
+    [SerializeField] private float _xOuterPos, _xEnterPos;
+    [SerializeField] private RectTransform _mainRect;
+
     private void Start()
     {
         _contentTrm = GameObject.Find("Content").transform;
@@ -56,7 +64,7 @@ public class UnitListUI : MonoBehaviour
     private void ContentAdder()
     {
         GameObject obj = null;
-        foreach(GameObject go in unitList)
+        foreach (GameObject go in unitList)
         {
             if (!go.activeSelf)
             {
@@ -75,10 +83,53 @@ public class UnitListUI : MonoBehaviour
         }
     }
 
+    public void EnterButton()
+    {
+        if (!_isActivate)
+        {
+            _isActivate = true;
+            _isEnter = !_isEnter;
+            StartCoroutine(EnterUI());
+        }
+    }
+
+    float xPos;
+
+    private IEnumerator EnterUI()
+    {
+        while (true)
+        {
+            //print(Vector2.Distance(new Vector2(_xOuterPos, 0), _mainRect.anchoredPosition));
+            if (_isEnter == false && Vector2.Distance(new Vector2(_xOuterPos, 0), _mainRect.anchoredPosition) <= .5f)
+            {
+                xPos = _xOuterPos;
+                break;
+            }
+
+            if (_isEnter && Vector2.Distance(new Vector2(_xEnterPos, 0), _mainRect.anchoredPosition) <= .5f)
+            {
+                xPos = _xEnterPos;
+                break;
+            }
+            
+            if (_isEnter)
+            {
+                xPos = Mathf.Lerp(xPos, _xEnterPos, Time.deltaTime * _enterSpeed);
+            }
+            else
+            {
+                xPos = Mathf.Lerp(xPos, _xOuterPos, Time.deltaTime * _enterSpeed);
+            }
+            _mainRect.anchoredPosition = new Vector2(xPos, 0);
+            yield return null;
+        }
+        _isActivate = false;
+    }
+
     [ContextMenu("ClearList")]
     private void ContentClear()
     {
-        foreach(GameObject go in selectedList)
+        foreach (GameObject go in selectedList)
         {
             go.SetActive(false);
         }
