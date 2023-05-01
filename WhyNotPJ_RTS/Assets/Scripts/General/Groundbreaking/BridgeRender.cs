@@ -8,6 +8,7 @@ public class BridgeRender : MonoBehaviour
 	//BoxCollider valueChanger;
 	public Material mat;
 	public Vector3Int pos;
+	public float angleRad;
 
 	public float length = 0;
 	public const float UNITHEIGHT = 1.5f;
@@ -31,10 +32,11 @@ public class BridgeRender : MonoBehaviour
 		}
 	}
 
-	public void Gen(float leng, Vector3Int p)
+	public void Gen(float leng, Vector3Int p, float rad, int id)
 	{
 		pos = p;
 		length = leng;
+		angleRad = rad;
 
 		mat.SetTextureScale("_MainTex", new Vector2(1, leng / 10));
 		
@@ -42,6 +44,29 @@ public class BridgeRender : MonoBehaviour
 		bridgeUnder[1].transform.localPosition = Vector3.forward * (leng / 2);
 		bridgeUnder[2].transform.localPosition = -Vector3.forward * (leng / 2);
 
-		FogOfWar.instance.UpdateBridgeTexture(this,new Vector2Int(100, 100), 78);
+		Vector3Int idx = Perceive.PosToIdxVector(pos);
+
+		for (int y = -(int)(length / 2); y < (int)(length / 2); y++)
+		{
+			for (int x = -3; x < 3; x++)
+			{
+				Vector3Int v = new Vector3Int(x, y, 0);
+				v += idx;
+				v = new Vector3Int((int)((v.x - idx.x) * Mathf.Cos(angleRad) - (v.y - idx.y) * Mathf.Cos(angleRad) + idx.x),
+				   (int)((v.x - idx.x) * Mathf.Sin(angleRad) + (v.y - idx.y) * Mathf.Cos(angleRad) + idx.y),
+				   0);
+
+				Vector3 rayPos = Perceive.IdxVectorToPos(v);
+				
+				rayPos.y = 100f;
+				
+				RaycastHit hit;
+				Physics.Raycast(rayPos, Vector3.down, out hit, 200f, Perceive.GROUNDMASK);
+				Perceive.fullMap[v.y, v.x, 1].height = (int)hit.point.y;
+				Perceive.fullMap[v.y, v.x, 1].emptyVal = false;
+				Perceive.fullMap[v.y, v.x, 1].Id = id;
+			}
+		}
+		
 	}
 }

@@ -12,6 +12,7 @@ public enum Buildables
 
 public class ConstructBuild : MonoBehaviour
 { 
+	public static ConstructBuild instance;
 
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
@@ -20,15 +21,22 @@ public class ConstructBuild : MonoBehaviour
 	const float RAYDIST = 1.5f; //모델 키
 	const float RAYGAP = 1.2f; //모델 지름
 
+	static int BridgeNumber = 12;
 
 	public float bridgeYErr = 0.5f;
 	public BridgeRender bridge;
+
 	//public GameObject wall;
 
 	//test
 	public Transform sPos;
 	public Transform ePos;
 	//test
+
+	private void Awake()
+	{
+		instance = this;
+	}
 
 	private void Start()
 	{
@@ -37,12 +45,12 @@ public class ConstructBuild : MonoBehaviour
 
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
 	{
-		// 클릭시스템과 병합 시 제거
+		// 클릭시스템과 병합 시 제거 #
 		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
 		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
 		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
 		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
-		// 클릭시스템과 병합 시 제거
+		// 클릭시스템과 병합 시 제거 #
 		
 		Vector3 dir = endPos - startPos;
 		Vector3 pos = (startPos + endPos) / 2;
@@ -54,8 +62,9 @@ public class ConstructBuild : MonoBehaviour
 				BridgeRender b = Instantiate(bridge);
 				b.transform.position = pos;
 				b.transform.LookAt(endPos);
-				Vector3Int p = new Vector3Int((int)startPos.x, (int)startPos.y, (int)startPos.z);
-				b.Gen(dist, p);
+				Vector3Int p = new Vector3Int((int)startPos.x, (int)startPos.y, 0);
+				float rad = Mathf.Atan2(dir.x, dir.z);
+				b.Gen(dist, p, rad, BridgeNumber++);
 			}
 			else
 			{
@@ -98,7 +107,8 @@ public class ConstructBuild : MonoBehaviour
 		while(!Approximate(startPos, endPos, 0.5f))
 		{
 			startPos += dir.normalized * RAYGAP;
-			if(!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK))
+			Vector3Int idx = Perceive.PosToIdxVector(startPos);
+			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK) && Perceive.fullMap[idx.x, idx.y, 0].Id == 0)
 			{
 				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
 				return true; 

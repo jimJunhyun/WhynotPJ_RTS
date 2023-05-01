@@ -28,9 +28,26 @@ public struct MapData
 	// bool 에서 int 로 바꿈으로서 가만히 있는 놈의 시야 등을 관리하기 편해짐.
 	//프레임도 괜찮음. 상식적인 속도로 움직인다는 가정 하에 현상황 기준 90 이상의 프레임을 내더라.
 	//비상식적인 속도로 움직이면 애매해지는데, 일단 그렇게 움직이지는 않는다.
-
 	public bool emptyVal;
+
+	int id;
+	public int Id
+	{
+		get
+		{
+			return id;
+		}
+		set
+		{
+			if (!emptyVal)
+			{
+				id = value;
+			}
+		}
+	}
 }
+
+// 된다면 되는거다...
 
 public struct MapUpdateBhv
 {
@@ -61,9 +78,6 @@ public struct MapUpdateBhv
 /// 그러기 위해서 맵 새로고침을 구조체로 만들고, 이것을 사용하여 킴과 끔의 리스트를 만듬.
 /// 업데이트가 필요하면 그 킴과 끔을 실행시키는 것으로 함. = UpdateMap()
 /// 
-/// 
-/// 일단 복층 구조가 존재할 경우 그것을 우선적으로 계산함.
-/// 그리고 복층 구조가 존재하지 않은 곳에서 다시 계산함.
 /// </summary>
 
 public class Perceive
@@ -100,11 +114,12 @@ public class Perceive
 				fullMap[y, x, 0].y = y;
 				fullMap[y, x, 0].height = 0;
 				fullMap[y, x, 0].emptyVal = false;
+				fullMap[y, x, 0].Id = 0;
 				fullMap[y, x, 1].x = x;
 				fullMap[y, x, 1].y = y;
 				fullMap[y, x, 1].height = 0;
 				fullMap[y, x, 1].emptyVal = true;
-
+				fullMap[y, x, 1].Id = 0;
 
 				Vector3 pos = IdxVectorToPos(new Vector3Int(x, y));
 				pos.y = 100;
@@ -193,40 +208,47 @@ public class Perceive
 	void UpdateMapRecurOn(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
-
+		bool isMulti = false;
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
+			isMulti |= UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
 		}
 
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
+			if (isMulti);
+				//FogOfWar.instance.UpdateBridgeTexture(bridge, startPos, distance);!!!!!!!!!!!!!!!!!!!!
 		}
 	}
 
 	void UpdateMapRecurOff(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
+		bool isMulti = false;
 
 		for (int i = 0; i < 360; ++i)
 		{
-			UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
+			isMulti |= UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
 		}
+		
 
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
+			if (isMulti);
+				//FogOfWar.instance.UpdateBridgeTexture(bridge, startPos, distance);!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
 	}
 
-	void UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
+	bool UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
 	{
 		float xAccumulate = 0;
 		float yAccumulate = 0;
 		float xInc = Mathf.Cos(angle * Mathf.Deg2Rad);
 		float yInc = Mathf.Sin(angle * Mathf.Deg2Rad);
 		int xIdx = 0, yIdx = 0;
+		bool isMultiFloor = false;
 		for (int i = 0; i < distance; i++)
 		{
 			yIdx = pos.y + (int)yAccumulate;
@@ -254,6 +276,7 @@ public class Perceive
 					{
 						map[yIdx, xIdx, 1] -= 1;
 					}
+					isMultiFloor = true;
 				}
 			}
 			else
@@ -265,6 +288,7 @@ public class Perceive
 			yAccumulate += yInc;
 			xAccumulate += xInc;
 		}
+		return isMultiFloor;
 	}
 	#endregion
 

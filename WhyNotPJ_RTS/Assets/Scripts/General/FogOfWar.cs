@@ -47,35 +47,18 @@ public class FogOfWar : MonoBehaviour
 	{ 
 		Texture2D t = new Texture2D(100, 100);
 		//Vector3 bPos = Perceive.IdxVectorToPos(bridge.pos);
-		for (int y = fromPos.y-rad; y < fromPos.y + rad; y++)
+		
+		for (int y = 0; y < 100; y++)
 		{
-			for (int x = fromPos.x- rad; x < fromPos.x + rad; x++)
+			for (int x = 0; x < 100; x++)
 			{
-				if(x * x + y * y <= rad * rad)
+				//중심점은 50, 50
+				//(x-50) * cosR - (y-50)sinR + 50 : X점
+				//(x-50) * sinR + (y-50)cosR + 50 : Y점
+				if ((bridge.pos + new Vector3Int((int)((x - 50) * Mathf.Cos(bridge.angleRad) - (y - 50) * Mathf.Cos(bridge.angleRad) + 50), (int)((x - 50) * Mathf.Sin(bridge.angleRad) + (y - 50) * Mathf.Cos(bridge.angleRad) + 50)) - (Vector3Int)fromPos).sqrMagnitude <= rad * rad)
 				{
-					Vector3 p = Perceive.IdxVectorToPos(new Vector3Int(y, x, 0));
-					int cx = Mathf.Clamp(bridge.pos.x - (int)p.x, 0, 100);
-					int cy = Mathf.Clamp(bridge.pos.y - (int)p.y, 0, 100);
-					t.SetPixel(cy, cx, Color.blue);
-					if (x > bridge.pos.x - rad && x < bridge.pos.x + rad && y > bridge.pos.y - rad && y < bridge.pos.y + rad)
-					{
-					}
-
+					t.SetPixel(100 - x, y, Color.clear);
 				}
-				//Vector3 v = Perceive.IdxVectorToPos(new Vector3Int(y, x));
-				
-					
-					//둥그렇게에서 그 거리를 구하기.
-					//Vector2Int v = new Vector2Int(y, x);
-					//v -= fromPos;
-					//if (v.sqrMagnitude <= rad * rad * 1.2)
-					//{
-					//	t.SetPixel(y, x, Color.clear);
-					//}
-					//else
-					//{
-					//	t.SetPixel(y, x, Color.black);
-					//}
 			}
 		}
 		
