@@ -25,7 +25,7 @@ public class ConstructBuild : MonoBehaviour
 
 	public float bridgeYErr = 0.5f;
 	public BridgeRender bridge;
-
+	public Dictionary<int, BridgeRender> bridgeIdPair = new Dictionary<int, BridgeRender>();
 	//public GameObject wall;
 
 	//test
@@ -60,11 +60,13 @@ public class ConstructBuild : MonoBehaviour
 			if(BridgeExamine(startPos, endPos, dist))
 			{
 				BridgeRender b = Instantiate(bridge);
+				bridgeIdPair.Add(BridgeNumber, b);
 				b.transform.position = pos;
 				b.transform.LookAt(endPos);
 				Vector3Int p = new Vector3Int((int)startPos.x, (int)startPos.y, 0);
 				float rad = Mathf.Atan2(dir.x, dir.z);
 				b.Gen(dist, p, rad, BridgeNumber++);
+				
 			}
 			else
 			{

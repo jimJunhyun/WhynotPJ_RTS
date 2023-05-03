@@ -63,7 +63,6 @@ public class BridgeRender : MonoBehaviour
 				RaycastHit hit;
 				Physics.Raycast(rayPos, Vector3.down, out hit, 200f, Perceive.GROUNDMASK);
 				Perceive.fullMap[v.y, v.x, 1].height = (int)hit.point.y;
-				Perceive.fullMap[v.y, v.x, 1].emptyVal = false;
 				Perceive.fullMap[v.y, v.x, 1].Id = id;
 			}
 		}

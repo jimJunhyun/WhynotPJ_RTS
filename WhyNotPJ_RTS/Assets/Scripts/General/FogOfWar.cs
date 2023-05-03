@@ -43,7 +43,7 @@ public class FogOfWar : MonoBehaviour
 			}
 		}
 	}
-	public void UpdateBridgeTexture(BridgeRender bridge, Vector2Int fromPos, int rad)
+	public void UpdateBridgeTexture(BridgeRender bridge, Vector3Int fromPos, int rad)
 	{ 
 		Texture2D t = new Texture2D(100, 100);
 		//Vector3 bPos = Perceive.IdxVectorToPos(bridge.pos);
@@ -55,7 +55,19 @@ public class FogOfWar : MonoBehaviour
 				//중심점은 50, 50
 				//(x-50) * cosR - (y-50)sinR + 50 : X점
 				//(x-50) * sinR + (y-50)cosR + 50 : Y점
-				if ((bridge.pos + new Vector3Int((int)((x - 50) * Mathf.Cos(bridge.angleRad) - (y - 50) * Mathf.Cos(bridge.angleRad) + 50), (int)((x - 50) * Mathf.Sin(bridge.angleRad) + (y - 50) * Mathf.Cos(bridge.angleRad) + 50)) - (Vector3Int)fromPos).sqrMagnitude <= rad * rad)
+
+				//1. 위치 및 거리 계산이 부정확
+				//분명 이론상 완벽한데...
+
+				//2. 여러 시야가 한번에 지나갈 때에 그 중 하나만 됨.
+				//시야에서는 여러 시야가 한번에 지나갈 때를 수정하기 위해서
+				//int만 더해주고빼주고 했는데....?..............
+				//여기서는 다리마다 마테리얼이 전부 다르기 때문에 문제가 생기는 것이다.
+
+				//그러면 다리마다 같은 마테리얼을 적용하면 또 모르지...
+				//그러려면 텍스쳐 하나에다가 다리가 생성될때마다 텍스쳐를 포스트잇처럼 붙이듯이?
+				//하면 되지 않을까
+				if ((bridge.pos + new Vector3Int((int)((x - 50) * Mathf.Cos(bridge.angleRad) - (y - 50) * Mathf.Cos(bridge.angleRad) + 50), (int)((x - 50) * Mathf.Sin(bridge.angleRad) + (y - 50) * Mathf.Cos(bridge.angleRad) + 50)) - fromPos).sqrMagnitude <= rad * rad)
 				{
 					t.SetPixel(100 - x, y, Color.clear);
 				}

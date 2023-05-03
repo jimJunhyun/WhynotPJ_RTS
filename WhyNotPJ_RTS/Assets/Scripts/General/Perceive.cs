@@ -28,7 +28,6 @@ public struct MapData
 	// bool 에서 int 로 바꿈으로서 가만히 있는 놈의 시야 등을 관리하기 편해짐.
 	//프레임도 괜찮음. 상식적인 속도로 움직인다는 가정 하에 현상황 기준 90 이상의 프레임을 내더라.
 	//비상식적인 속도로 움직이면 애매해지는데, 일단 그렇게 움직이지는 않는다.
-	public bool emptyVal;
 
 	int id;
 	public int Id
@@ -39,10 +38,7 @@ public struct MapData
 		}
 		set
 		{
-			if (!emptyVal)
-			{
-				id = value;
-			}
+			id = value;
 		}
 	}
 }
@@ -113,12 +109,10 @@ public class Perceive
 				fullMap[y, x, 0].x = x;
 				fullMap[y, x, 0].y = y;
 				fullMap[y, x, 0].height = 0;
-				fullMap[y, x, 0].emptyVal = false;
 				fullMap[y, x, 0].Id = 0;
 				fullMap[y, x, 1].x = x;
 				fullMap[y, x, 1].y = y;
 				fullMap[y, x, 1].height = 0;
-				fullMap[y, x, 1].emptyVal = true;
 				fullMap[y, x, 1].Id = 0;
 
 				Vector3 pos = IdxVectorToPos(new Vector3Int(x, y));
@@ -208,47 +202,53 @@ public class Perceive
 	void UpdateMapRecurOn(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
-		bool isMulti = false;
+		List<BridgeRender> bridges = new List<BridgeRender>();
 		for (int i = 0; i < 360; ++i)
 		{
-			isMulti |= UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
+			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
+			bridges.AddRange(l.FindAll((item) => { return !bridges.Contains(item); }));
 		}
 
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
-			if (isMulti);
-				//FogOfWar.instance.UpdateBridgeTexture(bridge, startPos, distance);!!!!!!!!!!!!!!!!!!!!
+			for (int i = 0; i < bridges.Count; i++)
+			{
+				FogOfWar.instance.UpdateBridgeTexture(bridges[i], startPos, distance);
+			}
 		}
 	}
 
 	void UpdateMapRecurOff(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
-		bool isMulti = false;
+		List<BridgeRender> bridges = new List<BridgeRender>();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			isMulti |= UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
+			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
+			bridges.AddRange(l.FindAll((item) => { return !bridges.Contains(item); }));
 		}
 		
-
+		
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
-			if (isMulti);
-				//FogOfWar.instance.UpdateBridgeTexture(bridge, startPos, distance);!!!!!!!!!!!!!!!!!!!!!!!!!!
+			for (int i = 0; i < bridges.Count; i++)
+			{
+				FogOfWar.instance.UpdateBridgeTexture(bridges[i], startPos, distance);
+			}
 		}
 	}
 
-	bool UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
+	List<BridgeRender> UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
 	{
 		float xAccumulate = 0;
 		float yAccumulate = 0;
 		float xInc = Mathf.Cos(angle * Mathf.Deg2Rad);
 		float yInc = Mathf.Sin(angle * Mathf.Deg2Rad);
 		int xIdx = 0, yIdx = 0;
-		bool isMultiFloor = false;
+		List<BridgeRender> foundBridges = new List<BridgeRender>();
 		for (int i = 0; i < distance; i++)
 		{
 			yIdx = pos.y + (int)yAccumulate;
@@ -266,7 +266,7 @@ public class Perceive
 					map[yIdx, xIdx, 0] -= 1;
 				}
 
-				if (!fullMap[yIdx, xIdx, 1].emptyVal && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
+				if (fullMap[yIdx, xIdx, 1].Id != 0 && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
 				{
 					if (isOn)
 					{
@@ -276,7 +276,7 @@ public class Perceive
 					{
 						map[yIdx, xIdx, 1] -= 1;
 					}
-					isMultiFloor = true;
+					foundBridges.Add(ConstructBuild.instance.bridgeIdPair[fullMap[yIdx, xIdx, 1].Id]);
 				}
 			}
 			else
@@ -288,7 +288,7 @@ public class Perceive
 			yAccumulate += yInc;
 			xAccumulate += xInc;
 		}
-		return isMultiFloor;
+		return foundBridges;
 	}
 	#endregion
 
