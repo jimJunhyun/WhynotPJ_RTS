@@ -5,15 +5,22 @@ using UnityEngine;
 
 public class Barricade : IBuilding, IProducable
 {
-	public string myName => "¹Ù¸®ÄÉÀÌµå";
+	public GameObject prefab => null;
+	public string myName => "ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½Ìµï¿½";
 
-	public float produceTime => 1.5f;
+	public float produceTime = 1.5f;
 
-	public Element element => new Element(0, 9, 7);
+	public Element element = new Element(0, 9, 7);
 
-	public Action onCompleted => () => { Debug.Log("¹Ù¸®ÄÉÀÌµå °Ç¼³ ¿Ï·á"); };
+	public Action onCompleted = () => { Debug.Log("ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ç¼ï¿½ ï¿½Ï·ï¿½"); };
 
-	public List<IUnit> nearUnit { get; set; }
+	public GameObject _prefab => null;
+	public string _myName => myName;
+    public float _produceTime => produceTime;
+    public Element _element => element;
+    public Action _onCompleted => onCompleted;
+
+    public List<UnitController> nearUnit { get; set; }
 
 	public Vector3 scale { get;} = new Vector3(1,1,1);
 	public Vector3 pos { get; set; }

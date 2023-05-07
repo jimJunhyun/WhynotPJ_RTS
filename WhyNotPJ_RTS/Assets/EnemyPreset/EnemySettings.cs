@@ -12,10 +12,6 @@ public class EnemySettings : ScriptableObject
     public float initVioBias;
     public float violenceBias;
     public float vioIncreaseBias;
-    //[Header("건설적")]
-    //public float initConBias;
-    //public float constructBias;
-    //public float conIncreaseBias;
     [Header("방어적")]
     public float initDefBias;
     public float defendBias;
@@ -69,4 +65,9 @@ public class EnemySettings : ScriptableObject
     public float passiveBias;
     [Header("충분한 물량 판단 기준")]
     public int adequateSoldier;
+
+    [Header("수비적인 위치 - 높이 중시성")]
+    public float heightBias;
+    [Header("수비적인 위치 - 거리 중시성")]
+    public float distBias;
 }
