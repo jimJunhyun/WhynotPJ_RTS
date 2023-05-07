@@ -3490,6 +3490,7 @@ GameObject:
   - component: {fileID: 1223208651}
   - component: {fileID: 1223208650}
   - component: {fileID: 1223208652}
+  - component: {fileID: 1223208653}
   m_Layer: 5
   m_Name: MainUIPanel
   m_TagString: Untagged
@@ -3578,6 +3579,22 @@ MonoBehaviour:
   _xOuterPos: 0
   _xEnterPos: 500
   _mainRect: {fileID: 1223208649}
+--- !u!114 &1223208653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223208648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65ae897b3e32944a85a02523c161d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  dragRectangle: {fileID: 0}
 --- !u!1 &1233294386
 GameObject:
   m_ObjectHideFlags: 0
@@ -6100,9 +6117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7197fafb2ee5d4a98706ba877c2558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainCam: {fileID: 0}
-  _warnPoint: {fileID: 388230575}
-  _warnRect: {fileID: 2118164139}
 --- !u!114 &1995331504
 MonoBehaviour:
   m_ObjectHideFlags: 0
