@@ -206,15 +206,23 @@ public class Perceive
 		for (int i = 0; i < 360; ++i)
 		{
 			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
-			bridges.AddRange(l.FindAll((item) => { return !bridges.Contains(item); }));
+			for (int j = 0; j < l.Count; ++j)
+			{
+				if (!bridges.Contains(l[j]))
+				{
+					bridges.Add(l[j]);
+				}
+
+			}
 		}
 
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
+			
 			for (int i = 0; i < bridges.Count; i++)
 			{
-				FogOfWar.instance.UpdateBridgeTexture(bridges[i], startPos, distance);
+				FogOfWar.instance.UpdateBridgeTexture(bridges[i], true);
 			}
 		}
 	}
@@ -227,7 +235,14 @@ public class Perceive
 		for (int i = 0; i < 360; ++i)
 		{
 			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
-			bridges.AddRange(l.FindAll((item) => { return !bridges.Contains(item); }));
+			for (int j = 0; j < l.Count; ++j)
+			{
+				if (!bridges.Contains(l[j]))
+				{
+					bridges.Add(l[j]);
+				}
+				
+			}
 		}
 		
 		
@@ -236,7 +251,7 @@ public class Perceive
 			FogOfWar.instance.UpdateTexture(map, prevMap);
 			for (int i = 0; i < bridges.Count; i++)
 			{
-				FogOfWar.instance.UpdateBridgeTexture(bridges[i], startPos, distance);
+				FogOfWar.instance.UpdateBridgeTexture(bridges[i], false);
 			}
 		}
 	}
@@ -265,7 +280,7 @@ public class Perceive
 				{
 					map[yIdx, xIdx, 0] -= 1;
 				}
-
+				//Debug.Log(fullMap[yIdx, xIdx, 1].height);
 				if (fullMap[yIdx, xIdx, 1].Id != 0 && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
 				{
 					if (isOn)

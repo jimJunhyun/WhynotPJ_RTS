@@ -12,6 +12,8 @@ public class BridgeRender : MonoBehaviour
 
 	public float length = 0;
 	public const float UNITHEIGHT = 1.5f;
+	
+	int sights = 0;
 
 	private void Awake()
 	{
@@ -30,6 +32,22 @@ public class BridgeRender : MonoBehaviour
 		{
 			bridgeUnder[i].material = mat;
 		}
+	}
+
+	public void See(bool seeing)
+	{
+		int val = 0;
+		if(seeing)
+			val = 1;
+		else
+			val = -1;
+
+		if((sights <= 0 && sights + val > 0 ) || (sights > 0 && sights + val <= 0))
+		{
+			sights += val;
+			mat.SetInt("_Conceal", sights > 0 ? 1 : 0);
+		}
+
 	}
 
 	public void Gen(float leng, Vector3Int p, float rad, int id)
@@ -51,9 +69,8 @@ public class BridgeRender : MonoBehaviour
 			for (int x = -3; x < 3; x++)
 			{
 				Vector3Int v = new Vector3Int(x, y, 0);
-				v += idx;
-				v = new Vector3Int((int)((v.x - idx.x) * Mathf.Cos(angleRad) - (v.y - idx.y) * Mathf.Cos(angleRad) + idx.x),
-				   (int)((v.x - idx.x) * Mathf.Sin(angleRad) + (v.y - idx.y) * Mathf.Cos(angleRad) + idx.y),
+				v = new Vector3Int((int)(v.x * Mathf.Cos(angleRad) - v.y  * Mathf.Cos(angleRad) + idx.x),
+				   (int)(v.x * Mathf.Sin(angleRad) + v.y * Mathf.Cos(angleRad) + idx.y),
 				   0);
 
 				Vector3 rayPos = Perceive.IdxVectorToPos(v);

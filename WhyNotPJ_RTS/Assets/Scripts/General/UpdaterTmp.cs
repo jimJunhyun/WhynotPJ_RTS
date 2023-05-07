@@ -26,7 +26,7 @@ public class UpdaterTmp : MonoBehaviour
 				PlayerEye.instance.perceived.AddOffUpd(prevPos, 15);
 				prevPos = vec;
 				PlayerEye.instance.perceived.AddOnUpd(prevPos, 15);
-				Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
+				//Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
 			}
 			else
 			{
