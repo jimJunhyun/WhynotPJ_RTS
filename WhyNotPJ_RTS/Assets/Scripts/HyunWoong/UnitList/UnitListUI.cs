@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UnitListUI : MonoBehaviour
 {
     public List<GameObject> unitList = new List<GameObject>();   //선택된 유닛들이 들어갈 리스트
-    public List<GameObject> selectedList = new List<GameObject>();   //선택된 유닛들이 들어갈 리스트
+    public List<UnitDefault> selectedList = new List<UnitDefault>();   //선택된 유닛들이 들어갈 리스트
     public GameObject unitCard;         //UI에서 유닛의 스택을 나타내는 카드
     private Transform _contentTrm;      //카드가 들어갈 위치
 
@@ -64,22 +64,20 @@ public class UnitListUI : MonoBehaviour
     private void ContentAdder()
     {
         GameObject obj = null;
-        foreach (GameObject go in unitList)
+
+        foreach (UnitDefault item in UnitManager.Instance.SelectedUnitList)
         {
-            if (!go.activeSelf)
+            selectedList.Add(item);
+        }
+
+        foreach (UnitDefault go in selectedList)
+        {
+            if (!go.gameObject.activeSelf)
             {
-                obj = go;
-                obj.SetActive(true);
-                selectedList.Add(obj);
+                obj = go.gameObject;
+                obj.gameObject.SetActive(true);
                 break;
             }
-        }
-        if (!obj)
-        {
-            obj = Instantiate(unitCard);
-            unitList.Add(obj);
-            selectedList.Add(obj);
-            obj.transform.parent = _contentTrm;
         }
     }
 
@@ -129,9 +127,9 @@ public class UnitListUI : MonoBehaviour
     [ContextMenu("ClearList")]
     private void ContentClear()
     {
-        foreach (GameObject go in selectedList)
+        foreach (UnitDefault go in selectedList)
         {
-            go.SetActive(false);
+            go.gameObject.SetActive(false);
         }
         selectedList.Clear();
     }
