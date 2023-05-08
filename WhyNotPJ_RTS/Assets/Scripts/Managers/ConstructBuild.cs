@@ -40,7 +40,7 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(sPos.position, ePos.position, Buildables.Bridge);
+		Construct(ePos.position, sPos.position, Buildables.Bridge);
 	}
 
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
@@ -63,9 +63,8 @@ public class ConstructBuild : MonoBehaviour
 				bridgeIdPair.Add(BridgeNumber, b);
 				b.transform.position = pos;
 				b.transform.LookAt(endPos);
-				Vector3Int p = new Vector3Int((int)startPos.x, (int)startPos.y, 0);
 				float rad = Mathf.Atan2(dir.x, dir.z);
-				b.Gen(dist, p, rad, BridgeNumber++);
+				b.Gen(dist, pos, rad, BridgeNumber++);
 				
 			}
 			else
@@ -106,26 +105,31 @@ public class ConstructBuild : MonoBehaviour
 			return false;
 		}
 		startPos.y += BRIDGEYSCALE / 2;
-		while(!Approximate(startPos, endPos, 0.5f))
+		while (!Approximate(startPos, endPos, 0.5f)) 
+			//아주 가아아끔 아무도 밑으로 못지나가는 다리가 생길수도있다.
+			//아주 가아끔 다른 다리와 겹칠 수 있다.
+			//큰 문제가 될 경우 탐색 심도를 높이기로.
 		{
 			startPos += dir.normalized * RAYGAP;
 			Vector3Int idx = Perceive.PosToIdxVector(startPos);
-			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK) && Perceive.fullMap[idx.x, idx.y, 0].Id == 0)
+			if(Perceive.fullMap[idx.x, idx.y, 0].Id != 0)
 			{
-				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
+				Debug.Log("다른 다리 발견됨.");
+				return false;
+			}
+			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK))
+			{
+				//Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
 				return true; 
 			}
-			else
-			{
-				Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.red, 1000f);
-			}
+			//else
+			//{
+			//	Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.red, 1000f);
+			//}
 		}
 		Debug.Log("키보다 작음.");
 		return false;
 	}
-
-	//여기에 높이를 판단해서 맵에 넣어줘야함.
-	//우선 맵의 데이터 저장시스템을 변경할 필요가 있어보임.
 
 	bool Approximate(float a, float b, float err)
 	{

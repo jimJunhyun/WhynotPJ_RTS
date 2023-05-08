@@ -87,6 +87,7 @@ public class Perceive
 	public bool isPlayer;
 
 	public const int GROUNDMASK =1 <<  8;
+	public const int BRIDGEMASK =1 <<  10;
 
 
 	//int로 변경할것임. (vis를 빼는 느낌)
@@ -222,7 +223,7 @@ public class Perceive
 			
 			for (int i = 0; i < bridges.Count; i++)
 			{
-				FogOfWar.instance.UpdateBridgeTexture(bridges[i], true);
+				bridges[i].See(true);
 			}
 		}
 	}
@@ -251,10 +252,11 @@ public class Perceive
 			FogOfWar.instance.UpdateTexture(map, prevMap);
 			for (int i = 0; i < bridges.Count; i++)
 			{
-				FogOfWar.instance.UpdateBridgeTexture(bridges[i], false);
+				bridges[i].See(false);
 			}
 		}
 	}
+	#endregion
 
 	List<BridgeRender> UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //둥그렇게 시야 밝히기
 	{
@@ -280,9 +282,11 @@ public class Perceive
 				{
 					map[yIdx, xIdx, 0] -= 1;
 				}
-				//Debug.Log(fullMap[yIdx, xIdx, 1].height);
+				
 				if (fullMap[yIdx, xIdx, 1].Id != 0 && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
 				{
+					
+					Debug.Log(fullMap[yIdx, xIdx, 1].height + " <= " + (height + HEIGHTTHRESHOLD));
 					if (isOn)
 					{
 						map[yIdx, xIdx, 1] += 1;
@@ -305,7 +309,7 @@ public class Perceive
 		}
 		return foundBridges;
 	}
-	#endregion
+	
 
 	public static Vector3Int PosToIdxVector(Vector3 pos) //층은 따로 할당
 	{

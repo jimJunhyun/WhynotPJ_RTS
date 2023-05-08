@@ -43,10 +43,6 @@ public class FogOfWar : MonoBehaviour
 			}
 		}
 	}
-	public void UpdateBridgeTexture(BridgeRender bridge, bool isSeeing)
-	{ 
-		bridge.See(isSeeing);
-	}
 
 	public void UpdateTexture(int[,,] map, int[,,] prevMap)
 	{
