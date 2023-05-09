@@ -45,6 +45,8 @@ public class CameraController : MonoBehaviour
 
 	private Plane plane;
 
+	private LayerMask groundLayer;
+
 	private void Start()
 	{
 		plane.SetNormalAndPosition(Vector3.up, transform.position);
@@ -61,6 +63,15 @@ public class CameraController : MonoBehaviour
 		//zoomValue가 할당되어 있을 시에는 zoomValue에 값에 맞게 카메라 위치를 지정
 		targetZoomPosition += zoomAmount * currentZoomValue;
 		cameraTransform.localPosition = targetZoomPosition;
+
+		groundLayer = LayerMask.NameToLayer("Ground");
+
+		RaycastHit hit;
+		Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f);
+		if (hit.collider)
+		{
+			cameraYOffset = hit.point.y + 0.5f;
+		}
 	}
 
 	private void Update()
@@ -79,6 +90,13 @@ public class CameraController : MonoBehaviour
 			delta1 = PlanePositionDelta(Input.GetTouch(0));
 			if (Input.GetTouch(0).phase == TouchPhase.Moved)
 			{
+				RaycastHit hit;
+				Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f, 1 << groundLayer);
+				if (hit.collider)
+				{
+					Debug.DrawLine(transform.position + new Vector3(0, 100, 0), hit.point);
+					cameraYOffset = hit.point.y + 0.5f;
+				}
 				targetPosition += delta1 * movementMultiply;
 				camState = CameraState.MOVING;
 			}
