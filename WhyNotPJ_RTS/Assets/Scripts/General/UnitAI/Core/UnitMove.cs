@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +11,9 @@ public class UnitMove : MonoBehaviour
     public NavMeshAgent NavMeshAgent => navMeshAgent;
     private NavMeshPath path;
     private Animator animator;
+
+    private Vector3 lastGround;
+    private float groundDis;
 
     private void Start()
     {
@@ -34,13 +38,21 @@ public class UnitMove : MonoBehaviour
         switch (hit.mask)
         {
             case 8:
-
                 navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
+
+                groundDis = Vector3.Distance(lastGround, visualTrm.position);
+
+                if (groundDis <= 20)
+                {
+                    visualTrm.localPosition = new Vector3(0f, -(groundDis / 4), 0f);
+                }
 
                 break;
             default:
                 navMeshAgent.speed = moveSpeed;
                 visualTrm.localPosition = Vector3.zero;
+
+                lastGround = transform.position;
 
                 break;
         }
