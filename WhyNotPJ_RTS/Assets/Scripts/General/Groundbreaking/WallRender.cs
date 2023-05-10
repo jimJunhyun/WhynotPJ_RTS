@@ -32,19 +32,11 @@ public class WallRender : GroundBreak
 		children[1].transform.position = new Vector3(pos.x, pos.y - (wallAmtVert - 1) * 0.8f, pos.z);
 		children[1].transform.localScale = new Vector3(wallAmt * 100, 100, wallAmtVert * 100);
 
-		Vector3 wPos = startPos;
-
-		for (int i = -(wallAmt / 2); i < wallAmt / 2; ++i)
+		for (int i = Mathf.CeilToInt(-(wallAmt / 2)); i < Mathf.CeilToInt( wallAmt / 2); ++i)
 		{
-			wPos += ConstructBuild.WALLXSCALE * dir.normalized;
-
 			GameObject g = Instantiate(children[2], transform).gameObject;
-			g.transform.position = wPos;
-			//g.transform.LookAt(endPos);
-			//g.transform.Rotate(0, 90, 0);
-
-
-			//children[2].transform.position = 
+			g.transform.localPosition = new Vector3(i * ConstructBuild.WALLXSCALE, wallAmtVert * ConstructBuild.WALLYSCALE,0);
 		}
+		children[2].transform.localPosition = new Vector3(Mathf.CeilToInt(wallAmt / 2) * ConstructBuild.WALLXSCALE, wallAmtVert * ConstructBuild.WALLYSCALE, 0);
 	}
 }

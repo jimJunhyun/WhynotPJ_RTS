@@ -50,8 +50,17 @@ public class ConstructBuild : MonoBehaviour
 		// 클릭시스템과 병합 시 제거 #
 		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
 		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
+		if(Perceive.fullMap[sIdx.y, sIdx.x, 0].info == GroundState.Water || Perceive.fullMap[eIdx.y, eIdx.x, 0].info == GroundState.Water)
+		{
+			Debug.Log("물");
+			return;
+		}
 		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
 		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
+
+		Instantiate(ePos, endPos, Quaternion.identity);
+		Instantiate(ePos, startPos, Quaternion.identity);
+
 		// 클릭시스템과 병합 시 제거 #
 		
 		Vector3 pos = (startPos + endPos) / 2;
@@ -78,7 +87,6 @@ public class ConstructBuild : MonoBehaviour
 		b.transform.position = pos;
 		
 		
-		//!!!!!!!!!!!!!!!!!!!!!!!!!
 		b.Gen(startPos, endPos, false, StrtNumber++);
 		
 	}

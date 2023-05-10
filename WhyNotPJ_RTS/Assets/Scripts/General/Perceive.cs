@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GroundState
+{
+	None = -1,
+	Ground,
+	Water
+}
+
 public struct MapData
 {
 	public int x;
@@ -41,6 +48,8 @@ public struct MapData
 			id = value;
 		}
 	}
+
+	public GroundState info;
 }
 
 // 된다면 되는거다...
@@ -118,9 +127,16 @@ public class Perceive
 
 				Vector3 pos = IdxVectorToPos(new Vector3Int(x, y));
 				pos.y = 100;
-
 				Physics.Raycast(pos, Vector3.down, out hit, 200f, GROUNDMASK);
 				fullMap[y, x, 0].height = (int)hit.point.y;
+				if (hit.transform.CompareTag("WATER"))
+				{
+					fullMap[y, x, 0].info = GroundState.Water;
+				}
+				else
+				{
+					fullMap[y, x, 0].info = GroundState.Ground;
+				}
 			}
 		}
 	}
