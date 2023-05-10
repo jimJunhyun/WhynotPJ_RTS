@@ -16,17 +16,19 @@ public class ConstructBuild : MonoBehaviour
 
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
-	const int GROUNDLAYERMASK = 1 << 8;
+	public const float WALLXSCALE = 7.5f;
+	public const float WALLYSCALE = 7.5f;
 
 	const float RAYDIST = 1.5f; //모델 키
 	const float RAYGAP = 1.2f; //모델 지름
 
-	static int BridgeNumber = 12;
+	static int StrtNumber = 12;
 
 	public float bridgeYErr = 0.5f;
-	public BridgeRender bridge;
-	public Dictionary<int, BridgeRender> bridgeIdPair = new Dictionary<int, BridgeRender>();
-	//public GameObject wall;
+	public GroundBreak bridge;
+	public GroundBreak wall;
+	public Dictionary<int, GroundBreak> strtIdPair = new Dictionary<int, GroundBreak>();
+	
 
 	//test
 	public Transform sPos;
@@ -40,7 +42,7 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(ePos.position, sPos.position, Buildables.Bridge);
+		Construct(sPos.position, ePos.position, Buildables.Wall);
 	}
 
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
@@ -52,46 +54,35 @@ public class ConstructBuild : MonoBehaviour
 		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
 		// 클릭시스템과 병합 시 제거 #
 		
-		Vector3 dir = endPos - startPos;
 		Vector3 pos = (startPos + endPos) / 2;
-		float dist = dir.magnitude;
-		if(type == Buildables.Bridge)
+		GroundBreak b = null;
+		switch (type)
 		{
-			if(BridgeExamine(startPos, endPos, dist))
-			{
-				BridgeRender b = Instantiate(bridge);
-				bridgeIdPair.Add(BridgeNumber, b);
-				b.transform.position = pos;
+			case Buildables.Bridge:
+				if(!BridgeExamine(startPos, endPos, (endPos - startPos).magnitude))
+					return;
+				b = Instantiate(bridge);
 				b.transform.LookAt(endPos);
-				float rad = Mathf.Atan2(dir.x, dir.z);
-				b.Gen(dist, pos, rad, BridgeNumber++);
-				
-			}
-			else
-			{
-				Debug.Log("지을 수 없다.");
-			}
+				break;
+			case Buildables.Wall:
+				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude))
+					return;
+				b = Instantiate(wall);
+				b.transform.LookAt(endPos);
+				b.transform.Rotate(0, 90, 0);
+				break;
+			default:
+				break;
 		}
+		strtIdPair.Add(StrtNumber, b);
+		b.transform.position = pos;
+		
+		
+		//!!!!!!!!!!!!!!!!!!!!!!!!!
+		b.Gen(startPos, endPos, false, StrtNumber++);
 		
 	}
-	//사용 안될듯?
-	//public void ConstructWithIdx(Vector2Int startPos, Vector2Int endPos, Buildables type)
-	//{
-	//	Vector3 sPos = Perceive.IdxVectorToPos(startPos);
-	//	Vector3 ePos = Perceive.IdxVectorToPos(endPos);
-	//	sPos.y = PlayerEye.instance.perceived.map[startPos.y, startPos.x].height;
-	//	ePos.y = PlayerEye.instance.perceived.map[endPos.y, endPos.x].height;
-	//	Vector3 dir = ePos - sPos;
-	//	Vector3 pos = (sPos + ePos) / 2;
-	//	float dist = dir.magnitude;
-	//	if (type == Buildables.Bridge)
-	//	{
-	//		BridgeRender b = Instantiate(bridge);
-	//		b.transform.position = pos;
-	//		b.transform.LookAt(ePos);
-	//		b.Gen(dist);
-	//	}
-	//}
+
 
 	bool BridgeExamine(Vector3 startPos, Vector3 endPos, float length)
 	{
@@ -99,7 +90,7 @@ public class ConstructBuild : MonoBehaviour
 		Vector3 boxOrigin = startPos;
 		boxOrigin.y += BRIDGEYSCALE / 2 + bridgeYErr;
 		//Debug.DrawRay(boxOrigin, dir, Color.red, 1000f);
-		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, GROUNDLAYERMASK))
+		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, Perceive.GROUNDMASK | Perceive.BRIDGEMASK))
 		{
 			Debug.Log("걸리는 것 발견됨.");
 			return false;
@@ -114,10 +105,10 @@ public class ConstructBuild : MonoBehaviour
 			Vector3Int idx = Perceive.PosToIdxVector(startPos);
 			if(Perceive.fullMap[idx.x, idx.y, 0].Id != 0)
 			{
-				Debug.Log("다른 다리 발견됨.");
+				Debug.Log("다른 물체 발견됨.");
 				return false;
 			}
-			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, GROUNDLAYERMASK))
+			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, Perceive.GROUNDMASK))
 			{
 				//Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
 				return true; 
@@ -129,6 +120,14 @@ public class ConstructBuild : MonoBehaviour
 		}
 		Debug.Log("키보다 작음.");
 		return false;
+	}
+	
+	bool WallExamine(Vector3 startPos, Vector3 endPos, float length)
+	{
+
+
+
+		return true;
 	}
 
 	bool Approximate(float a, float b, float err)

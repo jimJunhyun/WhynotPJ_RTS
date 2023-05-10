@@ -203,15 +203,15 @@ public class Perceive
 	void UpdateMapRecurOn(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
-		List<BridgeRender> bridges = new List<BridgeRender>();
+		List<GroundBreak> strts = new List<GroundBreak>();
 		for (int i = 0; i < 360; ++i)
 		{
-			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
+			List<GroundBreak> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, true);
 			for (int j = 0; j < l.Count; ++j)
 			{
-				if (!bridges.Contains(l[j]))
+				if (!strts.Contains(l[j]))
 				{
-					bridges.Add(l[j]);
+					strts.Add(l[j]);
 				}
 
 			}
@@ -221,9 +221,9 @@ public class Perceive
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
 			
-			for (int i = 0; i < bridges.Count; i++)
+			for (int i = 0; i < strts.Count; i++)
 			{
-				bridges[i].See(true);
+				strts[i].See(true);
 			}
 		}
 	}
@@ -231,16 +231,16 @@ public class Perceive
 	void UpdateMapRecurOff(Vector3Int startPos, int distance)
 	{
 		prevMap = (int[,,])map.Clone();
-		List<BridgeRender> bridges = new List<BridgeRender>();
+		List<GroundBreak> strts = new List<GroundBreak>();
 
 		for (int i = 0; i < 360; ++i)
 		{
-			List<BridgeRender> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
+			List<GroundBreak> l = UpdateMapRayRecur(startPos, distance, i, fullMap[startPos.y, startPos.x, startPos.z].height, false);
 			for (int j = 0; j < l.Count; ++j)
 			{
-				if (!bridges.Contains(l[j]))
+				if (!strts.Contains(l[j]))
 				{
-					bridges.Add(l[j]);
+					strts.Add(l[j]);
 				}
 				
 			}
@@ -250,22 +250,22 @@ public class Perceive
 		if (isPlayer)
 		{
 			FogOfWar.instance.UpdateTexture(map, prevMap);
-			for (int i = 0; i < bridges.Count; i++)
+			for (int i = 0; i < strts.Count; i++)
 			{
-				bridges[i].See(false);
+				strts[i].See(false);
 			}
 		}
 	}
 	#endregion
 
-	List<BridgeRender> UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //µÕ±×·¸°Ô ½Ã¾ß ¹àÈ÷±â
+	List<GroundBreak> UpdateMapRayRecur(Vector3Int pos, int distance, int angle, int height, bool isOn) //µÕ±×·¸°Ô ½Ã¾ß ¹àÈ÷±â
 	{
 		float xAccumulate = 0;
 		float yAccumulate = 0;
 		float xInc = Mathf.Cos(angle * Mathf.Deg2Rad);
 		float yInc = Mathf.Sin(angle * Mathf.Deg2Rad);
 		int xIdx = 0, yIdx = 0;
-		List<BridgeRender> foundBridges = new List<BridgeRender>();
+		List<GroundBreak> foundStrts = new List<GroundBreak>();
 		for (int i = 0; i < distance; i++)
 		{
 			yIdx = pos.y + (int)yAccumulate;
@@ -295,7 +295,7 @@ public class Perceive
 					{
 						map[yIdx, xIdx, 1] -= 1;
 					}
-					foundBridges.Add(ConstructBuild.instance.bridgeIdPair[fullMap[yIdx, xIdx, 1].Id]);
+					foundStrts.Add(ConstructBuild.instance.strtIdPair[fullMap[yIdx, xIdx, 1].Id]);
 				}
 			}
 			else
@@ -307,7 +307,7 @@ public class Perceive
 			yAccumulate += yInc;
 			xAccumulate += xInc;
 		}
-		return foundBridges;
+		return foundStrts;
 	}
 	
 
