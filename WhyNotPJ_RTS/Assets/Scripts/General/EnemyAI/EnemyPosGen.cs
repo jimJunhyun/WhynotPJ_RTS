@@ -37,11 +37,7 @@ public class EnemyPosGen : MonoBehaviour
 		if (con._element.rec >= 5f)
 		{
 			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
-			//�����迭 ����
-			//���� ����� �̹߰� �������� �̵��ϵ��� �ϱ�..
-			//�̹߰� ������ �� ���� �������� �̵��ϵ���?
 			//con.unitMove.SetTargetPosition(Vector3.zero);
-			//�켱����
 			//con.Move(Vector3.zero);
 			Debug.Log("�������� ����");
 		}
@@ -61,36 +57,34 @@ public class EnemyPosGen : MonoBehaviour
 				Debug.Log("���� �ϳ� ����.");
 			}
 			Debug.Log(con.name + " ���� �������� ����.");
-			//�߰��� �� ������ �����鼭, ����� ���� ������ �����Ͽ��ٸ� ������ ���� ���ο��� ���� ����
-			//�߰��� �� ������ ���ٸ� ��� ���·� ������.
-			//��Ҵٰ� ����
 		}
 		else
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
 
-			con.ChangeState(State.Alert); //�Ϸ�� ���� ���� ����. (�Ϸ�� �ൿ�� �����ϱ�, �Ǵ� ������ �ڷ�ƾ���� �����Ͽ� ��ȯ���� ��ٸ��� �ϱ�??)
+			con.ChangeState(State.Alert); 
 			Debug.Log(con.name + " ���� ������� ����");
-
-			//������ ����� ������ ���� ��.
-			//�Ÿ����� �ݺ��, ���̿��� ���
-			
 		}
 	}
 
-	public Vector2Int FindNearestSightless(UnitController unit) //���� ������ �ʿ���. ���ֿ� ���Ѱŵ� �˻� ���ǿ� ���Ѱŵ�
+	public Vector3Int FindNearestSightless(UnitController unit)
 	{
-		Vector2Int from = new Vector2Int(100, 100);
-		Vector2Int dest = Vector2Int.zero;
+		Vector3Int from = new Vector3Int(100, 100);
+		Vector3Int dest = Vector3Int.zero;
 		float smallestD = float.MaxValue;
 		//from = Perceive.PosToIdxVector(unit.transform);
 		for (int y = 0; y < Perceive.MAPY; ++y)
 		{
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
-				if(!EnemyEye.instance.perceived.map[y, x].visiblity)
+				int floor = 0;
+				if(!Perceive.fullMap[y, x, 1].emptyVal)
 				{
-					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector2Int(x, y)));
+					floor = 1;
+				}
+				if (EnemyEye.instance.perceived.map[y, x, floor] <= 0)
+				{
+					float dist = MapData.GetDist(Perceive.IdxVectorToPos(from), Perceive.IdxVectorToPos(new Vector3Int(x, y)));
 					if (smallestD > dist)
 					{
 						dest.x = x;
@@ -103,17 +97,22 @@ public class EnemyPosGen : MonoBehaviour
 		return dest;
 	}
 
-	public Vector2Int FindHighestHeightIdx() //�����鼭 ������� ��ȣ��.
+	public Vector3Int FindHighestHeightIdx()
 	{
 		float largestH = float.MinValue;
-		Vector2Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+		Vector3Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
 		for (int y = 0; y < Perceive.MAPY; y++)
 		{
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
-				if(EnemyEye.instance.perceived.map[y, x].visiblity) 
+				int floor = 0;
+				if (!Perceive.fullMap[y, x, 1].emptyVal)
 				{
-					float num = EnemyEye.instance.perceived.map[y, x].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector2Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					floor = 1;
+				}
+				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
+				{
+					float num = Perceive.fullMap[y, x, floor].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num > largestH) 
 					{
 						v.x = x;
@@ -147,11 +146,12 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			/*UnitController curC = myControls.Find((x) => { return x.CurrentState == ; });
-			if (curC != null)
-			{
-				SamplePos(curC);
-			}*/
+			//UnitController curC = myControls.Find((x) => { return x.CurrentState == State.Wait; });
+			//if (curC != null)
+			//{
+			//	SamplePos(curC);
+			//}
+			//유닛의 현재 상태를 인지할 수 있도록 하는 것이 무난하겠다.
 		}
 	}
 }

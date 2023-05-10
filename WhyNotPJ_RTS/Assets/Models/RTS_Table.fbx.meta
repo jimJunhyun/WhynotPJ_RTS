@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:WhyNotPJ_RTS/Assets/Models/RTS_Table.fbx.meta
 guid: 9e66c5503d351544bbe0211a235414ac
+========
+guid: b00ce7dd6f78dc64faa0ff73c5c9860c
+>>>>>>>> origin/HyunWoong_UI_FX:WhyNotPJ_RTS/Assets/Models/Map/WhyNot_RTS_Map1_high.fbx.meta
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []

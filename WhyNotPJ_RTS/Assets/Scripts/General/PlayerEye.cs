@@ -8,10 +8,16 @@ public class PlayerEye : MonoBehaviour
 
 	public Perceive perceived = new Perceive();
 
+
 	private void Awake()
 	{
 		instance = this;
 
-		perceived.InitMap(true);
+		perceived.ResetMap(true);
+	}
+
+	private void LateUpdate()
+	{
+		perceived.UpdateMap();
 	}
 }
