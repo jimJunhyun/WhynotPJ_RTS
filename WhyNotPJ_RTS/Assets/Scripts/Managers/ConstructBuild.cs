@@ -58,12 +58,11 @@ public class ConstructBuild : MonoBehaviour
 		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
 		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
 
-		Instantiate(ePos, endPos, Quaternion.identity);
-		Instantiate(ePos, startPos, Quaternion.identity);
+		
 
 		// 클릭시스템과 병합 시 제거 #
 		
-		Vector3 pos = (startPos + endPos) / 2;
+		Vector3 pos = new Vector3();
 		GroundBreak b = null;
 		switch (type)
 		{
@@ -71,22 +70,38 @@ public class ConstructBuild : MonoBehaviour
 				if(!BridgeExamine(startPos, endPos, (endPos - startPos).magnitude))
 					return;
 				b = Instantiate(bridge);
+				
+				pos = (startPos + endPos) / 2;
+				b.transform.position = pos;
 				b.transform.LookAt(endPos);
 				break;
 			case Buildables.Wall:
-				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude))
+				float lowest;
+				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude, out lowest))
 					return;
 				b = Instantiate(wall);
+
+				float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
+				highest += WALLYSCALE;
+				startPos.y = highest;
+				endPos.y = highest;
+				pos = (startPos + endPos) / 2;
+				b.transform.position = pos;
 				b.transform.LookAt(endPos);
 				b.transform.Rotate(0, 90, 0);
+				pos.y = lowest;
+				b.transform.position = pos;
 				break;
 			default:
 				break;
 		}
+		
 		strtIdPair.Add(StrtNumber, b);
-		b.transform.position = pos;
+
+		Instantiate(ePos, startPos, Quaternion.identity);
+		Instantiate(ePos, endPos, Quaternion.identity);
 		
-		
+
 		b.Gen(startPos, endPos, false, StrtNumber++);
 		
 	}
@@ -104,9 +119,9 @@ public class ConstructBuild : MonoBehaviour
 			return false;
 		}
 		startPos.y += BRIDGEYSCALE / 2;
-		while (!Approximate(startPos, endPos, 0.5f)) 
-			//아주 가아아끔 아무도 밑으로 못지나가는 다리가 생길수도있다.
-			//아주 가아끔 다른 다리와 겹칠 수 있다.
+		while (!Approximate(startPos, endPos, RAYGAP / 2)) 
+			//아주 가아아끔 아무도 밑으로 못지나가는 다리가 생길수도있다. U자형일때
+			//아주 가아끔 다른 다리와 겹칠 수 있다. 거리가 절묘할때
 			//큰 문제가 될 경우 탐색 심도를 높이기로.
 		{
 			startPos += dir.normalized * RAYGAP;
@@ -130,11 +145,26 @@ public class ConstructBuild : MonoBehaviour
 		return false;
 	}
 	
-	bool WallExamine(Vector3 startPos, Vector3 endPos, float length)
+	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint)
 	{
-
-
-
+		Vector3 p = startPos;
+		Vector3 dir = endPos - startPos;
+		RaycastHit h;
+		lowestPoint = 0;
+		while(!Approximate(p, endPos, RAYGAP / 2))
+		{
+			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
+			{
+				if(lowestPoint > h.point.y)
+				{
+					lowestPoint = h.point.y;
+				}
+				
+			}
+			p += dir.normalized * RAYGAP;
+		}
+		//유효한지 BoxCast
+		Debug.Log(lowestPoint);
 		return true;
 	}
 

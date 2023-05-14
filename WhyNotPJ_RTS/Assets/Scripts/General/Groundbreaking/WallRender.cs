@@ -15,28 +15,25 @@ public class WallRender : GroundBreak
 
 	public override void Gen(Vector3 startPos, Vector3 endPos, bool affectHeight, int id)
 	{
-		float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
-		highest += ConstructBuild.WALLYSCALE;
+		//Debug.Log(startPos);
+		//Debug.Log(endPos);
 
-		startPos.y = highest;
-		endPos.y = highest;
 		
-		Vector3 dir = endPos - startPos;
 
 		base.Gen(startPos, endPos,affectHeight, id);
 
-		wallAmt = (int)(length / ConstructBuild.WALLXSCALE);
-		wallAmtVert = (int)(highest / ConstructBuild.WALLYSCALE);
-		children[0].transform.position = pos;
+		wallAmt = Mathf.CeilToInt(length / ConstructBuild.WALLXSCALE);
+		wallAmtVert = Mathf.CeilToInt(startPos.y / ConstructBuild.WALLYSCALE);
+		children[0].transform.position = transform.position;
 		children[0].transform.localScale = new Vector3(wallAmt * 100, 100, 100);
-		children[1].transform.position = new Vector3(pos.x, pos.y - (wallAmtVert - 1) * 0.8f, pos.z);
+		children[1].transform.position = new Vector3(transform.position.x, transform.position.y - (wallAmtVert - 1) * 0.8f, transform.position.z);
 		children[1].transform.localScale = new Vector3(wallAmt * 100, 100, wallAmtVert * 100);
 
-		for (int i = Mathf.CeilToInt(-(wallAmt / 2)); i < Mathf.CeilToInt( wallAmt / 2); ++i)
+		for (int i = Mathf.CeilToInt(-(wallAmt / 2)); i < Mathf.FloorToInt( wallAmt / 2); ++i)
 		{
 			GameObject g = Instantiate(children[2], transform).gameObject;
-			g.transform.localPosition = new Vector3(i * ConstructBuild.WALLXSCALE, wallAmtVert * ConstructBuild.WALLYSCALE,0);
+			g.transform.localPosition = new Vector3(i * ConstructBuild.WALLXSCALE, startPos.y,0);
 		}
-		children[2].transform.localPosition = new Vector3(Mathf.CeilToInt(wallAmt / 2) * ConstructBuild.WALLXSCALE, wallAmtVert * ConstructBuild.WALLYSCALE, 0);
+		children[2].transform.localPosition = new Vector3(Mathf.CeilToInt(wallAmt / 2) * ConstructBuild.WALLXSCALE, startPos.y, 0);
 	}
 }

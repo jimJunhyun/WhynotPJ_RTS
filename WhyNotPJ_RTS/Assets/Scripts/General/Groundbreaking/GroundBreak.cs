@@ -5,7 +5,6 @@ using UnityEngine;
 public class GroundBreak : MonoBehaviour
 {
 	protected List<Renderer> children = new List<Renderer>(); 
-	protected Vector3 pos;
 	protected float angleRad;
 	protected Material mat;
 
@@ -37,7 +36,6 @@ public class GroundBreak : MonoBehaviour
 	public virtual void Gen(Vector3 startPos, Vector3 endPos, bool affectHeight, int id)
 	{
 		Vector3 dir = endPos - startPos;
-		pos = (startPos + endPos) / 2;
 		
 		length = dir.magnitude;
 		angleRad = Mathf.Atan2(dir.x, dir.z);
@@ -48,7 +46,7 @@ public class GroundBreak : MonoBehaviour
 	public IEnumerator DelayRay(int id, bool affectHeight)
 	{
 		yield return null;
-		Vector3Int idx = Perceive.PosToIdxVector(pos);
+		Vector3Int idx = Perceive.PosToIdxVector(transform.position);
 
 		for (int y = -(int)(length / 2); y < (int)(length / 2); y++)
 		{
