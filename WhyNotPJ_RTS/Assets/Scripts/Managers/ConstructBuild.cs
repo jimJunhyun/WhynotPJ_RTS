@@ -17,7 +17,7 @@ public class ConstructBuild : MonoBehaviour
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
 	public const float WALLXSCALE = 7.5f;
-	public const float WALLYSCALE = 7.5f;
+	public const float WALLYSCALE = 5.5f;
 
 	const float RAYDIST = 1.5f; //모델 키
 	const float RAYGAP = 1.2f; //모델 지름
@@ -42,7 +42,7 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(sPos.position, ePos.position, Buildables.Wall);
+		Construct(sPos.position, ePos.position, Buildables.Bridge);
 	}
 
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
@@ -126,7 +126,7 @@ public class ConstructBuild : MonoBehaviour
 		{
 			startPos += dir.normalized * RAYGAP;
 			Vector3Int idx = Perceive.PosToIdxVector(startPos);
-			if(Perceive.fullMap[idx.x, idx.y, 0].Id != 0)
+			if(Perceive.fullMap[idx.x, idx.y, 1].Id != 0)
 			{
 				Debug.Log("다른 물체 발견됨.");
 				return false;
@@ -153,6 +153,12 @@ public class ConstructBuild : MonoBehaviour
 		lowestPoint = 0;
 		while(!Approximate(p, endPos, RAYGAP / 2))
 		{
+			Vector3Int v = Perceive.PosToIdxVector(p);
+			if (Perceive.fullMap[v.y, v.x, 1].Id != 0)
+			{
+				Debug.Log("다른 물체 발견됨");
+				return false;
+			}
 			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
 			{
 				if(lowestPoint > h.point.y)
@@ -161,10 +167,15 @@ public class ConstructBuild : MonoBehaviour
 				}
 				
 			}
+			else
+			{
+				Debug.Log("더 높은 무언가 발견됨.");
+				return false;
+			}
 			p += dir.normalized * RAYGAP;
 		}
-		//유효한지 BoxCast
-		Debug.Log(lowestPoint);
+
+
 		return true;
 	}
 

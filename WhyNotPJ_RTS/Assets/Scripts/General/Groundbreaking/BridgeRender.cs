@@ -9,12 +9,14 @@ public class BridgeRender : GroundBreak
 	public override void Awake()
 	{
 		base.Awake();
+	}
 
-		mat = new Material(children[0].material);
-
-		for (int i = 0; i < children.Count; i++)
+	public override void Update()
+	{
+		base.Update();
+		if (Input.GetMouseButtonDown(0))
 		{
-			children[i].material = mat;
+			Hp = 0;
 		}
 	}
 

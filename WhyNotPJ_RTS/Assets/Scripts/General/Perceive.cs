@@ -242,7 +242,12 @@ public class Perceive
 			
 			for (int i = 0; i < strts.Count; i++)
 			{
-				strts[i].See(true);
+				if(strts[i] != null)
+				{
+					strts[i].See(true);
+					strts[i].CheckVis();
+				}
+				
 			}
 		}
 	}
@@ -301,11 +306,8 @@ public class Perceive
 				{
 					map[yIdx, xIdx, 0] -= 1;
 				}
-				
 				if (fullMap[yIdx, xIdx, 1].Id != 0 && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
 				{
-					
-					Debug.Log(fullMap[yIdx, xIdx, 1].height + " <= " + (height + HEIGHTTHRESHOLD));
 					if (isOn)
 					{
 						map[yIdx, xIdx, 1] += 1;
