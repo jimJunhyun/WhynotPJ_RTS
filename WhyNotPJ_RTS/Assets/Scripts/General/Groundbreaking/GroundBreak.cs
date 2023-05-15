@@ -63,10 +63,10 @@ public class GroundBreak : MonoBehaviour
 
 	public void CheckDest()
 	{
-		if(Hp <= 0)
+		if(Hp <= 0 && !isBroken)
 		{
 			isBroken = true;
-
+			StartCoroutine(DelayRay(0, false, true));
 			for (int i = 0; i < transform.childCount; i++)
 			{
 				Collider c;
@@ -75,7 +75,8 @@ public class GroundBreak : MonoBehaviour
 					c.enabled = false;
 				}
 			}
-			StartCoroutine(DelayRay(0, false, true));
+			
+			
 			if (sights > 0)
 			{
 				CheckVis();
@@ -121,13 +122,14 @@ public class GroundBreak : MonoBehaviour
 
 				rayPos.y = 100f;
 				RaycastHit hit;
-
-				Physics.SphereCast(rayPos, 0.1f, Vector3.down, out hit, 200f, Perceive.BRIDGEMASK | Perceive.GROUNDMASK);
+				
+				Physics.SphereCast(rayPos, 0.1f, Vector3.down, out hit, 200f, Perceive.CONSTRUCTMASK | Perceive.GROUNDMASK);
 				if (hit.collider.transform.parent == transform)
 				{
 					if (isRemoving)
 					{
 						Perceive.fullMap[v.y, v.x, 1].Id = 0;
+						//Debug.Log("REMOVING:>>>");
 					}
 					else
 					{

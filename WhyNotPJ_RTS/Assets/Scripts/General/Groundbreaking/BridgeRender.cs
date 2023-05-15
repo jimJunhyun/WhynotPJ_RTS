@@ -14,10 +14,7 @@ public class BridgeRender : GroundBreak
 	public override void Update()
 	{
 		base.Update();
-		if (Input.GetMouseButtonDown(0))
-		{
-			Hp = 0;
-		}
+		
 	}
 
 	public override void Gen(Vector3 startPos, Vector3 endPos, bool affectHeight, int id)

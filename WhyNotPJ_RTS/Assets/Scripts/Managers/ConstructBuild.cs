@@ -42,7 +42,17 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(sPos.position, ePos.position, Buildables.Bridge);
+		Construct(sPos.position, ePos.position, Buildables.Wall);
+		
+	}
+
+	private void LateUpdate()
+	{
+		if (Input.GetMouseButtonDown(1))
+		{
+			Construct(sPos.position, ePos.position, Buildables.Wall);
+		}
+		
 	}
 
 	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
@@ -76,15 +86,16 @@ public class ConstructBuild : MonoBehaviour
 				b.transform.LookAt(endPos);
 				break;
 			case Buildables.Wall:
+				float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
+				highest += WALLYSCALE;
+				startPos.y = highest;
+				endPos.y = highest;
 				float lowest;
 				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude, out lowest))
 					return;
 				b = Instantiate(wall);
 
-				float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
-				highest += WALLYSCALE;
-				startPos.y = highest;
-				endPos.y = highest;
+				
 				pos = (startPos + endPos) / 2;
 				b.transform.position = pos;
 				b.transform.LookAt(endPos);
@@ -95,12 +106,11 @@ public class ConstructBuild : MonoBehaviour
 			default:
 				break;
 		}
+
+		//Instantiate(ePos, startPos, Quaternion.identity);
+		//Instantiate(ePos, endPos, Quaternion.identity);
 		
 		strtIdPair.Add(StrtNumber, b);
-
-		Instantiate(ePos, startPos, Quaternion.identity);
-		Instantiate(ePos, endPos, Quaternion.identity);
-		
 
 		b.Gen(startPos, endPos, false, StrtNumber++);
 		
@@ -113,7 +123,10 @@ public class ConstructBuild : MonoBehaviour
 		Vector3 boxOrigin = startPos;
 		boxOrigin.y += BRIDGEYSCALE / 2 + bridgeYErr;
 		//Debug.DrawRay(boxOrigin, dir, Color.red, 1000f);
-		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, Perceive.GROUNDMASK | Perceive.BRIDGEMASK))
+		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, Perceive.GROUNDMASK | Perceive.CONSTRUCTMASK
+			
+			
+			))
 		{
 			Debug.Log("걸리는 것 발견됨.");
 			return false;
@@ -133,13 +146,8 @@ public class ConstructBuild : MonoBehaviour
 			}
 			if (!Physics.Raycast(startPos, Vector3.down, RAYDIST, Perceive.GROUNDMASK))
 			{
-				//Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.blue,1000f);
 				return true; 
 			}
-			//else
-			//{
-			//	Debug.DrawRay(startPos, Vector3.down * RAYDIST, Color.red, 1000f);
-			//}
 		}
 		Debug.Log("키보다 작음.");
 		return false;
@@ -169,6 +177,7 @@ public class ConstructBuild : MonoBehaviour
 			}
 			else
 			{
+				Debug.DrawRay(p,Vector3.down * 100, Color.white, 1000f);
 				Debug.Log("더 높은 무언가 발견됨.");
 				return false;
 			}

@@ -96,7 +96,7 @@ public class Perceive
 	public bool isPlayer;
 
 	public const int GROUNDMASK =1 <<  8;
-	public const int BRIDGEMASK =1 <<  10;
+	public const int CONSTRUCTMASK =1 <<  10;
 
 
 	//int로 변경할것임. (vis를 빼는 느낌)
