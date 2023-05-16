@@ -10,7 +10,10 @@ public class CameraSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitSelectManager unitManager;
+    private UnitSelectManager unitManager;	// 유닛의 선택 & 해제를 담당하는 UnitManager 클래스
+	private UnitListUI unitListUI;			// 선택한 유닛의 정보를 출력하는 UI를 담당하는 클래스
+
+	public bool isDraging = false;
 
 	private void Awake()
 	{
@@ -18,6 +21,7 @@ public class CameraSelectManager : MonoBehaviour
 
 		// 유닛매니저 생성,, 추후 선언 위치 변경 필요
 		unitManager = new UnitSelectManager();
+		unitListUI = GetComponent<UnitListUI>();
 
 		DrawDragRectangle();
 	}
@@ -48,7 +52,16 @@ public class CameraSelectManager : MonoBehaviour
 				{
 					if (hit.transform.TryGetComponent(out ISelectable unit))
 					{
-						unitManager.ClickSelectUnit(unit);
+						UnitSelectManager.Instance.ClickSelectUnit(unit);
+						print(UnitSelectManager.Instance.SelectedUnitList.Count);
+						if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
+						{
+							unitListUI.ShowUnitInfo();
+						}
+						else if (!UnitSelectManager.Instance.IsSelecting)
+						{
+							unitListUI.HideUnitInfo();
+						}
 					}
 				}
 			}
@@ -93,6 +106,15 @@ public class CameraSelectManager : MonoBehaviour
 
 			CameraController.camState = CameraState.NONE;
 		}
+
+		if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
+		{
+			unitListUI.ShowUnitInfo();
+		}
+		else if (!UnitSelectManager.Instance.IsSelecting)
+		{
+			unitListUI.HideUnitInfo();
+		}
 	}
 
 	private void DrawDragRectangle()
@@ -133,12 +155,12 @@ public class CameraSelectManager : MonoBehaviour
 	/// </summary>
 	private void SelectUnits()
 	{
-		unitManager.DeselectAll();
-		foreach (UnitController unit in unitManager.unitList)
+		UnitSelectManager.Instance.DeselectAll();
+		foreach (UnitController unit in UnitSelectManager.Instance.unitList)
 		{
-			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.WorldPos)))
+			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))
 			{
-				unitManager.DragSelectUnit(unit);
+				UnitSelectManager.Instance.DragSelectUnit(unit);
 			}
 		}
 	}

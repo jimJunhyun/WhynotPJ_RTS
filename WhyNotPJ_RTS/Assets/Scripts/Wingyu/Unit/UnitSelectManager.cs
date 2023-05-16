@@ -22,6 +22,8 @@ public class UnitSelectManager
 		select unit as UnitController
 		).ToList();
 
+	public bool IsSelecting => selectedList.Count > 0;
+
 	public UnitSelectManager()
 	{
 		if (Instance == null)

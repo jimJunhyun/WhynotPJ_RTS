@@ -1,11 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 유닛의 정보를 출력하는 UI를 관리하는 클래스
+/// </summary>
+public class UnitInfoUI
+{
+    public UnitInfoUI(GameObject prefab, Image image = null, TextMeshProUGUI text = null, Slider health = null)
+	{
+        this.prefab = prefab;
+        this.image = image;
+        this.text = text;
+        this.health = health;
+	}
+
+    public GameObject prefab;
+    public Image image;                 // 유닛의 아이콘이 들어간다
+    public TextMeshProUGUI text;        // 유닛의 이름이 들어간다
+    public Slider health;               // 유닛의 체력을 나타낸다
+}
+
 public class UnitListUI : MonoBehaviour
 {
-    public List<GameObject> unitCardList = new List<GameObject>();   //선택된 유닛들이 들어갈 리스트
+    public List<UnitInfoUI> unitCardList = new List<UnitInfoUI>();   //선택된 유닛들이 들어갈 리스트
     public List<UnitController> selectedList = new List<UnitController>();   //선택된 유닛들이 들어갈 리스트
     public GameObject unitCard;         //UI에서 유닛의 스택을 나타내는 카드
     private Transform _contentTrm;      //카드가 들어갈 위치
@@ -20,9 +40,14 @@ public class UnitListUI : MonoBehaviour
     [SerializeField] private float _xOuterPos, _xEnterPos;
     [SerializeField] private RectTransform _mainRect;
 
+    [SerializeField] Sprite image;
+
+    private GameObject uiParent;
+
     private void Start()
     {
         _contentTrm = GameObject.Find("Content").transform;
+        uiParent = GameObject.Find("UnitProducer");
 
         Init();
     }
@@ -32,8 +57,8 @@ public class UnitListUI : MonoBehaviour
         for (int i = 0; i < 50; i++)
         {
             GameObject obj = Instantiate(unitCard);
-            unitCardList.Add(obj);
-            obj.transform.parent = _contentTrm;
+            unitCardList.Add(new UnitInfoUI(obj, obj.transform.Find("Image").GetComponent<Image>(), obj.GetComponentInChildren<TextMeshProUGUI>(), null));
+            obj.transform.SetParent(_contentTrm);
             obj.SetActive(false);
         }
     }
@@ -41,6 +66,7 @@ public class UnitListUI : MonoBehaviour
     [ContextMenu("NewCard")]
     public void NewCard()
     {
+        print("NewCard");
         ContentAdder();
     }
 
@@ -59,6 +85,41 @@ public class UnitListUI : MonoBehaviour
         {
             ContentClear();
         }
+    }
+
+    public void ShowUnitInfo()
+	{
+        int count = UnitSelectManager.Instance.SelectedUnitList.Count;
+        uiParent.gameObject.SetActive(true);
+
+        foreach (UnitInfoUI ui in unitCardList)
+        {
+            if (ui.prefab.gameObject.activeInHierarchy)
+            {
+                ui.prefab.gameObject.SetActive(false);
+            }
+        }
+
+        print(count);
+        for (int i = 0; i < count; i++)
+		{
+            unitCardList[i].prefab.gameObject.SetActive(true);
+            unitCardList[i].text.text = UnitSelectManager.Instance.SelectedUnitList[i]?.gameObject.name;
+            unitCardList[i].image.sprite = image;
+        }
+	}
+
+    public void HideUnitInfo()
+	{
+        foreach (UnitInfoUI tmp in unitCardList)
+		{
+            if (tmp.prefab.gameObject.activeInHierarchy)
+			{
+                tmp.prefab.gameObject.SetActive(false);
+			}
+		}
+
+        uiParent.gameObject.SetActive(false);
     }
 
     private void ContentAdder()

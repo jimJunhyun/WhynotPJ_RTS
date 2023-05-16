@@ -67,7 +67,7 @@ public class CameraController : MonoBehaviour
 		groundLayer = LayerMask.NameToLayer("Ground");
 
 		RaycastHit hit;
-		Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f);
+		Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f, 1 << groundLayer);
 		if (hit.collider)
 		{
 			cameraYOffset = hit.point.y + 0.5f;
@@ -76,6 +76,8 @@ public class CameraController : MonoBehaviour
 
 	private void Update()
 	{
+		print(camState.ToString());
+
 		if (camState == CameraState.DRAGSELECTING) return;
 
 		if (Input.touchCount >= 1)
@@ -94,7 +96,6 @@ public class CameraController : MonoBehaviour
 				Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f, 1 << groundLayer);
 				if (hit.collider)
 				{
-					Debug.DrawLine(transform.position + new Vector3(0, 100, 0), hit.point);
 					cameraYOffset = hit.point.y + 0.5f;
 				}
 				targetPosition += delta1 * movementMultiply;
