@@ -58,7 +58,7 @@ public class GroundBreak : MonoBehaviour
 		length = dir.magnitude;
 		angleRad = Mathf.Atan2(dir.x, dir.z);
 
-		StartCoroutine(DelayRay(id, affectHeight, false));
+		StartCoroutine(DelayRay(id, affectHeight));
 	}
 
 	public void CheckDest()
@@ -66,17 +66,6 @@ public class GroundBreak : MonoBehaviour
 		if(Hp <= 0 && !isBroken)
 		{
 			isBroken = true;
-			StartCoroutine(DelayRay(0, false, true));
-			for (int i = 0; i < transform.childCount; i++)
-			{
-				Collider c;
-				if (c = transform.GetChild(i).GetComponent<Collider>())
-				{
-					c.enabled = false;
-				}
-			}
-			
-			
 			if (sights > 0)
 			{
 				CheckVis();
@@ -84,26 +73,31 @@ public class GroundBreak : MonoBehaviour
 		}
 	}
 
-	public bool CheckVis()
+	public bool CheckVis() //발견되기 전까진 남아있음.
 	{
 		if (isBroken)
 		{
-			for (int i = 0; i < transform.childCount; i++)
+			int myId = 0;
+			for (int y = 0; y < Perceive.MAPY; y++)
 			{
-				Collider c;
-				if (c = transform.GetChild(i).GetComponent<Collider>())
+				for (int x = 0; x < Perceive.MAPX; x++)
 				{
-					c.enabled = true; //풀링 대응용.
+					if((myId != 0 && myId == Perceive.fullMap[y, x, 1].Id) || (Perceive.fullMap[y, x, 1].Id != 0 && ConstructBuild.instance.strtIdPair[Perceive.fullMap[y, x, 1].Id] == this))
+					{
+						if(myId == 0)
+							myId = Perceive.fullMap[y, x, 1].Id;
+						Perceive.fullMap[y, x, 1].Id = 0;
+					}
 				}
 			}
-			
+			ConstructBuild.instance.strtIdPair.Remove(myId);
 			Destroy(gameObject);
 			return true;
 		}
 		return false;
 	}
 
-	IEnumerator DelayRay(int id, bool affectHeight, bool isRemoving)
+	IEnumerator DelayRay(int id, bool affectHeight)
 	{
 		yield return null;
 		Vector3Int idx = Perceive.PosToIdxVector(transform.position);
@@ -124,22 +118,14 @@ public class GroundBreak : MonoBehaviour
 				RaycastHit hit;
 				
 				Physics.SphereCast(rayPos, 0.1f, Vector3.down, out hit, 200f, Perceive.CONSTRUCTMASK | Perceive.GROUNDMASK);
+				//Debug.Log(isRemoving);
 				if (hit.collider.transform.parent == transform)
 				{
-					if (isRemoving)
-					{
-						Perceive.fullMap[v.y, v.x, 1].Id = 0;
-						//Debug.Log("REMOVING:>>>");
-					}
+					if (affectHeight)
+						Perceive.fullMap[v.y, v.x, 1].height = (int)hit.point.y;
 					else
-					{
-						if (affectHeight)
-							Perceive.fullMap[v.y, v.x, 1].height = (int)hit.point.y;
-						else
-							Perceive.fullMap[v.y, v.x, 1].height = Perceive.fullMap[v.y, v.x, 0].height;
-						Perceive.fullMap[v.y, v.x, 1].Id = id;
-					}
-					
+						Perceive.fullMap[v.y, v.x, 1].height = Perceive.fullMap[v.y, v.x, 0].height;
+					Perceive.fullMap[v.y, v.x, 1].Id = id;
 				}
 			}
 		}

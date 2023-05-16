@@ -123,10 +123,7 @@ public class ConstructBuild : MonoBehaviour
 		Vector3 boxOrigin = startPos;
 		boxOrigin.y += BRIDGEYSCALE / 2 + bridgeYErr;
 		//Debug.DrawRay(boxOrigin, dir, Color.red, 1000f);
-		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, Perceive.GROUNDMASK | Perceive.CONSTRUCTMASK
-			
-			
-			))
+		if (Physics.BoxCast(boxOrigin, new Vector3(BRIDGEXSCALE / 2, BRIDGEYSCALE / 2, 0.5f), dir.normalized, Quaternion.LookRotation(dir.normalized), length, Perceive.GROUNDMASK | Perceive.CONSTRUCTMASK))
 		{
 			Debug.Log("걸리는 것 발견됨.");
 			return false;
