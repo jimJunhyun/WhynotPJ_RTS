@@ -15,10 +15,9 @@ public class Producer : MonoBehaviour
 
 	private void Update()
 	{
-		if (isProducing)
-		{
-			Processing();
-		}
+		if (!isProducing) return;
+
+		Processing();
 	}
 
 	private void Processing()
@@ -32,10 +31,6 @@ public class Producer : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// ������ ������ ����� Queue�� �߰�
-	/// </summary>
-	/// <param name="pro"></param>
 	public void AddProduct(IProducable pro)
 	{
 		produceQueue.Enqueue(pro);
@@ -56,24 +51,22 @@ public class Producer : MonoBehaviour
 	{
 		if (item == null) return;
 
-		// ������ ����
-		IProducable finProduct = Instantiate(item._prefab, SetSpawnPoint(), Quaternion.identity).GetComponent<IProducable>();
+		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
+		obj.transform.position = SetSpawnPoint();
+		IProducable finProduct = obj.GetComponent<IProducable>();
 		finProduct._onCompleted?.Invoke();
-		UnitManager.Instance.unitList.Add(finProduct as UnitDefault);
+		UnitSelectManager.Instance.unitList.Add(finProduct as UnitController);
 
-		// ���� �ʱ�ȭ
 		item = null;
 		isProducing = false;
 		produceTime = 0;
 		progress = 0;
 
-		// �������� ����� ������ ����
 		SetProduce();
 	}
 
 	private Vector3 SetSpawnPoint()
 	{
-		// ������ ����� ��ġ�� ��ȯ
 		int angle = Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
 		pos += transform.position + new Vector3(0, 0.5f, 0);

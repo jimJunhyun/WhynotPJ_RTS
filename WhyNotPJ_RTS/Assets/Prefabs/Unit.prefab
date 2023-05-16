@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1815088460164482090}
   - component: {fileID: 1815088460164482089}
   - component: {fileID: 1815088460164482088}
-  - component: {fileID: 1815088460164482093}
+  - component: {fileID: 1603064792}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1815088460164482103}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -100,7 +100,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1815088460164482093
+--- !u!114 &1603064792
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,10 +109,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815088460164482103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57e73570b7313c245a1419baed45e7a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 86386bdb511afc043b7642ff3103e9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  marker: {fileID: 1815088460249786162}
+  myName: Test
+  produceTime: 1
+  vio: 1
+  def: 1
+  rec: 1
+  attackPower: 1
+  attackSpeed: 1
+  attackRange: 1
+  defensePenetration: 1
+  healthPoint: 1
+  defensePower: 1
+  moveSpeed: 1
 --- !u!1 &1815088460249786162
 GameObject:
   m_ObjectHideFlags: 0

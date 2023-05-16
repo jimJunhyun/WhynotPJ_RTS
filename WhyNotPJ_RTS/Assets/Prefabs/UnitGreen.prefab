@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 9033351263872499443}
   - component: {fileID: 9033351263872499440}
   - component: {fileID: 9033351263872499441}
-  - component: {fileID: 9033351263872499444}
+  - component: {fileID: 8363615371241731141}
   m_Layer: 0
   m_Name: UnitGreen
   m_TagString: Untagged
@@ -183,7 +183,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &9033351263872499444
+--- !u!114 &8363615371241731141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,7 +192,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 9033351263872499438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57e73570b7313c245a1419baed45e7a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 86386bdb511afc043b7642ff3103e9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  marker: {fileID: 9033351263821536747}
+  myName: Green
+  produceTime: 1
+  vio: 1
+  def: 1
+  rec: 1
+  attackPower: 1
+  attackSpeed: 1
+  attackRange: 1
+  defensePenetration: 1
+  healthPoint: 1
+  defensePower: 1
+  moveSpeed: 1

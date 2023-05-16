@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour, IProducable
+public class UnitController : MonoBehaviour, IProducable, ISelectable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
@@ -38,10 +38,21 @@ public class UnitController : MonoBehaviour, IProducable
     private Dictionary<State, IUnitState> stateDictionary = null;
     private IUnitState currentState;
     public IUnitState CurrentState => currentState;
-	public GameObject _prefab => null;
+	public GameObject _prefab => gameObject;
+
+    //test
+    public GameObject marker;
+    public bool isSelect = false;
+
+    // ISelectable
+	public bool CanDragSelect => true;
+	public Vector3 WorldPos => transform.position;
 
 	private void Awake()
     {
+        //test
+        marker = transform.Find("Marker").gameObject;
+
         stateDictionary = new Dictionary<State, IUnitState>();
         Transform stateTrm = transform.Find("States");
 
@@ -79,4 +90,19 @@ public class UnitController : MonoBehaviour, IProducable
 
         currentState?.OnEnterState();
     }
+
+    // ISelectable
+	public void OnSelectUnit()
+	{
+        //test
+        marker.SetActive(true);
+        isSelect = true;
+	}
+
+	public void OnDeselectUnit()
+	{
+        //test
+        marker.SetActive(false);
+        isSelect = false;
+	}
 }
