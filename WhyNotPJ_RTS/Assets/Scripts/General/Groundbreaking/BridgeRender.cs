@@ -1,45 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class BridgeRender : MonoBehaviour
+public class BridgeRender : GroundBreak
 {
-    List<Renderer> bridgeUnder = new List<Renderer>(); //다리 -> 시작점 -> 끝점
-	//BoxCollider valueChanger;
-	public Material mat;
-	public Vector3Int pos;
 
-	public float length = 0;
-	public const float UNITHEIGHT = 1.5f;
-
-	private void Awake()
+	public override void Awake()
 	{
-		GetComponentsInChildren<Renderer>(bridgeUnder);
-		//List<BoxCollider> bs = new List<BoxCollider>();
-		//bridgeUnder[0].GetComponentsInChildren<BoxCollider>(bs);
-		//bs.Remove(bridgeUnder[0].GetComponent<BoxCollider>());
-		//valueChanger = bs[0];
-
-
-		//valueChanger.transform.position -= new Vector3(0, UNITHEIGHT, 0);
-
-		mat = new Material(bridgeUnder[0].material);
-
-		for (int i = 0; i < bridgeUnder.Count; i++)
-		{
-			bridgeUnder[i].material = mat;
-		}
+		base.Awake();
 	}
 
-	public void Gen(float leng, Vector3Int p)
+	public override void Update()
 	{
-		pos = p;
-		length = leng;
-
-		mat.SetTextureScale("_MainTex", new Vector2(1, leng / 10));
+		base.Update();
 		
-		bridgeUnder[0].transform.localScale = new Vector3(100, 35 * leng / 3, 100);
-		bridgeUnder[1].transform.localPosition = Vector3.forward * (leng / 2);
-		bridgeUnder[2].transform.localPosition = -Vector3.forward * (leng / 2);
+	}
+
+	public override void Gen(Vector3 startPos, Vector3 endPos, bool affectHeight, int id)
+	{
+		base.Gen(startPos, endPos, affectHeight, id);
+		mat.SetTextureScale("_MainTex", new Vector2(1, length / 10));
+		
+		children[0].transform.localScale = new Vector3(100, 35 * length / 3, 100);
+		children[1].transform.localPosition = Vector3.forward * (length / 2);
+		children[2].transform.localPosition = -Vector3.forward * (length / 2);
+
+		//Debug.Log("!");
+
+		
+		
 	}
 }

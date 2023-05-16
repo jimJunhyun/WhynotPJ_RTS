@@ -1,13 +1,14 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:WhyNotPJ_RTS/Assets/Models/WhyNot_RTS_Shield.fbx.meta
-guid: 7800cda4dff12ca4fb9d504ca0975e0f
-========
-guid: 44532f7a8a9e62741a4ec8216ff70090
->>>>>>>> YouJunHyun_AI:WhyNotPJ_RTS/Assets/Models/WhyNot_RTS_Map1_high.fbx.meta
+guid: 16ae51a364ac726479f48132fcae3c2c
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Barricade
+    second: {fileID: 2100000, guid: eb0284a92db372747a3c192110cf519f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

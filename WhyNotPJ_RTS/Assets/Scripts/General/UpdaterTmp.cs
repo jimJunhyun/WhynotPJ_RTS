@@ -14,7 +14,7 @@ public class UpdaterTmp : MonoBehaviour
 
 	private void Start()
 	{
-		PlayerEye.instance.perceived.AddOnUpd(prevPos, 15);
+		PlayerEye.instance.perceived.AddOnUpd(prevPos, 10);
 	}
 	void Update()
     {
@@ -23,15 +23,15 @@ public class UpdaterTmp : MonoBehaviour
 		{
 			if (isPlayer)
 			{
-				PlayerEye.instance.perceived.AddOffUpd(prevPos, 15);
+				PlayerEye.instance.perceived.AddOffUpd(prevPos, 10);
 				prevPos = vec;
-				PlayerEye.instance.perceived.AddOnUpd(prevPos, 15);
-				Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
+				PlayerEye.instance.perceived.AddOnUpd(prevPos, 10);
+				//Debug.Log($"플레이어 시야 새로고침됨. {prevPos}");
 			}
 			else
 			{
 				prevPos = vec;
-				EnemyEye.instance.perceived.AddOnUpd(prevPos, 15);
+				EnemyEye.instance.perceived.AddOnUpd(prevPos, 10);
 			}
 			
 			

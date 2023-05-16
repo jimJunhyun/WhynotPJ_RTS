@@ -78,7 +78,7 @@ public class EnemyPosGen : MonoBehaviour
 			for (int x = 0; x < Perceive.MAPX; ++x)
 			{
 				int floor = 0;
-				if(!Perceive.fullMap[y, x, 1].emptyVal)
+				if(Perceive.fullMap[y, x, 1].Id != 0)
 				{
 					floor = 1;
 				}
@@ -106,7 +106,7 @@ public class EnemyPosGen : MonoBehaviour
 			for (int x = 0; x < Perceive.MAPX; x++)
 			{
 				int floor = 0;
-				if (!Perceive.fullMap[y, x, 1].emptyVal)
+				if (Perceive.fullMap[y, x, 1].Id != 0)
 				{
 					floor = 1;
 				}

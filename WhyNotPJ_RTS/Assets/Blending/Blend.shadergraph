@@ -17,6 +17,9 @@
         },
         {
             "m_Id": "f2e02e4eb6114944aaee44a9e546afaf"
+        },
+        {
+            "m_Id": "2626d5ea07fe4d3f85e3016a21733ef7"
         }
     ],
     "m_Keywords": [],
@@ -778,6 +781,33 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "2626d5ea07fe4d3f85e3016a21733ef7",
+    "m_Guid": {
+        "m_GuidSerialized": "b8d3b9ff-0771-4c1d-b32e-1481690094ea"
+    },
+    "m_Name": "ThresholdTest",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "ThresholdTest",
+    "m_DefaultReferenceName": "_ThresholdTest",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.23000000417232514,
+    "m_FloatType": 1,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "269786e086994cf7b6a477eac9178725",
@@ -1228,6 +1258,9 @@
         },
         {
             "m_Id": "90a2fe2218354c6f97195e84c5034523"
+        },
+        {
+            "m_Id": "2626d5ea07fe4d3f85e3016a21733ef7"
         }
     ]
 }

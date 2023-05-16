@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Brige
+  m_Name: Wall
   m_Shader: {fileID: -6465566751694194690, guid: 5693ed1cbbdde914c83c424007004629, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -49,8 +49,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: adf97edd9c8d8954496d5862cefc7985, type: 3}
-        m_Scale: {x: 1, y: 9}
+        m_Texture: {fileID: 2800000, guid: f856d6a3b1d123143a0d8bd78bbf5400, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Masker:
         m_Texture: {fileID: 2800000, guid: 7cbeca7aee04d4c4495405ccba192fb5, type: 3}
