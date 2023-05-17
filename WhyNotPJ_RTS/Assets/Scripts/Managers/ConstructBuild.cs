@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public enum Buildables
@@ -32,10 +33,9 @@ public class ConstructBuild : MonoBehaviour
 	public Dictionary<int, GroundBreak> strtIdPair = new Dictionary<int, GroundBreak>();
 	
 
-	//test
-	public Transform sPos;
-	public Transform ePos;
-	//test
+	Vector3 sPos;
+	Vector3 ePos;
+	bool valid = false;
 
 	private void Awake()
 	{
@@ -44,58 +44,46 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(Buildables.Wall);
+		//Construct(Buildables.Wall);
 	}
 
-	public bool TouchDetect(out Vector3 sPos, out Vector3 ePos)
+	private void LateUpdate()
 	{
-		Vector3 v = new Vector3();
-		bool valid = true;
-		StartCoroutine(DelayGetInput((vec, b) => {
-			valid = b;
-			v = vec;
-			
-			
-		}));
-		Debug.Log("터치1");
-		if (valid)
-			sPos = v;
-		else
+		if (Input.GetMouseButtonDown(1))
 		{
-			sPos = new Vector3();
-			ePos = new Vector3();
-			return false;
+			StartCoroutine(BuildInp(Buildables.Wall));
 		}
-			
-		StartCoroutine(DelayGetInput((vec, b) => {
-			valid = b;
-			v = vec;
-
-		}));
-		Debug.Log("터치2");
-		if (valid)
-			ePos = v;
-		else
-		{
-			sPos = new Vector3();
-			ePos = new Vector3();
-			return false;
-		}
-
-		return true;
 	}
 
-	public void Construct(/*Vector3 startPos, Vector3 endPos, */Buildables type)
+	public IEnumerator BuildInp(Buildables t)
 	{
-		Vector3 startPos, endPos;
-		if(!TouchDetect(out startPos, out endPos))
+
+		valid = false;
+		yield return StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			sPos = vec;
+		}));
+		yield return null;
+		yield return StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			ePos = vec;
+		}));
+
+		Construct(t);
+	}
+
+	void Construct(Buildables type)
+	{
+		
+
+
+		if (!valid)
 		{
 			return;
 		}
-		
 
-		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
-		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
+		Vector3Int sIdx = Perceive.PosToIdxVector(sPos);
+		Vector3Int eIdx = Perceive.PosToIdxVector(ePos);
 		if(Perceive.fullMap[sIdx.y, sIdx.x, 0].info == GroundState.Water || Perceive.fullMap[eIdx.y, eIdx.x, 0].info == GroundState.Water)
 		{
 			Debug.Log("물");
@@ -107,28 +95,28 @@ public class ConstructBuild : MonoBehaviour
 		switch (type)
 		{
 			case Buildables.Bridge:
-				if(!BridgeExamine(startPos, endPos, (endPos - startPos).magnitude))
+				if(!BridgeExamine(sPos, ePos, (ePos - sPos).magnitude))
 					return;
 				b = Instantiate(bridge);
 				
-				pos = (startPos + endPos) / 2;
+				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
-				b.transform.LookAt(endPos);
+				b.transform.LookAt(ePos);
 				break;
 			case Buildables.Wall:
-				float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
+				float highest = sPos.y > ePos.y ? sPos.y : ePos.y;
 				highest += WALLYSCALE;
-				startPos.y = highest;
-				endPos.y = highest;
+				sPos.y = highest;
+				ePos.y = highest;
 				float lowest;
-				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude, out lowest))
+				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest))
 					return;
 				b = Instantiate(wall);
 
 				
-				pos = (startPos + endPos) / 2;
+				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
-				b.transform.LookAt(endPos);
+				b.transform.LookAt(ePos);
 				b.transform.Rotate(0, 90, 0);
 				pos.y = lowest;
 				b.transform.position = pos;
@@ -142,7 +130,7 @@ public class ConstructBuild : MonoBehaviour
 		
 		strtIdPair.Add(StrtNumber, b);
 
-		b.Gen(startPos, endPos, false, StrtNumber++);
+		b.Gen(sPos, ePos, false, StrtNumber++);
 		
 	}
 
@@ -227,6 +215,7 @@ public class ConstructBuild : MonoBehaviour
 
 	IEnumerator DelayGetInput(System.Action<Vector3, bool> callback)
 	{
+
 		Vector3 ret = new Vector3();
 		bool isValid = true;
 		yield return new WaitUntil(()=>{ 
@@ -237,7 +226,6 @@ public class ConstructBuild : MonoBehaviour
 			return Input.GetMouseButtonDown(0);
 #endif
 		});
-		Debug.Log("다기다림.");
 
 #if MOBILE
 		Touch t = Input.GetTouch(0);
