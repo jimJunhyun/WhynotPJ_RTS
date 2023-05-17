@@ -5,15 +5,21 @@ using UnityEngine;
 
 public class ReconTower : IBuilding, IProducable
 {
-	public string myName => "Á¤Âû Å¸¿ö";
+	public GameObject prefab => null;
+	public string myName => "ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½";
 
-	public float produceTime => 3f;
+    public float produceTime = 3f;
 
-	public Element element => new Element(0,1, 8);
+    public Element element = new Element(0, 1, 8);
 
-	public Action onCompleted => ()=>{ Debug.Log("Á¤ÂûÅ¸¿ö °Ç¼³ ¿Ï·á"); };
+    public Action onCompleted = () => { Debug.Log("ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½Ç¼ï¿½ ï¿½Ï·ï¿½"); };
+	public GameObject _prefab => null;
+    public string _myName => myName;
+    public float _produceTime => produceTime;
+	public Element _element => element;
+	public Action _onCompleted => onCompleted;
 
-	public List<IUnit> nearUnit { get; set; }
+	public List<UnitController> nearUnit { get; set; }
 
 	public Vector3 scale{ get;} = new Vector3(1, 1, 1);
 	public Vector3 pos { get; set; }
