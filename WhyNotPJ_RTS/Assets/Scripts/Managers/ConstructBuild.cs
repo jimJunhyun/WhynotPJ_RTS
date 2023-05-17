@@ -130,7 +130,7 @@ public class ConstructBuild : MonoBehaviour
 		
 		strtIdPair.Add(StrtNumber, b);
 
-		b.Gen(sPos, ePos, false, StrtNumber++);
+		b.Gen(sPos, ePos, true, StrtNumber++);
 		
 	}
 
@@ -173,7 +173,7 @@ public class ConstructBuild : MonoBehaviour
 		Vector3 p = startPos;
 		Vector3 dir = endPos - startPos;
 		RaycastHit h;
-		lowestPoint = 0;
+		lowestPoint = int.MaxValue;
 		while(!Approximate(p, endPos, RAYGAP / 2))
 		{
 			Vector3Int v = Perceive.PosToIdxVector(p);
@@ -184,11 +184,11 @@ public class ConstructBuild : MonoBehaviour
 			}
 			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
 			{
+				Debug.DrawLine(new Vector3(p.x, p.y,p.z + 10f), h.point, Color.red, 1000f);
 				if(lowestPoint > h.point.y)
 				{
 					lowestPoint = h.point.y;
 				}
-				
 			}
 			else
 			{
