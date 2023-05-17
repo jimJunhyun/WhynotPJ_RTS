@@ -13,6 +13,7 @@ public class Scout : MonoBehaviour, IProducable
     private int vio, def, rec;
     private Action onCompleted;
 
+    public GameObject _prefab => null;
     string IProducable._myName => myName;
     float IProducable._produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);

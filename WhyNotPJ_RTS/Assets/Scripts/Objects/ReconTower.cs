@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class ReconTower : IBuilding, IProducable
 {
-    public string myName = "ÇÁ·Îµå·Î¸ðÀÌ";
+	public GameObject prefab => null;
+	public string myName => "ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½";
 
     public float produceTime = 3f;
 
     public Element element = new Element(0, 1, 8);
 
-    public Action onCompleted = () => { Debug.Log("ÇÁ·Îµå·Î¸ðÀÌ °Ç¼³ ¿Ï·á"); };
-    //À§Ã³·³ »ó¼ö·Î Á÷Á¢ ÀÔ·ÂÇÏ°Å³ª SerializesField µîÀ¸·Î ¿¡µðÅÍ¿¡¼­ ÀÔ·Â
+    public Action onCompleted = () => { Debug.Log("ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½Ç¼ï¿½ ï¿½Ï·ï¿½"); };
+	public GameObject _prefab => null;
     public string _myName => myName;
     public float _produceTime => produceTime;
 	public Element _element => element;
