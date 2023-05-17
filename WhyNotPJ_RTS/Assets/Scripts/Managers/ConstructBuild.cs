@@ -1,3 +1,5 @@
+//#define MOBILE
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,22 +44,56 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(sPos.position, ePos.position, Buildables.Wall);
-		
+		Construct(Buildables.Wall);
 	}
 
-	private void LateUpdate()
+	public bool TouchDetect(out Vector3 sPos, out Vector3 ePos)
 	{
-		if (Input.GetMouseButtonDown(1))
+		Vector3 v = new Vector3();
+		bool valid = true;
+		StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			v = vec;
+			
+			
+		}));
+		Debug.Log("터치1");
+		if (valid)
+			sPos = v;
+		else
 		{
-			Construct(sPos.position, ePos.position, Buildables.Wall);
+			sPos = new Vector3();
+			ePos = new Vector3();
+			return false;
+		}
+			
+		StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			v = vec;
+
+		}));
+		Debug.Log("터치2");
+		if (valid)
+			ePos = v;
+		else
+		{
+			sPos = new Vector3();
+			ePos = new Vector3();
+			return false;
+		}
+
+		return true;
+	}
+
+	public void Construct(/*Vector3 startPos, Vector3 endPos, */Buildables type)
+	{
+		Vector3 startPos, endPos;
+		if(!TouchDetect(out startPos, out endPos))
+		{
+			return;
 		}
 		
-	}
 
-	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
-	{
-		// 클릭시스템과 병합 시 제거 #
 		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
 		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
 		if(Perceive.fullMap[sIdx.y, sIdx.x, 0].info == GroundState.Water || Perceive.fullMap[eIdx.y, eIdx.x, 0].info == GroundState.Water)
@@ -65,12 +101,6 @@ public class ConstructBuild : MonoBehaviour
 			Debug.Log("물");
 			return;
 		}
-		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
-		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
-
-		
-
-		// 클릭시스템과 병합 시 제거 #
 		
 		Vector3 pos = new Vector3();
 		GroundBreak b = null;
@@ -193,5 +223,40 @@ public class ConstructBuild : MonoBehaviour
 	bool Approximate(Vector3 a, Vector3 b, float err)
 	{
 		return Approximate(a.x, b.x, err) && Approximate(a.y, b.y , err) && Approximate(a.z, b.z, err);
+	}
+
+	IEnumerator DelayGetInput(System.Action<Vector3, bool> callback)
+	{
+		Vector3 ret = new Vector3();
+		bool isValid = true;
+		yield return new WaitUntil(()=>{ 
+#if MOBILE
+			return Input.touchCount == 1;
+#else
+			//Debug.Log("!");
+			return Input.GetMouseButtonDown(0);
+#endif
+		});
+		Debug.Log("다기다림.");
+
+#if MOBILE
+		Touch t = Input.GetTouch(0);
+		yield return new WaitUntil(() => {
+
+			return t.phase == TouchPhase.Ended;
+
+			});
+#endif
+		RaycastHit hit;
+#if MOBLIE
+		Ray r = Camera.main.ScreenPointToRay(t.position);
+#else
+		Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+#endif
+		if (isValid = Physics.Raycast(r,out hit, Camera.main.farClipPlane, Perceive.GROUNDMASK))
+		{
+			ret = hit.point;
+		}
+		callback(ret, isValid);
 	}
 }
