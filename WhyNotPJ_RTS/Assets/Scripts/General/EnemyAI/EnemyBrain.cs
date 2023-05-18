@@ -82,8 +82,6 @@ public class EnemyBrain : MonoBehaviour
 		set.defendBias = set.initDefBias;
 		set.reconBias = set.initRecBias;
 		producable.Add(new ReconTower());
-		producable.Add(new Barricade());
-		producable.Add(new Scout());
 		produceActs = FindObjectsOfType<Producer>().OfType<Producer>().ToList().FindAll(x => !x.pSide);
 	}
 

@@ -20,7 +20,8 @@ public class ConstructBuild : MonoBehaviour
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
 	public const float WALLXSCALE = 7.5f;
-	public const float WALLYSCALE = 5.5f;
+	public const float WALLYSCALE = 2.4f;//º® °¡¿îµ¥
+	public const float WALLBASEYSCALE = 1.66f;//º® ¹Ø
 
 	const float RAYDIST = 1.5f; //¸ðµ¨ Å°
 	const float RAYGAP = 1.2f; //¸ðµ¨ Áö¸§
@@ -105,14 +106,14 @@ public class ConstructBuild : MonoBehaviour
 				break;
 			case Buildables.Wall:
 				float highest = sPos.y > ePos.y ? sPos.y : ePos.y;
-				highest += WALLYSCALE;
+				highest += WALLBASEYSCALE + WALLYSCALE;
 				sPos.y = highest;
 				ePos.y = highest;
 				float lowest;
 				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest))
 					return;
 				b = Instantiate(wall);
-
+				((WallRender)b).lowestPoint = lowest;
 				
 				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
@@ -184,7 +185,7 @@ public class ConstructBuild : MonoBehaviour
 			}
 			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
 			{
-				Debug.DrawLine(new Vector3(p.x, p.y,p.z + 10f), h.point, Color.red, 1000f);
+				Debug.DrawLine(new Vector3(p.x, p.y ,p.z ), h.point, Color.red, 1000f);
 				if(lowestPoint > h.point.y)
 				{
 					lowestPoint = h.point.y;
