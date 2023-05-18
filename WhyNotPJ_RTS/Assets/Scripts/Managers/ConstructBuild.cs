@@ -22,6 +22,7 @@ public class ConstructBuild : MonoBehaviour
 	public const float WALLXSCALE = 7.5f;
 	public const float WALLYSCALE = 2.4f;//º® °¡¿îµ¥
 	public const float WALLBASEYSCALE = 1.66f;//º® ¹Ø
+	public const float WALLTOPYGAP = 4.55f;//º® À§ ºó ºÎºÐ ³ÐÀÌ
 
 	const float RAYDIST = 1.5f; //¸ðµ¨ Å°
 	const float RAYGAP = 1.2f; //¸ðµ¨ Áö¸§
@@ -110,11 +111,17 @@ public class ConstructBuild : MonoBehaviour
 				sPos.y = highest;
 				ePos.y = highest;
 				float lowest;
-				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest))
+				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest, out highest))
 					return;
 				b = Instantiate(wall);
+				highest += WALLBASEYSCALE + WALLYSCALE;
 				((WallRender)b).lowestPoint = lowest;
-				
+				((WallRender)b).highestPoint = highest;
+				if (sPos.y < highest)
+				{
+					sPos.y = highest;
+					ePos.y = highest;
+				}
 				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
 				b.transform.LookAt(ePos);
@@ -169,12 +176,13 @@ public class ConstructBuild : MonoBehaviour
 		return false;
 	}
 	
-	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint)
+	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint, out float highestPoint)
 	{
 		Vector3 p = startPos;
 		Vector3 dir = endPos - startPos;
 		RaycastHit h;
 		lowestPoint = int.MaxValue;
+		highestPoint = int.MinValue;
 		while(!Approximate(p, endPos, RAYGAP / 2))
 		{
 			Vector3Int v = Perceive.PosToIdxVector(p);
@@ -189,6 +197,10 @@ public class ConstructBuild : MonoBehaviour
 				if(lowestPoint > h.point.y)
 				{
 					lowestPoint = h.point.y;
+				}
+				if(highestPoint < h.point.y)
+				{
+					highestPoint = h.point.y;
 				}
 			}
 			else

@@ -12,14 +12,13 @@ public class EnemyBrain : MonoBehaviour
 	public float biasMiddle = 5f;
 	public float dynamicity = 2f;
 
-	public ProdList<IProducable> producable = new ProdList<IProducable>();
+	public ProdList<IProducable> producable = new ProdList<IProducable>(); // 여기에 생산 가능한 모든 오브젝트를 더해야함.
 	IProducable product = null;
-	List<Producer> produceActs = new List<Producer>(); //새로운 생산 시설이 생기면 해당 시설 생산 완료 부분에서 더해줌.
-	//List<int> myPriority = new List<int>();
+	Producer producer; 
 	[HideInInspector]
 	public Transform playerBase;
 
-	void Examine() //할 행동 목록 결정		   
+	void Examine() //할 행동 목록 결정  
 	{
 		//상대 유닛 인식한 후에 그거에 맞게 성향 변동이 있을 예정
 		producable.Sort(set);
@@ -29,8 +28,8 @@ public class EnemyBrain : MonoBehaviour
     public void Decide() //행동 실행
 	{
 		Examine();
-		Producer p = produceActs.Find((x)=>{ return !x.isProducing;});
-		if(p != null)
+		
+		if(producer != null)
 		{
 			if (product._element.vio > biasMiddle)
 			{
@@ -71,7 +70,7 @@ public class EnemyBrain : MonoBehaviour
 					set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
 				}
 			}
-			p.AddProduct(product);
+			producer.AddProduct(product);
 		}
 	}
 
@@ -82,31 +81,9 @@ public class EnemyBrain : MonoBehaviour
 		set.defendBias = set.initDefBias;
 		set.reconBias = set.initRecBias;
 		producable.Add(new ReconTower());
-		produceActs = FindObjectsOfType<Producer>().OfType<Producer>().ToList().FindAll(x => !x.pSide);
+		producer = FindObjectsOfType<Producer>().ToList<Producer>().Find((p)=>{ return !p.pSide; });
 	}
 
-	//public List<int> CalcRank(List<float> list)
-	//{
-	//	List<int> rank = new List<int>();
-
-	//	for (int i = 0; i < list.Count; i++)
-	//	{
-	//		int r = 1;
-	//		for (int j = 0; j < list.Count; j++)
-	//		{
-	//			if(i == j)
-	//			{
-	//				continue;
-	//			}
-	//			if(list[i] < list[j])
-	//			{
-	//				++r;
-	//			}
-	//		}
-	//		rank.Add(r);
-	//	}
-	//	return rank;
-	//}
 }
 
 
