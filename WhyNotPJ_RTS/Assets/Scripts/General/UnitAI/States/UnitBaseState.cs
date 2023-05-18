@@ -9,6 +9,8 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
     public UnitController unitController;
     [HideInInspector]
     public UnitMove unitMove;
+    [HideInInspector]
+    public UnitAnimator unitAnimator;
 
     public abstract void OnEnterState();
 
@@ -20,5 +22,6 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
     {
         unitController = agentRoot.GetComponent<UnitController>();
         unitMove = agentRoot.GetComponent<UnitMove>();
+        unitAnimator = agentRoot.GetComponent<UnitAnimator>();
     }
 }

@@ -36,8 +36,8 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     #endregion
 
     private Dictionary<State, IUnitState> stateDictionary = null;
-    private IUnitState currentState;
-    public IUnitState CurrentState => currentState;
+    private IUnitState currentStateScript;
+    public State currentState;
 	public GameObject _prefab => gameObject;
 
     //test
@@ -79,16 +79,17 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
 
     private void Update()
     {
-        currentState.UpdateState();
+        currentStateScript.UpdateState();
     }
 
     public void ChangeState(State type)
     {
-        currentState?.OnExitState();
+        currentStateScript?.OnExitState();
 
-        currentState = stateDictionary[type];
+        currentStateScript = stateDictionary[type];
+        currentState = type;
 
-        currentState?.OnEnterState();
+        currentStateScript?.OnEnterState();
     }
 
     // ISelectable

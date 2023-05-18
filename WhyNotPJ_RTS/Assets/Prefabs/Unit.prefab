@@ -401,6 +401,8 @@ MonoBehaviour:
   healthPoint: 0
   defensePower: 0
   moveSpeed: 7
+  marker: {fileID: 0}
+  isSelect: 0
 --- !u!114 &242562238
 MonoBehaviour:
   m_ObjectHideFlags: 0

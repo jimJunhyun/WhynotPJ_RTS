@@ -7,26 +7,16 @@ public class UnitMoveState : UnitBaseState
 {
     public override void OnEnterState()
     {
-
+        unitAnimator.SetIsWalk(true);
     }
 
     public override void OnExitState()
     {
-
+        unitAnimator.SetIsWalk(false);
     }
 
     public override void UpdateState()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                unitMove.SetTargetPosition(hit.point);
-            }
-        }
-
         unitMove.SetAreaSpeed(unitController.moveSpeed);
 
         if (unitMove.NavMeshAgent.velocity.sqrMagnitude < 0.1f)
