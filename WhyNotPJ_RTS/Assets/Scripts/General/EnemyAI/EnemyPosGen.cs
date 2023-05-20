@@ -31,7 +31,7 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
 
-		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
+		UnitBaseState currentState = (con.CurrentStateScript as UnitBaseState);
 
 
 		if (con._element.rec >= 5f)
@@ -133,7 +133,7 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		for (int i = 0; i < accumulations.Count; i++)
 		{
-			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			((UnitBaseState)accumulations[i].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 		}
 		Debug.Log("�Ѱ���");
 	}

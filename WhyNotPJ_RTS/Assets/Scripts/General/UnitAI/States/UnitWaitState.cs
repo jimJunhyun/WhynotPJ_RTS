@@ -5,9 +5,13 @@ using UnityEngine;
 
 public class UnitWaitState : UnitBaseState
 {
+    [SerializeField]
+    private float sendSignTime = 5f;
+    private float curSignTime;
+
     public override void OnEnterState()
     {
-
+        curSignTime = sendSignTime;
     }
 
     public override void OnExitState()
@@ -17,14 +21,18 @@ public class UnitWaitState : UnitBaseState
 
     public override void UpdateState()
     {
-        if (unitMove.NavMeshAgent.velocity.sqrMagnitude >= 0.1f)
+        curSignTime -= Time.deltaTime;
+
+        if (curSignTime <= 0f)
+        {
+            //대기 신호
+
+            curSignTime = sendSignTime;
+        }
+
+        if (unitMove.NavMeshAgent.remainingDistance > 0f)
         {
             unitController.ChangeState(State.Move);
         }
-    }
-
-    public override void SetUp(Transform agentRoot)
-    {
-        base.SetUp(agentRoot);
     }
 }

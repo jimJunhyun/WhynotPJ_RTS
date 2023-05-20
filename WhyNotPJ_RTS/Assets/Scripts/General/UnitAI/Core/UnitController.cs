@@ -19,10 +19,10 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public float _produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);
     public Action _onCompleted => onCompleted;
+	public GameObject _prefab => gameObject;
     #endregion
 
     #region Unit Status
-    public static float detectRange = 5f;
     [Header("Unit Status")]
     public float attackPower;
     public float attackSpeed;
@@ -33,12 +33,15 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public float defensePower;
     [Space(20)]
     public float moveSpeed;
+    public float detectRange = 5f;
     #endregion
 
     private Dictionary<State, IUnitState> stateDictionary = null;
     private IUnitState currentStateScript;
+    public IUnitState CurrentStateScript => currentStateScript;
     public State currentState;
-	public GameObject _prefab => gameObject;
+
+    private UnitMove unitMove;
 
     //test
     public GameObject marker;
@@ -52,6 +55,8 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     {
         //test
         marker = transform.Find("Marker").gameObject;
+
+        unitMove = GetComponent<UnitMove>();
 
         stateDictionary = new Dictionary<State, IUnitState>();
         Transform stateTrm = transform.Find("States");
@@ -79,6 +84,21 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
 
     private void Update()
     {
+        if (currentState == State.Dead)
+        {
+            return;
+        }
+
+#if UNITY_EDITOR
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                unitMove.SetTargetPosition(hit.point);
+            }
+        }
+#endif
+
         currentStateScript.UpdateState();
     }
 

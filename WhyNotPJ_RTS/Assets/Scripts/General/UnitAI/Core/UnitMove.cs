@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -34,6 +32,7 @@ public class UnitMove : MonoBehaviour
         {
             case 8:
                 navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
+                visualTrm.localPosition = Vector3.down * 1.5f;
 
                 break;
             default:

@@ -19,14 +19,9 @@ public class UnitMoveState : UnitBaseState
     {
         unitMove.SetAreaSpeed(unitController.moveSpeed);
 
-        if (unitMove.NavMeshAgent.velocity.sqrMagnitude < 0.1f)
+        if (unitMove.NavMeshAgent.remainingDistance <= 0f)
         {
             unitController.ChangeState(State.Wait);
         }
-    }
-
-    public override void SetUp(Transform agentRoot)
-    {
-        base.SetUp(agentRoot);
     }
 }

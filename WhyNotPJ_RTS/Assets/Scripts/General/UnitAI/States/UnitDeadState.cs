@@ -6,21 +6,16 @@ public class UnitDeadState : UnitBaseState
 {
     public override void OnEnterState()
     {
-
+        //»ç¸Á Ã³¸®
     }
 
     public override void OnExitState()
     {
-
+        //Do Nothing
     }
 
     public override void UpdateState()
     {
-
-    }
-
-    public override void SetUp(Transform agentRoot)
-    {
-        base.SetUp(agentRoot);
+        //DO Nothing
     }
 }
