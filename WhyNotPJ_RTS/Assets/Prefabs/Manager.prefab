@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 5848127466192260178}
   - component: {fileID: 5848127466192260181}
   - component: {fileID: 5848127466192260180}
+  - component: {fileID: 698971952}
+  - component: {fileID: 698971953}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -100,3 +102,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afe55bbab0508b41a85b80334f3bf66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &698971952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848127466192260183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bbf3d259491ba4a825eb4ced861563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingList: {fileID: 11400000, guid: 7fee1225f7a76ff488ec94785560e061, type: 2}
+--- !u!114 &698971953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848127466192260183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65ae897b3e32944a85a02523c161d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  dragRectangle: {fileID: 0}
+  isDraging: 0

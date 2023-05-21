@@ -27,51 +27,61 @@ public class EnemyBrain : MonoBehaviour
     
     public void Decide() //행동 실행
 	{
-		Examine();
-		
-		if(producer != null)
+		if(producable.Count > 0)
 		{
-			if (product._element.vio > biasMiddle)
+			Examine();
+
+			if (producer != null)
 			{
-				set.violenceBias -= ( product._element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
-			}
-			else
-			{
-				set.violenceBias += set.vioIncreaseBias * (biasMiddle - product._element.vio) * dynamicity;
-			}
-			if (product._element.def > biasMiddle)
-			{
-				set.defendBias -= (product._element.def - biasMiddle ) / set.defIncreaseBias / dynamicity;
-			}
-			else
-			{
-				set.defendBias += (biasMiddle - product._element.def ) * set.defIncreaseBias * dynamicity;
-			}
-			if (product._element.rec > biasMiddle)
-			{
-				if(playerBase == null)
+				if (product._element.vio > biasMiddle)
 				{
-					set.reconBias -= ( product._element.rec - biasMiddle ) / set.initReconIncreaseBias / dynamicity;
+					set.violenceBias -= (product._element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
 				}
 				else
 				{
-					set.reconBias -= (product._element.rec - biasMiddle ) / set.recIncreaseBias / dynamicity;
+					set.violenceBias += set.vioIncreaseBias * (biasMiddle - product._element.vio) * dynamicity;
 				}
-				
-			}
-			else
-			{
-				if (playerBase == null)
+				if (product._element.def > biasMiddle)
 				{
-					set.reconBias += set.initReconIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					set.defendBias -= (product._element.def - biasMiddle) / set.defIncreaseBias / dynamicity;
 				}
 				else
 				{
-					set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					set.defendBias += (biasMiddle - product._element.def) * set.defIncreaseBias * dynamicity;
 				}
+				if (product._element.rec > biasMiddle)
+				{
+					if (playerBase == null)
+					{
+						set.reconBias -= (product._element.rec - biasMiddle) / set.initReconIncreaseBias / dynamicity;
+					}
+					else
+					{
+						set.reconBias -= (product._element.rec - biasMiddle) / set.recIncreaseBias / dynamicity;
+					}
+
+				}
+				else
+				{
+					if (playerBase == null)
+					{
+						set.reconBias += set.initReconIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					}
+					else
+					{
+						set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					}
+				}
+				if (producer.produceQueue.Count == 0)
+				{
+
+					producer.AddProduct(product);
+
+				}
+
 			}
-			producer.AddProduct(product);
 		}
+		
 	}
 
 	private void Awake()
@@ -80,8 +90,12 @@ public class EnemyBrain : MonoBehaviour
 		set.violenceBias = set.initVioBias;
 		set.defendBias = set.initDefBias;
 		set.reconBias = set.initRecBias;
-		producable.Add(new ReconTower());
+		
 		producer = FindObjectsOfType<Producer>().ToList<Producer>().Find((p)=>{ return !p.pSide; });
+
+		producable.AddRange(Resources.LoadAll<UnitDefault>("Prefabs/"));
+
+		//건물도 추가하기.
 	}
 
 }

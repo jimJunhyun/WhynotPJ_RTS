@@ -146,11 +146,11 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			//UnitController curC = myControls.Find((x) => { return x.CurrentState == State.Wait; });
-			//if (curC != null)
-			//{
-			//	SamplePos(curC);
-			//}
+			UnitController curC = myControls.Find((x) => { return x?.CurrentState == x?.GetStateDict(State.Wait); });
+			if (curC != null)
+			{
+				SamplePos(curC);
+			}
 			//유닛의 현재 상태를 인지할 수 있도록 하는 것이 무난하겠다.
 		}
 	}

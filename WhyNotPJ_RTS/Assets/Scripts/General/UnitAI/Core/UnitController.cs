@@ -105,4 +105,9 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
         marker.SetActive(false);
         isSelect = false;
 	}
+
+    public IUnitState GetStateDict(State st)
+	{
+        return stateDictionary[st];
+	}
 }
