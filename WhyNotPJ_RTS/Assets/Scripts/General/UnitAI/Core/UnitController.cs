@@ -50,10 +50,14 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 	public bool CanDragSelect => true;
 	public Vector3 WorldPos => transform.position;
 
+    private UnitMove unitMove;
+
 	private void Awake()
     {
         //test
         marker = transform.Find("Marker").gameObject;
+
+        unitMove = GetComponent<UnitMove>();
 
         stateDictionary = new Dictionary<State, IUnitState>();
         Transform stateTrm = transform.Find("States");
@@ -106,5 +110,10 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         //test
         marker.SetActive(false);
         isSelect = false;
+	}
+
+    public void Move(Vector3 point)
+	{
+        unitMove.SetTargetPosition(point);
 	}
 }

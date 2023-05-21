@@ -59,11 +59,68 @@ public class ClickAndSelectManager : MonoBehaviour
 				}
 			}
 		}
+
+		if (Input.GetMouseButtonUp(0))
+		{
+			if (CameraController.camState == CameraState.MOVING)
+			{
+				CameraController.camState = CameraState.NONE;
+				return;
+			}
+
+			RaycastHit hit;
+			Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+
+			if (Physics.Raycast(ray, out hit, 100f))
+			{
+				if (hit.transform.TryGetComponent(out UnitController unit))
+				{
+					if (unit._pSide == true)
+					{
+						UnitSelectManager.Instance.ClickSelectUnit(unit);
+					}
+				}
+				else
+				{
+					UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.Move(hit.point));
+				}
+			}
+
+			if (start - end == Vector3.zero || CameraController.camState != CameraState.DRAGSELECTING)
+				return;
+
+			CameraController.camState = CameraState.NONE;
+
+			CalculateDragRect();
+			SelectUnits();
+
+			start = end = Vector2.zero;
+			DrawDragRectangle();
+		}
+		else if (Input.GetMouseButtonDown(0))
+		{
+			start = Input.mousePosition;
+			dragRect = new Rect();
+		}
+		else if (Input.GetMouseButton(0))
+		{
+			DragSelect();
+		}
 	}
 
 	public void SetState()
 	{
 		CameraController.camState = CameraController.camState == CameraState.DRAGSELECTING ? CameraState.NONE : CameraState.DRAGSELECTING;
+	}
+
+	private void DragSelect()
+	{
+		end = Input.mousePosition;
+
+		if (CameraController.camState != CameraState.DRAGSELECTING)
+			return;
+
+		DrawDragRectangle();
 	}
 
 	private void DragSelect(Touch touch)
@@ -104,41 +161,40 @@ public class ClickAndSelectManager : MonoBehaviour
 	private void DrawDragRectangle()
 	{
 		dragRectangle.position = (start + end) * 0.5f;
-		print("-1" + start + ", " + end);
-		print("0" + (start.x - end.x));
-		print("1" + Mathf.Abs(start.x - end.x));
-		print("2" + new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y)));
-		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
-		print("3" + dragRectangle.sizeDelta);
+		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y)) * 1.37f;
 		debug1.position = start;
 		debug2.position = end;
-		print("4" + start + ", " + end);
 	}
 
 	private void CalculateDragRect()
 	{
-		Touch touch = Input.GetTouch(0);
+		Vector2 position;
 
-		if (touch.position.x < start.x)
+		if (Input.touchCount > 0)
+			position = Input.GetTouch(0).position;
+		else
+			position = Input.mousePosition;
+
+		if (position.x < start.x)
 		{
-			dragRect.xMin = touch.position.x;
+			dragRect.xMin = position.x;
 			dragRect.xMax = start.x;
 		}
 		else
 		{
 			dragRect.xMin = start.x;
-			dragRect.xMax = touch.position.x;
+			dragRect.xMax = position.x;
 		}
 
-		if (touch.position.y < start.y)
+		if (position.y < start.y)
 		{
-			dragRect.yMin = touch.position.y;
+			dragRect.yMin = position.y;
 			dragRect.yMax = start.y;
 		}
 		else
 		{
 			dragRect.yMin = start.y;
-			dragRect.yMax = touch.position.y;
+			dragRect.yMax = position.y;
 		}
 	}
 

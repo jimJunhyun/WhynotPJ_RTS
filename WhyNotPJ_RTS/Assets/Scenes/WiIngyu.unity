@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPosition: {fileID: 398008907}
   isProducing: 0
-  pSide: 0
+  pSide: 1
 --- !u!1 &471146852
 GameObject:
   m_ObjectHideFlags: 0

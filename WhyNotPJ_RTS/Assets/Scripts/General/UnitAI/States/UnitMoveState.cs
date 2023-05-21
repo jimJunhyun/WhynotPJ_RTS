@@ -17,15 +17,15 @@ public class UnitMoveState : UnitBaseState
 
     public override void UpdateState()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                unitMove.SetTargetPosition(hit.point);
-            }
-        }
+        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        //    {
+        //        unitMove.SetTargetPosition(hit.point);
+        //    }
+        //}
 
         unitMove.SetAreaSpeed(unitController.moveSpeed);
 
