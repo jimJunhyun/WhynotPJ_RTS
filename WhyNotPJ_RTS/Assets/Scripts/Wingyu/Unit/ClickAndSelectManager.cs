@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class CameraSelectManager : MonoBehaviour
+public class ClickAndSelectManager : MonoBehaviour
 {
     [SerializeField] private LayerMask unitLayer;
 	[SerializeField] private RectTransform dragRectangle;	// 마우스로 드래그한 범위를 가시화하는 Image UI의 RectTransform
+
+	public RectTransform debug1;
+	public RectTransform debug2;
 
 	private Rect dragRect;
 	private Vector3 start = Vector2.zero;
@@ -11,7 +14,6 @@ public class CameraSelectManager : MonoBehaviour
 
     private Camera mainCam;
     private UnitSelectManager unitManager;	// 유닛의 선택 & 해제를 담당하는 UnitManager 클래스
-	private UnitListUI unitListUI;			// 선택한 유닛의 정보를 출력하는 UI를 담당하는 클래스
 
 	public bool isDraging = false;
 
@@ -20,8 +22,7 @@ public class CameraSelectManager : MonoBehaviour
 		mainCam = Camera.main;
 
 		// 유닛매니저 생성,, 추후 선언 위치 변경 필요
-		unitManager = new UnitSelectManager();
-		unitListUI = GetComponent<UnitListUI>();
+		unitManager = GetComponent<UnitSelectManager>();
 
 		DrawDragRectangle();
 	}
@@ -50,18 +51,10 @@ public class CameraSelectManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit, 100f, unitLayer))
 				{
-					if (hit.transform.TryGetComponent(out ISelectable unit))
+					if (hit.transform.TryGetComponent(out UnitController unit))
 					{
-						UnitSelectManager.Instance.ClickSelectUnit(unit);
-						print(UnitSelectManager.Instance.SelectedUnitList.Count);
-						if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
-						{
-							unitListUI.ShowUnitInfo();
-						}
-						else if (!UnitSelectManager.Instance.IsSelecting)
-						{
-							unitListUI.HideUnitInfo();
-						}
+						if (unit._pSide == true)
+							UnitSelectManager.Instance.ClickSelectUnit(unit);
 					}
 				}
 			}
@@ -106,21 +99,20 @@ public class CameraSelectManager : MonoBehaviour
 
 			CameraController.camState = CameraState.NONE;
 		}
-
-		if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
-		{
-			unitListUI.ShowUnitInfo();
-		}
-		else if (!UnitSelectManager.Instance.IsSelecting)
-		{
-			unitListUI.HideUnitInfo();
-		}
 	}
 
 	private void DrawDragRectangle()
 	{
 		dragRectangle.position = (start + end) * 0.5f;
+		print("-1" + start + ", " + end);
+		print("0" + (start.x - end.x));
+		print("1" + Mathf.Abs(start.x - end.x));
+		print("2" + new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y)));
 		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
+		print("3" + dragRectangle.sizeDelta);
+		debug1.position = start;
+		debug2.position = end;
+		print("4" + start + ", " + end);
 	}
 
 	private void CalculateDragRect()
@@ -158,6 +150,9 @@ public class CameraSelectManager : MonoBehaviour
 		UnitSelectManager.Instance.DeselectAll();
 		foreach (UnitController unit in UnitSelectManager.Instance.unitList)
 		{
+			if (unit._pSide == false)
+				continue;
+
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))
 			{
 				UnitSelectManager.Instance.DragSelectUnit(unit);

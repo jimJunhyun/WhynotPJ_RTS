@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PoolingObject
 {
-    public MonoBehaviour prefab;
+    public PoolableMono prefab;
     public int count;
 }
 

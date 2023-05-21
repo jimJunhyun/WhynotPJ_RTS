@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Producer : MonoBehaviour
 {
+	[SerializeField]
+	private Transform spawnPosition;
     public IProducable item;
 	public bool isProducing = false;
 	public bool pSide = false;
@@ -35,7 +37,7 @@ public class Producer : MonoBehaviour
 	{
 		produceQueue.Enqueue(pro);
 
-		if (!isProducing) // ���� ����Ǵ� ������ ���� �� ���� ���� ����
+		if (!isProducing)
 			SetProduce();
 	} 
 
@@ -47,15 +49,16 @@ public class Producer : MonoBehaviour
 		isProducing = true;
 	}
 
-    private void Produce()
+    private IProducable Produce()
 	{
-		if (item == null) return;
+		if (item == null) return null;
 
-		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
+		UnitController obj = PoolManager.Instance.Pop(item._prefab.gameObject.name) as UnitController;
+		obj._pSide = pSide;
 		obj.transform.position = SetSpawnPoint();
 		IProducable finProduct = obj.GetComponent<IProducable>();
 		finProduct._onCompleted?.Invoke();
-		UnitSelectManager.Instance.unitList.Add(finProduct as UnitController);
+		UnitSelectManager.Instance.unitList.Add(obj);
 
 		item = null;
 		isProducing = false;
@@ -63,13 +66,15 @@ public class Producer : MonoBehaviour
 		progress = 0;
 
 		SetProduce();
+
+		return finProduct;
 	}
 
 	private Vector3 SetSpawnPoint()
 	{
 		int angle = Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
-		pos += transform.position + new Vector3(0, 0.5f, 0);
+		pos += transform.position;
 		return pos;
 	}
 }

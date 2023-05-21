@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour, IProducable, ISelectable
+public class UnitController : PoolableMono, IProducable, ISelectable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
@@ -19,6 +19,8 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public float _produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);
     public Action _onCompleted => onCompleted;
+    [field:SerializeField]
+    public bool _pSide { get; set; }
     #endregion
 
     #region Unit Status

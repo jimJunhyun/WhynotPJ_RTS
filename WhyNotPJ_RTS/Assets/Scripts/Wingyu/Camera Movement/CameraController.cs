@@ -76,8 +76,6 @@ public class CameraController : MonoBehaviour
 
 	private void Update()
 	{
-		print(camState.ToString());
-
 		if (camState == CameraState.DRAGSELECTING) return;
 
 		if (Input.touchCount >= 1)

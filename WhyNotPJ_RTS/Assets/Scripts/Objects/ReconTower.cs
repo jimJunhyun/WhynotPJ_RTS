@@ -18,6 +18,7 @@ public class ReconTower : IBuilding, IProducable
     public float _produceTime => produceTime;
 	public Element _element => element;
 	public Action _onCompleted => onCompleted;
+	public bool _pSize => true;
 
 	public List<UnitController> nearUnit { get; set; }
 
