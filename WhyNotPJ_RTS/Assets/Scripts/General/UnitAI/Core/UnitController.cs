@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour, IProducable, ISelectable
+public class UnitController : MonoBehaviour, ISelectable, IProducable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
@@ -14,7 +14,7 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     [SerializeField]
     private int vio, def, rec;
     private Action onCompleted;
-
+    
     public string _myName => myName;
     public float _produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);

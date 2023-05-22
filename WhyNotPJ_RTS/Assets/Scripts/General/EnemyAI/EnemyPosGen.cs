@@ -33,20 +33,18 @@ public class EnemyPosGen : MonoBehaviour
 
 		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
 
-
 		if (con._element.rec >= 5f)
 		{
 			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
-			//con.unitMove.SetTargetPosition(Vector3.zero);
-			//con.Move(Vector3.zero);
-			Debug.Log("�������� ����");
+			
+			Debug.Log("정찰적인 조작");
 		}
 		else if(set.warBias >= selected)
 		{
 			if(EnemyBrain.instance.playerBase != null)
 			{
-				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
-				Debug.Log(con._myName + "���� �������� ����");
+				currentState.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+				Debug.Log(con._myName + "을 적 본진으로 보냄.");
 			}
 			else
 			{
@@ -54,16 +52,18 @@ public class EnemyPosGen : MonoBehaviour
 				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
-				Debug.Log("���� �ϳ� ����.");
+				Debug.Log("유닛 하나 축적");
 			}
-			Debug.Log(con.name + " ���� �������� ����.");
+			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
 		else
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
-
+			NavMeshHit hit;
+			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
+			currentState.unitMove.SetTargetPosition(hit.position);
 			con.ChangeState(State.Alert); 
-			Debug.Log(con.name + " ���� ������� ����");
+			Debug.Log(con.name + " 에게 방어적인 조작 : "+hit.position);
 		}
 	}
 
@@ -112,8 +112,9 @@ public class EnemyPosGen : MonoBehaviour
 				}
 				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
 				{
-					float num = Perceive.fullMap[y, x, floor].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
-					if (num > largestH) 
+					int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 0.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
+					float num = (Perceive.fullMap[y, x, floor].height - Perceive.averageHeight) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					if (num * (set.adequateSoldier - units) > largestH) 
 					{
 						v.x = x;
 						v.y = y;
@@ -135,7 +136,7 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 		}
-		Debug.Log("�Ѱ���");
+		Debug.Log("총공격명령");
 	}
 
 	public void FindPlaying()

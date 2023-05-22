@@ -92,6 +92,7 @@ public class Perceive
 	public const int MAPX = 200;
 	public const int MAPY = 200;
 	public static MapData[,,] fullMap = new MapData[MAPY, MAPX, 2]; //여기에 지형 관련 정보를 모두 저장.
+	public static float averageHeight;
 
 	public bool isPlayer;
 
@@ -138,10 +139,13 @@ public class Perceive
 					else
 					{
 						fullMap[y, x, 0].info = GroundState.Ground;
+						averageHeight += fullMap[y, x, 0].height;
 					}
 				}
 			}
 		}
+		averageHeight /= 40000;
+		
 	}
 
 	public void ResetMap(bool isP)

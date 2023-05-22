@@ -33,7 +33,7 @@ public class Producer : MonoBehaviour
 
 	public void AddProduct(IProducable pro)
 	{
-		Debug.Log("아이템 더함.");
+		//Debug.Log("아이템 더함.");
 		produceQueue.Enqueue(pro);
 		if (!isProducing) // ���� ����Ǵ� ������ ���� �� ���� ���� ����
 			SetProduce();
@@ -45,26 +45,26 @@ public class Producer : MonoBehaviour
 		
 		item = produceQueue.Dequeue();
 		
-		Debug.Log(item._myName +" 생산 시작.");
+		//Debug.Log(item._myName +" 생산 시작.");
 		isProducing = true;
 	}
 
     private void Produce()
 	{
 		if (item == null) return;
-		Debug.Log(item._myName + " 생산 완료.");
+		//Debug.Log(item._myName + " 생산 완료.");
 		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
 		obj.transform.position = SetSpawnPoint();
 		IProducable finProduct = obj.GetComponent<IProducable>();
+		UnitController c = obj.GetComponent<UnitController>();
 		finProduct._onCompleted?.Invoke();
 		if (pSide)
 		{
-			UnitSelectManager.Instance.unitList.Add(finProduct as UnitController);
+			UnitSelectManager.Instance.unitList.Add(finProduct as UnitDefault);
 		}
 		else
 		{
-			Debug.Log("ADDED " + (finProduct as UnitController)?.isSelect); //?????????????
-			EnemyPosGen.instance.myControls.Add(finProduct as UnitController);
+			EnemyPosGen.instance.myControls.Add(c);
 		}
 		
 
