@@ -29,10 +29,9 @@ public class EnemyBrain : MonoBehaviour
 	{
 		if(producable.Count > 0)
 		{
-			Examine();
-
-			if (producer != null)
+			if (producer != null && producer.produceQueue.Count == 0)
 			{
+				Examine();
 				if (product._element.vio > biasMiddle)
 				{
 					set.violenceBias -= (product._element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
@@ -72,13 +71,7 @@ public class EnemyBrain : MonoBehaviour
 						set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
 					}
 				}
-				if (producer.produceQueue.Count == 0)
-				{
-
-					producer.AddProduct(product);
-
-				}
-
+				producer.AddProduct(product);
 			}
 		}
 		

@@ -284,8 +284,8 @@ GameObject:
   - component: {fileID: 7158677428280384397}
   - component: {fileID: 3260701368780547740}
   - component: {fileID: 3848869150832372684}
-  - component: {fileID: 1815088460164482093}
   - component: {fileID: 242562232}
+  - component: {fileID: 1815088460164482093}
   - component: {fileID: -5767092797678055330}
   - component: {fileID: 242562238}
   m_Layer: 14
@@ -365,19 +365,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1815088460164482093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1815088460164482103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57e73570b7313c245a1419baed45e7a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  marker: {fileID: 1815088460249786162}
 --- !u!114 &242562232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,10 +378,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myName: 
-  produceTime: 2
-  vio: 0
-  def: 0
-  rec: 0
+  produceTime: 5
+  vio: 1
+  def: 1
+  rec: 7
   attackPower: 0
   attackSpeed: 0
   attackRange: 0
@@ -404,6 +391,19 @@ MonoBehaviour:
   moveSpeed: 7
   marker: {fileID: 0}
   isSelect: 0
+--- !u!114 &1815088460164482093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815088460164482103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e73570b7313c245a1419baed45e7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  marker: {fileID: 1815088460249786162}
 --- !u!114 &-5767092797678055330
 MonoBehaviour:
   m_ObjectHideFlags: 0

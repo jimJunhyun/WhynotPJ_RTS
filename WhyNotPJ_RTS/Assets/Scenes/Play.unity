@@ -351,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6294763431470170853, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -588
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
@@ -644,7 +644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d184b2bdc20247a7d811dffab6235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 0
+  difficulty: 1
   breakFlag: 0
 --- !u!114 &776838861
 MonoBehaviour:

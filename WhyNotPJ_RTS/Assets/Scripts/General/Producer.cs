@@ -33,7 +33,7 @@ public class Producer : MonoBehaviour
 
 	public void AddProduct(IProducable pro)
 	{
-		//Debug.Log("아이템 더함.");
+		Debug.Log("아이템 더함.");
 		produceQueue.Enqueue(pro);
 		if (!isProducing) // ���� ����Ǵ� ������ ���� �� ���� ���� ����
 			SetProduce();
@@ -45,7 +45,7 @@ public class Producer : MonoBehaviour
 		
 		item = produceQueue.Dequeue();
 		
-		//Debug.Log(item._myName +" 생산 시작.");
+		Debug.Log(item._myName +" 생산 시작.");
 		isProducing = true;
 	}
 

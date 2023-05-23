@@ -35,9 +35,12 @@ public class EnemyPosGen : MonoBehaviour
 
 		if (con._element.rec >= 5f)
 		{
-			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
+			Vector3 v = Perceive.IdxVectorToPos(FindNearestSightless(con));
+			NavMeshHit hit;
+			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
+			currentState.unitMove.SetTargetPosition(hit.position);
 			
-			Debug.Log("정찰적인 조작");
+			//Debug.Log($"정찰적인 조작 : {hit.position}");
 		}
 		else if(set.warBias >= selected)
 		{
@@ -69,7 +72,7 @@ public class EnemyPosGen : MonoBehaviour
 
 	public Vector3Int FindNearestSightless(UnitController unit)
 	{
-		Vector3Int from = new Vector3Int(100, 100);
+		Vector3Int from = Perceive.PosToIdxVector(unit.transform.position);
 		Vector3Int dest = Vector3Int.zero;
 		float smallestD = float.MaxValue;
 		//from = Perceive.PosToIdxVector(unit.transform);
@@ -89,6 +92,7 @@ public class EnemyPosGen : MonoBehaviour
 					{
 						dest.x = x;
 						dest.y = y;
+						dest.z = floor;
 						smallestD = dist;
 					}
 				}
@@ -112,8 +116,8 @@ public class EnemyPosGen : MonoBehaviour
 				}
 				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
 				{
-					int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 0.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
-					float num = (Perceive.fullMap[y, x, floor].height - Perceive.averageHeight) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 2.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
+					float num = (Perceive.fullMap[y, x, floor].height/* - Perceive.averageHeight*/) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
 					if (num * (set.adequateSoldier - units) > largestH) 
 					{
 						v.x = x;
