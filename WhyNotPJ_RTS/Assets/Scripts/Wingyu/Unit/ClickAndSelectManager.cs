@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class ClickAndSelectManager : MonoBehaviour
 {
     [SerializeField] private LayerMask unitLayer;
-	[SerializeField] private RectTransform dragRectangle;	// ¸¶¿ì½º·Î µå·¡±×ÇÑ ¹üÀ§¸¦ °¡½ÃÈ­ÇÏ´Â Image UIÀÇ RectTransform
+	[SerializeField] private RectTransform dragRectangle;	// ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½Ï´ï¿½ Image UIï¿½ï¿½ RectTransform
 
 	public RectTransform debug1;
 	public RectTransform debug2;
@@ -14,7 +14,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitSelectManager unitManager;	// À¯´ÖÀÇ ¼±ÅÃ & ÇØÁ¦¸¦ ´ã´çÇÏ´Â UnitManager Å¬·¡½º
+    private UnitSelectManager unitManager;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ & ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ UnitManager Å¬ï¿½ï¿½ï¿½ï¿½
 
 	public bool isDraging = false;
 
@@ -22,7 +22,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		mainCam = Camera.main;
 
-		// À¯´Ö¸Å´ÏÀú »ý¼º,, ÃßÈÄ ¼±¾ð À§Ä¡ º¯°æ ÇÊ¿ä
+		// ï¿½ï¿½ï¿½Ö¸Å´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½,, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 		unitManager = GetComponent<UnitSelectManager>();
 
 		DrawDragRectangle();
@@ -30,15 +30,15 @@ public class ClickAndSelectManager : MonoBehaviour
 
 	private void Update()
 	{
-		// Å¬¸¯ ÀÌº¥Æ®
+		// Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		if (Input.touchCount == 1)
 		{
 			Touch touch = Input.GetTouch(0);
 
-			//µå·¡±× ¿¬»ê
+			//ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			DragSelect(touch);
 
-			// ¼Õ°¡¶ôÀ» ¶ÃÀ» ¶§
+			// ï¿½Õ°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			if (touch.phase == TouchPhase.Ended)
 			{
 				if (CameraController.camState == CameraState.MOVING)
@@ -71,7 +71,6 @@ public class ClickAndSelectManager : MonoBehaviour
 
 			RaycastHit hit;
 			Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-			print(EventSystem.current.IsPointerOverGameObject());
 			if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 100f))
 			{
 				if (hit.transform.TryGetComponent(out UnitController unit))
@@ -87,7 +86,7 @@ public class ClickAndSelectManager : MonoBehaviour
 				}
 				else
 				{
-					UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.Move(hit.point));
+					UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.UnitMove.SetTargetPosition(hit.point));
 				}
 			}
 
@@ -133,14 +132,14 @@ public class ClickAndSelectManager : MonoBehaviour
 		if (CameraController.camState != CameraState.DRAGSELECTING)
 			return;
 
-		// µå·¡±× ÀÌº¥Æ® - ½ÃÀÛ
+		// ï¿½å·¡ï¿½ï¿½ ï¿½Ìºï¿½Æ® - ï¿½ï¿½ï¿½ï¿½
 		if (touch.phase == TouchPhase.Began)
 		{
 			start = touch.position;
 			dragRect = new Rect();
 		}
 
-		// µå·¡±× ÀÌº¥Æ® - µå·¡±× Áß
+		// ï¿½å·¡ï¿½ï¿½ ï¿½Ìºï¿½Æ® - ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½
 		if (touch.phase == TouchPhase.Moved)
 		{
 			end = touch.position;
@@ -204,7 +203,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// dragRectÀÇ ¹üÀ§ ³»¿¡ ÀÖ´Â À¯´ÖÀ» ¼±ÅÃÇÏ´Â ÇÔ¼ö
+	/// dragRectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 	/// </summary>
 	private void SelectUnits()
 	{

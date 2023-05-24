@@ -65,6 +65,7 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public LayerMask whatIsMainCamp, whatIsUnit, whatIsConstruction;
 
     private UnitMove unitMove;
+    public UnitMove UnitMove => unitMove;
 
     //target
     [HideInInspector]
@@ -120,15 +121,15 @@ public class UnitController : PoolableMono, IProducable, ISelectable
             return;
         }
 
-#if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-            {
-                unitMove.SetTargetPosition(hit.point);
-            }
-        }
-#endif
+//#if UNITY_EDITOR
+//        if (Input.GetMouseButtonDown(0))
+//        {
+//            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+//            {
+//                unitMove.SetTargetPosition(hit.point);
+//            }
+//        }
+//#endif
 
         currentStateScript.UpdateState();
     }
@@ -156,10 +157,5 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         //test
         marker.SetActive(false);
         isSelect = false;
-	}
-
-    public void Move(Vector3 point)
-	{
-        unitMove.SetTargetPosition(point);
 	}
 }
