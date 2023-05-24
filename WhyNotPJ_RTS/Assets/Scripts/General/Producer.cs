@@ -1,15 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+public class Process
+{
+	public Process(IProducable item, float produceTime, Slider progressSlider)
+	{
+		this.item = item;
+		this.produceTime = produceTime;
+		this.progressSlider = progressSlider;
+	}
+
+	public IProducable item;
+	public float produceTime;
+	public Slider progressSlider;
+}
 
 public class Producer : MonoBehaviour
 {
 	[SerializeField]
 	private Transform spawnPosition;
     public IProducable item;
+	public Process curItem;
 	public bool isProducing = false;
 	public bool pSide = false;
 
 	public Queue<IProducable> produceQueue = new Queue<IProducable>();
+	public Stack<Process> processStack = new Stack<Process>();
 
 	private float produceTime;
 	private float progress;
@@ -25,17 +42,54 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / item._produceTime;
+		progress = produceTime / curItem.item._produceTime;
+		
+		if (curItem.progressSlider)
+			curItem.progressSlider.value = progress;
+		curItem.produceTime = produceTime;
 
-		if (produceTime >= item._produceTime)
+		if (produceTime >= curItem.item._produceTime)
 		{
-			Produce();
+			curItem.progressSlider?.gameObject.SetActive(false);
+			MakeProduce();
 		}
+
 	}
 
-	public void AddProduct(IProducable pro)
+    private IProducable MakeProduce()
 	{
-		produceQueue.Enqueue(pro);
+		if (curItem == null) return null;
+
+		UnitController item = PoolManager.Instance.Pop(curItem.item._prefab.gameObject.name) as UnitController;
+		item._pSide = pSide;
+		item.transform.position = SetSpawnPoint();
+		IProducable finProduct = item.GetComponent<IProducable>();
+		finProduct._onCompleted?.Invoke();
+		UnitSelectManager.Instance.unitList.Add(item);
+
+		processStack.Pop();
+		Init();
+		SetProduce();
+
+		return finProduct;
+	}
+
+	private void Init()
+	{
+		curItem = null;
+		isProducing = false;
+		produceTime = 0;
+		progress = 0;
+	}
+
+	public void AddProduce(IProducable pro, Slider slider = null)
+	{
+		if (slider.gameObject.activeInHierarchy) return;
+		slider?.gameObject.SetActive(true);
+
+		Init();
+		Process process = new Process(pro, 0, slider);
+		processStack.Push(process);
 
 		if (!isProducing)
 			SetProduce();
@@ -43,33 +97,15 @@ public class Producer : MonoBehaviour
 
 	private void SetProduce()
 	{
-		if (produceQueue.Count == 0) return;
+		if (processStack.Count == 0) return;
+
+		curItem = processStack.Peek();
+		produceTime = curItem.produceTime;
 		
-		item = produceQueue.Dequeue();
 		isProducing = true;
 	}
 
-    private IProducable Produce()
-	{
-		if (item == null) return null;
-
-		UnitController obj = PoolManager.Instance.Pop(item._prefab.gameObject.name) as UnitController;
-		obj._pSide = pSide;
-		obj.transform.position = SetSpawnPoint();
-		IProducable finProduct = obj.GetComponent<IProducable>();
-		finProduct._onCompleted?.Invoke();
-		UnitSelectManager.Instance.unitList.Add(obj);
-
-		item = null;
-		isProducing = false;
-		produceTime = 0;
-		progress = 0;
-
-		SetProduce();
-
-		return finProduct;
-	}
-
+	// 스폰 위치 공식
 	private Vector3 SetSpawnPoint()
 	{
 		int angle = Random.Range(0, 361);

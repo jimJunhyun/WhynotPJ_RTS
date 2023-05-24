@@ -4,12 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProduceBuildingUI : MonoBehaviour
+public class ProducerUI : MonoBehaviour
 {
 	[SerializeField]
 	private ProduceableListSO produceList;
 	[SerializeField]
-	private ProductionButton prodBtnPrefab;
+	private UnitProduceButton prodBtnPrefab;
 	[SerializeField]
 	private Transform btnParent;
 	[SerializeField]
@@ -19,7 +19,7 @@ public class ProduceBuildingUI : MonoBehaviour
 	{
 		foreach (UnitController unit in produceList.list)
 		{
-			ProductionButton button = PoolManager.Instance.Pop(prodBtnPrefab.gameObject.name) as ProductionButton;
+			UnitProduceButton button = PoolManager.Instance.Pop(prodBtnPrefab.gameObject.name) as UnitProduceButton;
 			button.gameObject.transform.SetParent(btnParent);
 			button.SetData(unit, producer);
 		}

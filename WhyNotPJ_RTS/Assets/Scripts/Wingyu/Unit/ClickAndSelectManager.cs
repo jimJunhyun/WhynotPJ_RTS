@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ClickAndSelectManager : MonoBehaviour
 {
@@ -70,14 +71,18 @@ public class ClickAndSelectManager : MonoBehaviour
 
 			RaycastHit hit;
 			Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-
-			if (Physics.Raycast(ray, out hit, 100f))
+			print(EventSystem.current.IsPointerOverGameObject());
+			if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 100f))
 			{
 				if (hit.transform.TryGetComponent(out UnitController unit))
 				{
 					if (unit._pSide == true)
 					{
 						UnitSelectManager.Instance.ClickSelectUnit(unit);
+					}
+					else
+					{
+
 					}
 				}
 				else

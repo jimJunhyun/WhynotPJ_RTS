@@ -4,12 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProductionButton : PoolableMono
+public class UnitProduceButton : PoolableMono
 {
     private UnitController unit;
 
     private TextMeshProUGUI textmesh;
 	private Button button;
+	private Slider slider;
 
 	private Producer producer;
 
@@ -17,6 +18,8 @@ public class ProductionButton : PoolableMono
 	{
 		textmesh = transform.Find("Text").GetComponent<TextMeshProUGUI>();
 		button = GetComponent<Button>();
+		slider = GetComponentInChildren<Slider>();
+		slider.gameObject.SetActive(false);
 		transform.localScale = Vector3.one;
 	}
 
@@ -32,6 +35,6 @@ public class ProductionButton : PoolableMono
 
 	public void OnClick()
 	{
-		producer.AddProduct(unit);
+		producer.AddProduce(unit, slider);
 	}
 }
