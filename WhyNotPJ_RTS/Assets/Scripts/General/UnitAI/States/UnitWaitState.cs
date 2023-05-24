@@ -24,11 +24,20 @@ public class UnitWaitState : UnitBaseState
 
     public override void UpdateState()
     {
+        if (unitMove.NavMeshAgent.velocity.sqrMagnitude >= 0.1f)
+        {
+            unitController.ChangeState(State.Move);
+        }
+    }
+
+    public override void SetUp(Transform agentRoot)
+    {
+        base.SetUp(agentRoot);
         curSignTime -= Time.deltaTime;
 
         if (curSignTime <= 0f)
         {
-            //╢К╠Б ╫ехё
+            //О©╫О©╫О©╫ О©╫О©╫хё
 
             curSignTime = sendSignTime;
         }

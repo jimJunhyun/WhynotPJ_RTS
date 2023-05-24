@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour, IProducable, ISelectable
+public class UnitController : PoolableMono, IProducable, ISelectable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
@@ -24,7 +24,11 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public Action onCompleted => m_onCompleted;
 	public GameObject prefab => gameObject;
 
-    public bool isPlayer => m_isPlayer;
+    public bool isPlayer
+	{
+        get => m_isPlayer;
+		set => m_isPlayer = value;
+	}
     #endregion
 
     #region Unit Status
@@ -152,5 +156,10 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
         //test
         marker.SetActive(false);
         isSelect = false;
+	}
+
+    public void Move(Vector3 point)
+	{
+        unitMove.SetTargetPosition(point);
 	}
 }

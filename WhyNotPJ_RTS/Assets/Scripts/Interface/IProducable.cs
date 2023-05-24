@@ -60,7 +60,7 @@ public interface IProducable
 	public Action onCompleted { get; }
 	public GameObject prefab { get; }
 
-	public bool isPlayer { get; }
+	public bool isPlayer { get; set; }
 	public float healthPoint { get; }
 
 	public float this[int idx]

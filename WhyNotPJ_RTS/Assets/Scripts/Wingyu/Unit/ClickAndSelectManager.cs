@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CameraSelectManager : MonoBehaviour
+public class ClickAndSelectManager : MonoBehaviour
 {
     [SerializeField] private LayerMask unitLayer;
 	[SerializeField] private RectTransform dragRectangle;	// 마우스로 드래그한 범위를 가시화하는 Image UI의 RectTransform
+
+	public RectTransform debug1;
+	public RectTransform debug2;
 
 	private Rect dragRect;
 	private Vector3 start = Vector2.zero;
@@ -11,7 +15,6 @@ public class CameraSelectManager : MonoBehaviour
 
     private Camera mainCam;
     private UnitSelectManager unitManager;	// 유닛의 선택 & 해제를 담당하는 UnitManager 클래스
-	private UnitListUI unitListUI;			// 선택한 유닛의 정보를 출력하는 UI를 담당하는 클래스
 
 	public bool isDraging = false;
 
@@ -20,8 +23,7 @@ public class CameraSelectManager : MonoBehaviour
 		mainCam = Camera.main;
 
 		// 유닛매니저 생성,, 추후 선언 위치 변경 필요
-		unitManager = new UnitSelectManager();
-		unitListUI = GetComponent<UnitListUI>();
+		unitManager = GetComponent<UnitSelectManager>();
 
 		DrawDragRectangle();
 	}
@@ -50,27 +52,80 @@ public class CameraSelectManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit, 100f, unitLayer))
 				{
-					if (hit.transform.TryGetComponent(out ISelectable unit))
+					if (hit.transform.TryGetComponent(out UnitController unit))
 					{
-						UnitSelectManager.Instance.ClickSelectUnit(unit);
-						print(UnitSelectManager.Instance.SelectedUnitList.Count);
-						if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
-						{
-							unitListUI.ShowUnitInfo();
-						}
-						else if (!UnitSelectManager.Instance.IsSelecting)
-						{
-							unitListUI.HideUnitInfo();
-						}
+						if (unit.isPlayer == true)
+							UnitSelectManager.Instance.ClickSelectUnit(unit);
 					}
 				}
 			}
+		}
+
+		if (Input.GetMouseButtonUp(0))
+		{
+			if (CameraController.camState == CameraState.MOVING)
+			{
+				CameraController.camState = CameraState.NONE;
+				return;
+			}
+
+			RaycastHit hit;
+			Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+			print(EventSystem.current.IsPointerOverGameObject());
+			if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 100f))
+			{
+				if (hit.transform.TryGetComponent(out UnitController unit))
+				{
+					if (unit.isPlayer == true)
+					{
+						UnitSelectManager.Instance.ClickSelectUnit(unit);
+					}
+					else
+					{
+
+					}
+				}
+				else
+				{
+					UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.Move(hit.point));
+				}
+			}
+
+			if (start - end == Vector3.zero || CameraController.camState != CameraState.DRAGSELECTING)
+				return;
+
+			CameraController.camState = CameraState.NONE;
+
+			CalculateDragRect();
+			SelectUnits();
+
+			start = end = Vector2.zero;
+			DrawDragRectangle();
+		}
+		else if (Input.GetMouseButtonDown(0))
+		{
+			start = Input.mousePosition;
+			dragRect = new Rect();
+		}
+		else if (Input.GetMouseButton(0))
+		{
+			DragSelect();
 		}
 	}
 
 	public void SetState()
 	{
 		CameraController.camState = CameraController.camState == CameraState.DRAGSELECTING ? CameraState.NONE : CameraState.DRAGSELECTING;
+	}
+
+	private void DragSelect()
+	{
+		end = Input.mousePosition;
+
+		if (CameraController.camState != CameraState.DRAGSELECTING)
+			return;
+
+		DrawDragRectangle();
 	}
 
 	private void DragSelect(Touch touch)
@@ -106,47 +161,45 @@ public class CameraSelectManager : MonoBehaviour
 
 			CameraController.camState = CameraState.NONE;
 		}
-
-		if (UnitSelectManager.Instance.SelectedUnitList.Count > 0)
-		{
-			unitListUI.ShowUnitInfo();
-		}
-		else if (!UnitSelectManager.Instance.IsSelecting)
-		{
-			unitListUI.HideUnitInfo();
-		}
 	}
 
 	private void DrawDragRectangle()
 	{
 		dragRectangle.position = (start + end) * 0.5f;
 		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
+		debug1.position = start;
+		debug2.position = end;
 	}
 
 	private void CalculateDragRect()
 	{
-		Touch touch = Input.GetTouch(0);
+		Vector2 position;
 
-		if (touch.position.x < start.x)
+		if (Input.touchCount > 0)
+			position = Input.GetTouch(0).position;
+		else
+			position = Input.mousePosition;
+
+		if (position.x < start.x)
 		{
-			dragRect.xMin = touch.position.x;
+			dragRect.xMin = position.x;
 			dragRect.xMax = start.x;
 		}
 		else
 		{
 			dragRect.xMin = start.x;
-			dragRect.xMax = touch.position.x;
+			dragRect.xMax = position.x;
 		}
 
-		if (touch.position.y < start.y)
+		if (position.y < start.y)
 		{
-			dragRect.yMin = touch.position.y;
+			dragRect.yMin = position.y;
 			dragRect.yMax = start.y;
 		}
 		else
 		{
 			dragRect.yMin = start.y;
-			dragRect.yMax = touch.position.y;
+			dragRect.yMax = position.y;
 		}
 	}
 
@@ -158,6 +211,9 @@ public class CameraSelectManager : MonoBehaviour
 		UnitSelectManager.Instance.DeselectAll();
 		foreach (UnitController unit in UnitSelectManager.Instance.unitList)
 		{
+			if (unit.isPlayer == false)
+				continue;
+
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))
 			{
 				UnitSelectManager.Instance.DragSelectUnit(unit);

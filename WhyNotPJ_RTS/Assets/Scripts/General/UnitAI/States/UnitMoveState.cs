@@ -11,7 +11,7 @@ public class UnitMoveState : UnitBaseState
         {
             if (unitController.mainCamp != null)
             {
-                if (true/*º»ÁøÀÌ À¯È¿ÇÏÁö ¾ÊÀ½, Áï °ÔÀÓÀÌ Á¾·áµÊ*/)
+                if (true/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½*/)
                 {
                     unitController.ChangeState(State.Alert);
 
@@ -54,7 +54,7 @@ public class UnitMoveState : UnitBaseState
         {
             if (unitController.mainCamp != null)
             {
-                if (true/*º»ÁøÀÌ À¯È¿ÇÏÁö ¾ÊÀ½, Áï °ÔÀÓÀÌ Á¾·áµÊ*/)
+                if (true/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½*/)
                 {
                     unitController.ChangeState(State.Alert);
 
@@ -80,7 +80,7 @@ public class UnitMoveState : UnitBaseState
                 }
             }
 
-            //°ø°Ý ¹üÀ§ ÀÌ³»¿¡ µé¾î¿À¸é °ø°Ý
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
         else
         {

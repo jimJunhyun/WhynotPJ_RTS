@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Units
-{
-}
-
 /// <summary>
 /// 유닛 선택 기능을 테스트하기 위한 유닛 선택 컨트롤 클래스. 추후 개선 필요.
 /// </summary>
-public class UnitSelectManager
+public class UnitSelectManager : MonoBehaviour
 {
 	public static UnitSelectManager Instance;
 
@@ -24,13 +20,17 @@ public class UnitSelectManager
 
 	public bool IsSelecting => selectedList.Count > 0;
 
-	public UnitSelectManager()
+
+	private void Awake()
 	{
 		if (Instance == null)
 		{
 			Instance = this;
 		}
+	}
 
+	private void Start()
+	{
 		selectedList = new List<ISelectable>();
 		unitList = new List<ISelectable>();
 		unitList = GameObject.FindObjectsOfType<UnitController>().ToList<ISelectable>();
