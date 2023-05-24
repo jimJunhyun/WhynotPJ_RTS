@@ -67,6 +67,7 @@ MonoBehaviour:
   unitController: {fileID: 242562232}
   unitMove: {fileID: 242562238}
   unitAnimator: {fileID: 0}
+  sightDepth: 100
 --- !u!114 &1393964141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,20 +230,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86386bdb511afc043b7642ff3103e9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myName: 
-  produceTime: 0
+  m_myName: 
+  m_produceTime: 0
   vio: 0
   def: 0
   rec: 0
+  m_isPlayer: 0
   attackPower: 0
   attackSpeed: 0
   attackRange: 0
   defensePenetration: 0
-  healthPoint: 0
+  m_healthPoint: 0
   defensePower: 0
   moveSpeed: 7
   detectRange: 5
   currentState: 0
+  whatIsUnit:
+    serializedVersion: 2
+    m_Bits: 0
+  whatIsConstruction:
+    serializedVersion: 2
+    m_Bits: 0
   marker: {fileID: 0}
   isSelect: 0
 --- !u!114 &242562238

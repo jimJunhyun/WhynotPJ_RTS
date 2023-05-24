@@ -41,7 +41,7 @@ public class ProduceBuildingUI : MonoBehaviour
 			bm.mono = PoolManager.Instance.Pop(buttonPrefab.gameObject.name);
 			bm.button = bm.mono.GetComponent<Button>();
 			bm.button.transform.SetParent(contentTrm);
-			bm.button.GetComponentInChildren<TextMeshProUGUI>().text = produceBuilding.unitList[i]._myName;
+			bm.button.GetComponentInChildren<TextMeshProUGUI>().text = produceBuilding.unitList[i].myName;
 
 			int number = i;
 			bm.button.onClick.AddListener(() => produceBuilding.AddQueue(produceBuilding.unitList[number]));

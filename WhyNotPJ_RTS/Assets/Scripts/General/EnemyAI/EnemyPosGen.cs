@@ -34,7 +34,7 @@ public class EnemyPosGen : MonoBehaviour
 		UnitBaseState currentState = (con.CurrentStateScript as UnitBaseState);
 
 
-		if (con._element.rec >= 5f)
+		if (con.element.rec >= 5f)
 		{
 			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
 			//con.unitMove.SetTargetPosition(Vector3.zero);
@@ -46,7 +46,7 @@ public class EnemyPosGen : MonoBehaviour
 			if(EnemyBrain.instance.playerBase != null)
 			{
 				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
-				Debug.Log(con._myName + "���� �������� ����");
+				Debug.Log(con.myName + "���� �������� ����");
 			}
 			else
 			{

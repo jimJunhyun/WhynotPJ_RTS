@@ -11,12 +11,15 @@ public class UnitWaitState : UnitBaseState
 
     public override void OnEnterState()
     {
+        unitController.mainCamp = null;
+        unitController.enemy = null;
+        unitController.construction = null;
         curSignTime = sendSignTime;
     }
 
     public override void OnExitState()
     {
-
+        //Do Nothing
     }
 
     public override void UpdateState()
@@ -28,11 +31,6 @@ public class UnitWaitState : UnitBaseState
             //대기 신호
 
             curSignTime = sendSignTime;
-        }
-
-        if (unitMove.NavMeshAgent.remainingDistance > 0f)
-        {
-            unitController.ChangeState(State.Move);
         }
     }
 }

@@ -7,6 +7,7 @@ public class UnitDeadState : UnitBaseState
     public override void OnEnterState()
     {
         //»ç¸Á Ã³¸®
+        transform.parent.gameObject.SetActive(false);
     }
 
     public override void OnExitState()

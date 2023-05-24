@@ -8,18 +8,23 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
-    private string myName;
+    private string m_myName;
     [SerializeField]
-    private float produceTime;
+    private float m_produceTime;
     [SerializeField]
     private int vio, def, rec;
-    private Action onCompleted;
+    private Action m_onCompleted;
 
-    public string _myName => myName;
-    public float _produceTime => produceTime;
-    public Element _element => new Element(vio, def, rec);
-    public Action _onCompleted => onCompleted;
-	public GameObject _prefab => gameObject;
+    [SerializeField]
+    private bool m_isPlayer;
+
+    public string myName => m_myName;
+    public float produceTime => m_produceTime;
+    public Element element => new Element(vio, def, rec);
+    public Action onCompleted => m_onCompleted;
+	public GameObject prefab => gameObject;
+
+    public bool isPlayer => m_isPlayer;
     #endregion
 
     #region Unit Status
@@ -28,8 +33,20 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public float attackSpeed;
     public float attackRange;
     public float defensePenetration;
-    [Space(20)]
-    public float healthPoint;
+    [Space(20), SerializeField]
+    private float m_healthPoint;
+    public float healthPoint
+    {
+        get
+        {
+            return m_healthPoint;
+        }
+
+        set
+        {
+            m_healthPoint = value;
+        }
+    }
     public float defensePower;
     [Space(20)]
     public float moveSpeed;
@@ -41,7 +58,17 @@ public class UnitController : MonoBehaviour, IProducable, ISelectable
     public IUnitState CurrentStateScript => currentStateScript;
     public State currentState;
 
+    public LayerMask whatIsMainCamp, whatIsUnit, whatIsConstruction;
+
     private UnitMove unitMove;
+
+    //target
+    [HideInInspector]
+    public MainCamp mainCamp = null;
+    [HideInInspector]
+    public UnitController enemy = null;
+    [HideInInspector]
+    public GroundBreak construction = null;
 
     //test
     public GameObject marker;
