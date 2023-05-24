@@ -8,39 +8,67 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 {
     #region Unit Attributes
     [Header("Unit Attributes"), SerializeField]
-    private string myName;
+    private string m_myName;
     [SerializeField]
-    private float produceTime;
+    private float m_produceTime;
     [SerializeField]
     private int vio, def, rec;
-    private Action onCompleted;
+    private Action m_onCompleted;
 
-    public string _myName => myName;
-    public float _produceTime => produceTime;
-    public Element _element => new Element(vio, def, rec);
-    public Action _onCompleted => onCompleted;
-    [field:SerializeField]
-    public bool _pSide { get; set; }
+    [SerializeField]
+    private bool m_isPlayer;
+
+    public string myName => m_myName;
+    public float produceTime => m_produceTime;
+    public Element element => new Element(vio, def, rec);
+    public Action onCompleted => m_onCompleted;
+	public GameObject prefab => gameObject;
+
+    public bool isPlayer => m_isPlayer;
     #endregion
 
     #region Unit Status
-    public static float detectRange = 5f;
     [Header("Unit Status")]
     public float attackPower;
     public float attackSpeed;
     public float attackRange;
     public float defensePenetration;
-    [Space(20)]
-    public float healthPoint;
+    [Space(20), SerializeField]
+    private float m_healthPoint;
+    public float healthPoint
+    {
+        get
+        {
+            return m_healthPoint;
+        }
+
+        set
+        {
+            m_healthPoint = value;
+        }
+    }
     public float defensePower;
     [Space(20)]
     public float moveSpeed;
+    public float detectRange = 5f;
     #endregion
 
     private Dictionary<State, IUnitState> stateDictionary = null;
-    private IUnitState currentState;
-    public IUnitState CurrentState => currentState;
-	public GameObject _prefab => gameObject;
+    private IUnitState currentStateScript;
+    public IUnitState CurrentStateScript => currentStateScript;
+    public State currentState;
+
+    public LayerMask whatIsMainCamp, whatIsUnit, whatIsConstruction;
+
+    private UnitMove unitMove;
+
+    //target
+    [HideInInspector]
+    public MainCamp mainCamp = null;
+    [HideInInspector]
+    public UnitController enemy = null;
+    [HideInInspector]
+    public GroundBreak construction = null;
 
     //test
     public GameObject marker;
@@ -85,16 +113,32 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 
     private void Update()
     {
-        currentState.UpdateState();
+        if (currentState == State.Dead)
+        {
+            return;
+        }
+
+#if UNITY_EDITOR
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                unitMove.SetTargetPosition(hit.point);
+            }
+        }
+#endif
+
+        currentStateScript.UpdateState();
     }
 
     public void ChangeState(State type)
     {
-        currentState?.OnExitState();
+        currentStateScript?.OnExitState();
 
-        currentState = stateDictionary[type];
+        currentStateScript = stateDictionary[type];
+        currentState = type;
 
-        currentState?.OnEnterState();
+        currentStateScript?.OnEnterState();
     }
 
     // ISelectable

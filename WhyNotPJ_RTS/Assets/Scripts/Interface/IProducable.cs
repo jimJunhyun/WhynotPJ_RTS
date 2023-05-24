@@ -54,11 +54,14 @@ public struct Element
 
 public interface IProducable
 {
-	public string _myName { get;}
-	public float _produceTime{ get; }
-	public Element _element{ get;}
-	public Action _onCompleted { get; }
-	public GameObject _prefab { get; }
+	public string myName { get; }
+	public float produceTime { get; }
+	public Element element { get; }
+	public Action onCompleted { get; }
+	public GameObject prefab { get; }
+
+	public bool isPlayer { get; }
+	public float healthPoint { get; }
 
 	public float this[int idx]
 	{
@@ -66,11 +69,11 @@ public interface IProducable
 		{
 			float ret = 0;
 			if(idx == 0)
-				ret = _element.vio;
+				ret = element.vio;
 			if (idx == 1)
-				ret = _element.def;
+				ret = element.def;
 			if (idx == 2)
-				ret = _element.rec;
+				ret = element.rec;
 
 			return ret;
 		}

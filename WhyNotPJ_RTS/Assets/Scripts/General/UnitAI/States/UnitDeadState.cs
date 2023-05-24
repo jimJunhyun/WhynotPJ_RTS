@@ -6,21 +6,17 @@ public class UnitDeadState : UnitBaseState
 {
     public override void OnEnterState()
     {
-
+        //»ç¸Á Ã³¸®
+        transform.parent.gameObject.SetActive(false);
     }
 
     public override void OnExitState()
     {
-
+        //Do Nothing
     }
 
     public override void UpdateState()
     {
-
-    }
-
-    public override void SetUp(Transform agentRoot)
-    {
-        base.SetUp(agentRoot);
+        //DO Nothing
     }
 }

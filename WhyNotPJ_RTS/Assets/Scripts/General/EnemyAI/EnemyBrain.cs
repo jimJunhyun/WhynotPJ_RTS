@@ -32,31 +32,31 @@ public class EnemyBrain : MonoBehaviour
 		Producer p = produceActs.Find((x)=>{ return !x.isProducing;});
 		if(p != null)
 		{
-			if (product._element.vio > biasMiddle)
+			if (product.element.vio > biasMiddle)
 			{
-				set.violenceBias -= ( product._element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
+				set.violenceBias -= ( product.element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
 			}
 			else
 			{
-				set.violenceBias += set.vioIncreaseBias * (biasMiddle - product._element.vio) * dynamicity;
+				set.violenceBias += set.vioIncreaseBias * (biasMiddle - product.element.vio) * dynamicity;
 			}
-			if (product._element.def > biasMiddle)
+			if (product.element.def > biasMiddle)
 			{
-				set.defendBias -= (product._element.def - biasMiddle ) / set.defIncreaseBias / dynamicity;
+				set.defendBias -= (product.element.def - biasMiddle ) / set.defIncreaseBias / dynamicity;
 			}
 			else
 			{
-				set.defendBias += (biasMiddle - product._element.def ) * set.defIncreaseBias * dynamicity;
+				set.defendBias += (biasMiddle - product.element.def ) * set.defIncreaseBias * dynamicity;
 			}
-			if (product._element.rec > biasMiddle)
+			if (product.element.rec > biasMiddle)
 			{
 				if(playerBase == null)
 				{
-					set.reconBias -= ( product._element.rec - biasMiddle ) / set.initReconIncreaseBias / dynamicity;
+					set.reconBias -= ( product.element.rec - biasMiddle ) / set.initReconIncreaseBias / dynamicity;
 				}
 				else
 				{
-					set.reconBias -= (product._element.rec - biasMiddle ) / set.recIncreaseBias / dynamicity;
+					set.reconBias -= (product.element.rec - biasMiddle ) / set.recIncreaseBias / dynamicity;
 				}
 				
 			}
@@ -64,11 +64,11 @@ public class EnemyBrain : MonoBehaviour
 			{
 				if (playerBase == null)
 				{
-					set.reconBias += set.initReconIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					set.reconBias += set.initReconIncreaseBias * (biasMiddle - product.element.rec) * dynamicity;
 				}
 				else
 				{
-					set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+					set.reconBias += set.recIncreaseBias * (biasMiddle - product.element.rec) * dynamicity;
 				}
 			}
 			p.AddProduce(product);
@@ -81,9 +81,9 @@ public class EnemyBrain : MonoBehaviour
 		set.violenceBias = set.initVioBias;
 		set.defendBias = set.initDefBias;
 		set.reconBias = set.initRecBias;
-		producable.Add(new ReconTower());
+		/*producable.Add(new ReconTower());
 		producable.Add(new Barricade());
-		producable.Add(new Scout());
+		producable.Add(new Scout());*/
 		produceActs = FindObjectsOfType<Producer>().OfType<Producer>().ToList().FindAll(x => !x.pSide);
 	}
 

@@ -105,7 +105,7 @@ public class Producer : MonoBehaviour
 		isProducing = true;
 	}
 
-	// ½ºÆù À§Ä¡ °ø½Ä
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 	private Vector3 SetSpawnPoint()
 	{
 		int angle = Random.Range(0, 361);
