@@ -11,9 +11,9 @@ public class TestUnit : UnitDefault
 	public override GameObject _prefab => gameObject;
 	public override string _myName => "테스트 유닛";
 
-	public override float _produceTime => 5f;
+	public override float _produceTime => 1f;
 
-	public override Element _element => new Element(1, 1, 7);
+	public override Element _element => new Element(1, 1, 1);
 
 	public override Action _onCompleted => () => Debug.Log("유닛이 생산되다");
 

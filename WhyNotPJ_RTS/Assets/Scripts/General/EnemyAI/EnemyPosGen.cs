@@ -14,9 +14,7 @@ public class EnemyPosGen : MonoBehaviour
 	public float calcApt;
 	public float calcRad;
 
-	public GameObject sphere;
-
-	int curAccumulated = 0;
+	//public GameObject sphere;
 
 	public List<UnitController> myControls = new List<UnitController>();
 	public List<UnitController> accumulations = new List<UnitController>();
@@ -44,19 +42,21 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if(set.warBias >= selected)
 		{
-			if(EnemyBrain.instance.playerBase != null)
-			{
-				currentState.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
-				Debug.Log(con._myName + "을 적 본진으로 보냄.");
-			}
-			else
-			{
+			//if(EnemyBrain.instance.playerBase != null)
+			//{
+			//	NavMeshHit hit;
+			//	NavMesh.SamplePosition(EnemyBrain.instance.playerBase.position, out hit, 100f, NavMesh.AllAreas);
+			//	currentState.unitMove.SetTargetPosition(hit.position);
+			//	con.ChangeState(State.Attack);
+			//	Debug.Log(con.name + "을 적 본진으로 보냄.");
+			//}
+			//else
+			//{
 				con.ChangeState(State.Alert);
-				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
 				Debug.Log("유닛 하나 축적");
-			}
+			//}
 			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
 		else
@@ -136,16 +136,18 @@ public class EnemyPosGen : MonoBehaviour
 
 	public void WholeAttack()
 	{
-		for (int i = 0; i < accumulations.Count; i++)
+		while(accumulations.Count > 0)
 		{
-			((UnitBaseState)accumulations[i].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			((UnitBaseState)accumulations[0].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			myControls.Add(accumulations[0]);
+			accumulations.RemoveAt(0);
 		}
 		Debug.Log("총공격명령");
 	}
 
 	public void FindPlaying()
 	{
-		if (EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
+		if (EnemyBrain.instance.playerBase != null && accumulations.Count >= set.adequateSoldier)
 		{
 			WholeAttack();
 		}

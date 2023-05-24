@@ -15,7 +15,7 @@ public class EnemyBrain : MonoBehaviour
 	public ProdList<IProducable> producable = new ProdList<IProducable>(); // 여기에 생산 가능한 모든 오브젝트를 더해야함.
 	IProducable product = null;
 	Producer producer; 
-	[HideInInspector]
+	//[HideInInspector]
 	public Transform playerBase;
 
 	void Examine() //할 행동 목록 결정  

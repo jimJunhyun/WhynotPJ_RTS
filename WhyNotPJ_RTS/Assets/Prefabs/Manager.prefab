@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5848127466192260177}
   - component: {fileID: 5848127466192260176}
   - component: {fileID: 5848127466192260179}
-  - component: {fileID: 5848127466192260178}
   - component: {fileID: 5848127466192260181}
   - component: {fileID: 5848127466192260180}
   - component: {fileID: 698971952}
@@ -65,19 +64,6 @@ MonoBehaviour:
   bridgeYErr: 2
   bridge: {fileID: 9069388623709111244, guid: 3d0b797aab24afe438110a3b26834351, type: 3}
   wall: {fileID: -2009880267833801732, guid: 27756deaaf6e18d49ac2a39116febdd3, type: 3}
---- !u!114 &5848127466192260178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5848127466192260183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35494de5e36c3d14a938c6ba77d3bbf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 7b31f130af175b2438fbc7ffe4674b92, type: 2}
 --- !u!114 &5848127466192260181
 MonoBehaviour:
   m_ObjectHideFlags: 0

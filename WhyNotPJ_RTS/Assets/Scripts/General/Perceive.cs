@@ -100,9 +100,9 @@ public class Perceive
 	public const int CONSTRUCTMASK =1 <<  10;
 
 
-	//int로 변경할것임. (vis를 빼는 느낌)
+	
 	public int[,,] map; //여기에는 보이는 상태 관련 정보만 저장.
-	int[,,] prevMap; //여기에는 이전의 보이는 상태 관련 정보를 저장.
+	int[,,] prevMap; 
 
 	public delegate void UpdMaps(Vector3Int startPos, int dist);
 
@@ -242,7 +242,6 @@ public class Perceive
 
 		if (isPlayer)
 		{
-			FogOfWar.instance.UpdateTexture(map, prevMap);
 			
 			for (int i = 0; i < strts.Count; i++)
 			{
@@ -277,7 +276,6 @@ public class Perceive
 		
 		if (isPlayer)
 		{
-			FogOfWar.instance.UpdateTexture(map, prevMap);
 			for (int i = 0; i < strts.Count; i++)
 			{
 				strts[i].See(false);

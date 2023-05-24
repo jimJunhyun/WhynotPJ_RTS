@@ -380,8 +380,8 @@ MonoBehaviour:
   myName: 
   produceTime: 5
   vio: 1
-  def: 1
-  rec: 7
+  def: 8
+  rec: 1
   attackPower: 0
   attackSpeed: 0
   attackRange: 0
