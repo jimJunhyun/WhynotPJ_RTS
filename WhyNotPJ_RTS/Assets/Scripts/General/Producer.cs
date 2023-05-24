@@ -42,13 +42,13 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / curItem.item._produceTime;
+		progress = produceTime / curItem.item.produceTime;
 		
 		if (curItem.progressSlider)
 			curItem.progressSlider.value = progress;
 		curItem.produceTime = produceTime;
 
-		if (produceTime >= curItem.item._produceTime)
+		if (produceTime >= curItem.item.produceTime)
 		{
 			curItem.progressSlider?.gameObject.SetActive(false);
 			MakeProduce();
@@ -60,11 +60,11 @@ public class Producer : MonoBehaviour
 	{
 		if (curItem == null) return null;
 
-		UnitController item = PoolManager.Instance.Pop(curItem.item._prefab.gameObject.name) as UnitController;
-		item._pSide = pSide;
+		UnitController item = PoolManager.Instance.Pop(curItem.item.prefab.gameObject.name) as UnitController;
+		item.isPlayer = pSide;
 		item.transform.position = SetSpawnPoint();
 		IProducable finProduct = item.GetComponent<IProducable>();
-		finProduct._onCompleted?.Invoke();
+		finProduct.onCompleted?.Invoke();
 		UnitSelectManager.Instance.unitList.Add(item);
 
 		processStack.Pop();

@@ -24,7 +24,11 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public Action onCompleted => m_onCompleted;
 	public GameObject prefab => gameObject;
 
-    public bool isPlayer => m_isPlayer;
+    public bool isPlayer
+	{
+        get => m_isPlayer;
+		set => m_isPlayer = value;
+	}
     #endregion
 
     #region Unit Status
@@ -77,8 +81,6 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     // ISelectable
 	public bool CanDragSelect => true;
 	public Vector3 WorldPos => transform.position;
-
-    private UnitMove unitMove;
 
 	private void Awake()
     {

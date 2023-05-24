@@ -27,11 +27,12 @@ public class GroundBreak : MonoBehaviour, IProducable
     public Action onCompleted { get; }
     public GameObject prefab { get; }
 
-    public bool isPlayer { get; }
+    public bool isPlayer { get; set; }
     public float healthPoint { get; }
-    //여기까지 인터페이스
 
-    public virtual void Awake()
+	//여기까지 인터페이스
+
+	public virtual void Awake()
     {
         GetComponentsInChildren<Renderer>(children);
 

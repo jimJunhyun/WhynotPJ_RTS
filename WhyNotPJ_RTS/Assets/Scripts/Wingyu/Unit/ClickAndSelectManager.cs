@@ -54,7 +54,7 @@ public class ClickAndSelectManager : MonoBehaviour
 				{
 					if (hit.transform.TryGetComponent(out UnitController unit))
 					{
-						if (unit._pSide == true)
+						if (unit.isPlayer == true)
 							UnitSelectManager.Instance.ClickSelectUnit(unit);
 					}
 				}
@@ -76,7 +76,7 @@ public class ClickAndSelectManager : MonoBehaviour
 			{
 				if (hit.transform.TryGetComponent(out UnitController unit))
 				{
-					if (unit._pSide == true)
+					if (unit.isPlayer == true)
 					{
 						UnitSelectManager.Instance.ClickSelectUnit(unit);
 					}
@@ -166,7 +166,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	private void DrawDragRectangle()
 	{
 		dragRectangle.position = (start + end) * 0.5f;
-		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y)) * 1.37f;
+		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
 		debug1.position = start;
 		debug2.position = end;
 	}
@@ -211,7 +211,7 @@ public class ClickAndSelectManager : MonoBehaviour
 		UnitSelectManager.Instance.DeselectAll();
 		foreach (UnitController unit in UnitSelectManager.Instance.unitList)
 		{
-			if (unit._pSide == false)
+			if (unit.isPlayer == false)
 				continue;
 
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))

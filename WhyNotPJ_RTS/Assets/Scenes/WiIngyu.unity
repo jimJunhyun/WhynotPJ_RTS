@@ -2178,7 +2178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0006713867}
+  m_AnchoredPosition: {x: 0, y: -0.0007324219}
   m_SizeDelta: {x: 0, y: -340.67758}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1077822185
@@ -3219,10 +3219,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 56666086}
     m_Modifications:
-    - target: {fileID: 242562232, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
-      propertyPath: <_pSide>k__BackingField
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1815088460164482091, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3271,6 +3267,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peltast
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7158677428280384397, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
