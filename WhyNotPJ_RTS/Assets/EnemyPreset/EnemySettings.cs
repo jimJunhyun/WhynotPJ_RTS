@@ -57,6 +57,13 @@ public class EnemySettings : ScriptableObject
         }
     }
 
+    [Space(10)]
+    [Header("상대 유닛의 성향을 판단하는 척도")]
+    public float fxblStandard;
+    [Header("판단에 따라 증감되는 성향의 정도")]
+    public float fxblIncrement;
+
+    [Space(10)]
 
 	[Header("병사를 지휘하는 속성.")]
     [Header("공격적인 지휘")]

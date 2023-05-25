@@ -77,6 +77,43 @@ public class EnemyBrain : MonoBehaviour
 		
 	}
 
+	/// <summary>
+	/// 높은거로 판단되봤자 1~10일거라서
+	/// 5부근일듯?
+	/// 
+	/// 고유성향증감률에 영향받음.
+	/// </summary>
+	/// <param name="info"></param>
+	public void ReactTo(List<UnitController> info)
+	{
+		if(info.Count == 0)
+			return;
+
+		float vioAvg = 0, defAvg = 0, recAvg = 0;
+
+		for (int i = 0; i < info.Count; i++)
+		{
+			vioAvg += info[i]._element[0];
+			defAvg += info[i]._element[1];
+			recAvg += info[i]._element[2];
+		}
+		vioAvg /= info.Count;
+		defAvg /= info.Count;
+		recAvg /= info.Count;
+		if(vioAvg >= set.fxblStandard)
+		{
+			set[0] += set.fxblIncrement * set.vioIncreaseBias;
+		}
+		if (defAvg >= set.fxblStandard)
+		{
+			set[1] += set.fxblIncrement * set.defIncreaseBias;
+		}
+		if (recAvg >= set.fxblStandard)
+		{
+			set[2] += set.fxblIncrement * set.recIncreaseBias;
+		}
+	}
+
 	private void Awake()
 	{
 		instance = this;

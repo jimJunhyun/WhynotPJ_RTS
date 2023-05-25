@@ -83,13 +83,6 @@ public class UnitController : MonoBehaviour, ISelectable, IProducable
     private void Update()
     {
         currentState.UpdateState();
-
-        Debug.Log(isSeen());
-		if (isSeen() && !isPlayer)
-		{
-            //오브젝트 보이게
-            Debug.Log($"발견됨 : {transform.name}");
-		}
     }
 
     public void ChangeState(State type)
@@ -121,7 +114,7 @@ public class UnitController : MonoBehaviour, ISelectable, IProducable
         return stateDictionary[st];
 	}
 
-    public bool isSeen() //이후 수정 필요. 
+    public bool isSeen() //나름 제대로 작동하는듯
 	{
         Vector3Int posIdx = Perceive.PosToIdxVector(transform.position);
         int floor = 0;
