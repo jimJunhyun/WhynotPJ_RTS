@@ -58,14 +58,16 @@ public class Producer : MonoBehaviour
 		IProducable finProduct = obj.GetComponent<IProducable>();
 		UnitController c = obj.GetComponent<UnitController>();
 		finProduct._onCompleted?.Invoke();
+		c.isPlayer = pSide;
 		if (pSide)
 		{
-			UnitSelectManager.Instance.unitList.Add(finProduct as UnitDefault);
+			UnitSelectManager.Instance.unitList.Add(c);
 		}
 		else
 		{
 			EnemyPosGen.instance.myControls.Add(c);
 		}
+
 		
 
 		item = null;

@@ -73,7 +73,7 @@ public class EnemyPosGen : MonoBehaviour
 	public Vector3Int FindNearestSightless(UnitController unit)
 	{
 		Vector3Int from = Perceive.PosToIdxVector(unit.transform.position);
-		Vector3Int dest = Vector3Int.zero;
+		Vector3Int dest = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
 		float smallestD = float.MaxValue;
 		//from = Perceive.PosToIdxVector(unit.transform);
 		for (int y = 0; y < Perceive.MAPY; ++y)

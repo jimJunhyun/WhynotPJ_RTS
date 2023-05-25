@@ -382,6 +382,7 @@ MonoBehaviour:
   vio: 1
   def: 8
   rec: 1
+  isPlayer: 0
   attackPower: 0
   attackSpeed: 0
   attackRange: 0

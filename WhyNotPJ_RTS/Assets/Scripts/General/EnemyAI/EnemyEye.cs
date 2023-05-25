@@ -9,6 +9,8 @@ public class EnemyEye : MonoBehaviour
     
 	public Perceive perceived = new Perceive();
 
+	List<UnitController> foundUnits = new List<UnitController>();
+
 	private void Awake()
 	{
 		instance = this;
@@ -16,11 +18,12 @@ public class EnemyEye : MonoBehaviour
 		perceived.ResetMap(false);
 
 		
-		perceived.AddOnUpd(new Vector3Int(100, 100), 5);
+		perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
 	}
-
+	
 	private void LateUpdate()
 	{
 		perceived.UpdateMap();
+		
 	}
 }

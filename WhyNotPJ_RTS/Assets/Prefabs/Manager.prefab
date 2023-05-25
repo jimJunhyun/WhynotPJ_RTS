@@ -115,6 +115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   dragRectangle: {fileID: 0}
   isDraging: 0

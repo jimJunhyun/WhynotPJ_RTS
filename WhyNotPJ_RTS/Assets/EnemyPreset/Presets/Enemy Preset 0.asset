@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Enemy Preset 0
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
   initVioBias: 7
-  violenceBias: 217
+  violenceBias: 235
   vioIncreaseBias: 1.5
   initDefBias: 7
-  defendBias: 147
+  defendBias: 159
   defIncreaseBias: 1
   initRecBias: 7
-  reconBias: 77
+  reconBias: 83
   recIncreaseBias: 0.5
   initReconIncreaseBias: 1.2
-  warBias: 75
-  passiveBias: 1
+  warBias: 1
+  passiveBias: 75
   adequateSoldier: 6
   heightBias: 3
   distBias: 2

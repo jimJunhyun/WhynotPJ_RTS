@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public class UnitController : MonoBehaviour, ISelectable, IProducable
 {
     #region Unit Attributes
@@ -19,6 +20,8 @@ public class UnitController : MonoBehaviour, ISelectable, IProducable
     public float _produceTime => produceTime;
     public Element _element => new Element(vio, def, rec);
     public Action _onCompleted => onCompleted;
+
+    public bool isPlayer;
     #endregion
 
     #region Unit Status
@@ -80,6 +83,13 @@ public class UnitController : MonoBehaviour, ISelectable, IProducable
     private void Update()
     {
         currentState.UpdateState();
+
+        Debug.Log(isSeen());
+		if (isSeen() && !isPlayer)
+		{
+            //오브젝트 보이게
+            Debug.Log($"발견됨 : {transform.name}");
+		}
     }
 
     public void ChangeState(State type)
@@ -109,5 +119,24 @@ public class UnitController : MonoBehaviour, ISelectable, IProducable
     public IUnitState GetStateDict(State st)
 	{
         return stateDictionary[st];
+	}
+
+    public bool isSeen() //이후 수정 필요. 
+	{
+        Vector3Int posIdx = Perceive.PosToIdxVector(transform.position);
+        int floor = 0;
+		if (Mathf.Abs(Perceive.fullMap[posIdx.y, posIdx.x, 0].height - transform.position.y) > 1)
+		{
+            floor = 1;
+		}
+        //Debug.Log(Perceive.fullMap[posIdx.y, posIdx.x, 0].height + " : " + transform.position.y);
+		if (isPlayer)
+		{
+            return EnemyEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+		}
+		else
+		{
+            return PlayerEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+        }
 	}
 }

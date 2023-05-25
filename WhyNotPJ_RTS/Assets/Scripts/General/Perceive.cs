@@ -93,7 +93,7 @@ public class Perceive
 	public const int MAPY = 200;
 	public static MapData[,,] fullMap = new MapData[MAPY, MAPX, 2]; //여기에 지형 관련 정보를 모두 저장.
 	public static float averageHeight;
-
+	
 	public bool isPlayer;
 
 	public const int GROUNDMASK =1 <<  8;
@@ -236,7 +236,6 @@ public class Perceive
 				{
 					strts.Add(l[j]);
 				}
-
 			}
 		}
 
