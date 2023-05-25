@@ -20,7 +20,9 @@ public class ConstructBuild : MonoBehaviour
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
 	public const float WALLXSCALE = 7.5f;
-	public const float WALLYSCALE = 5.5f;
+	public const float WALLYSCALE = 2.4f;//º® °¡¿îµ¥
+	public const float WALLBASEYSCALE = 1.66f;//º® ¹Ø
+	public const float WALLTOPYGAP = 4.55f;//º® À§ ºó ºÎºÐ ³ÐÀÌ
 
 	const float RAYDIST = 1.5f; //¸ðµ¨ Å°
 	const float RAYGAP = 1.2f; //¸ðµ¨ Áö¸§
@@ -105,15 +107,21 @@ public class ConstructBuild : MonoBehaviour
 				break;
 			case Buildables.Wall:
 				float highest = sPos.y > ePos.y ? sPos.y : ePos.y;
-				highest += WALLYSCALE;
+				highest += WALLBASEYSCALE + WALLYSCALE;
 				sPos.y = highest;
 				ePos.y = highest;
 				float lowest;
-				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest))
+				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest, out highest))
 					return;
 				b = Instantiate(wall);
-
-				
+				highest += WALLBASEYSCALE + WALLYSCALE;
+				((WallRender)b).lowestPoint = lowest;
+				((WallRender)b).highestPoint = highest;
+				if (sPos.y < highest)
+				{
+					sPos.y = highest;
+					ePos.y = highest;
+				}
 				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
 				b.transform.LookAt(ePos);
@@ -130,7 +138,7 @@ public class ConstructBuild : MonoBehaviour
 		
 		strtIdPair.Add(StrtNumber, b);
 
-		b.Gen(sPos, ePos, false, StrtNumber++);
+		b.Gen(sPos, ePos, true, StrtNumber++);
 		
 	}
 
@@ -168,12 +176,13 @@ public class ConstructBuild : MonoBehaviour
 		return false;
 	}
 	
-	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint)
+	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint, out float highestPoint)
 	{
 		Vector3 p = startPos;
 		Vector3 dir = endPos - startPos;
 		RaycastHit h;
-		lowestPoint = 0;
+		lowestPoint = int.MaxValue;
+		highestPoint = int.MinValue;
 		while(!Approximate(p, endPos, RAYGAP / 2))
 		{
 			Vector3Int v = Perceive.PosToIdxVector(p);
@@ -184,11 +193,15 @@ public class ConstructBuild : MonoBehaviour
 			}
 			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
 			{
+				Debug.DrawLine(new Vector3(p.x, p.y ,p.z ), h.point, Color.red, 1000f);
 				if(lowestPoint > h.point.y)
 				{
 					lowestPoint = h.point.y;
 				}
-				
+				if(highestPoint < h.point.y)
+				{
+					highestPoint = h.point.y;
+				}
 			}
 			else
 			{

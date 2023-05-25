@@ -21,15 +21,15 @@ public class EnemyDiffSet : MonoBehaviour
 	{ 
 		if(difficulty == Diff.Easy)
 		{
-			delSec = 1f;
+			delSec = 0.09f;
 		}
 		else if (difficulty == Diff.Normal)
 		{
-			delSec = 0.4f;
+			delSec = 0.045f;
 		}
 		else if (difficulty == Diff.Hard)
 		{
-			delSec = 0.07f;
+			delSec = 0;
 		}
 		StartCoroutine(Nominate());
 	}
@@ -37,7 +37,10 @@ public class EnemyDiffSet : MonoBehaviour
 	{
 		while (!breakFlag)
 		{
-			yield return new WaitForSeconds(delSec);
+			if(delSec == 0)
+				yield return null;
+			else
+				yield return new WaitForSeconds(delSec);
 			EnemyBrain.instance.Decide();
 			EnemyPosGen.instance.FindPlaying();
 		}

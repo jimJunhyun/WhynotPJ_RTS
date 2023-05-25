@@ -14,9 +14,7 @@ public class EnemyPosGen : MonoBehaviour
 	public float calcApt;
 	public float calcRad;
 
-	public GameObject sphere;
-
-	int curAccumulated = 0;
+	//public GameObject sphere;
 
 	public List<UnitController> myControls = new List<UnitController>();
 	public List<UnitController> accumulations = new List<UnitController>();
@@ -31,46 +29,51 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
 
-		UnitBaseState currentState = (con.CurrentStateScript as UnitBaseState);
+		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
 
-
-		if (con.element.rec >= 5f)
+		if (con._element.rec >= 5f)
 		{
-			currentState.unitMove.SetTargetPosition(Perceive.IdxVectorToPos(FindNearestSightless(con)));
-			//con.unitMove.SetTargetPosition(Vector3.zero);
-			//con.Move(Vector3.zero);
-			Debug.Log("�������� ����");
+			Vector3 v = Perceive.IdxVectorToPos(FindNearestSightless(con));
+			NavMeshHit hit;
+			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
+			currentState.unitMove.SetTargetPosition(hit.position);
+			
+			//Debug.Log($"정찰적인 조작 : {hit.position}");
 		}
 		else if(set.warBias >= selected)
 		{
-			if(EnemyBrain.instance.playerBase != null)
-			{
-				//con.unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
-				Debug.Log(con.myName + "���� �������� ����");
-			}
-			else
-			{
+			//if(EnemyBrain.instance.playerBase != null)
+			//{
+			//	NavMeshHit hit;
+			//	NavMesh.SamplePosition(EnemyBrain.instance.playerBase.position, out hit, 100f, NavMesh.AllAreas);
+			//	currentState.unitMove.SetTargetPosition(hit.position);
+			//	con.ChangeState(State.Attack);
+			//	Debug.Log(con.name + "을 적 본진으로 보냄.");
+			//}
+			//else
+			//{
 				con.ChangeState(State.Alert);
-				curAccumulated += 1;
 				accumulations.Add(con);
 				myControls.Remove(con);
-				Debug.Log("���� �ϳ� ����.");
-			}
-			Debug.Log(con.name + " ���� �������� ����.");
+				Debug.Log("유닛 하나 축적");
+			//}
+			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
 		else
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
-
+			NavMeshHit hit;
+			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
+			currentState.unitMove.SetTargetPosition(hit.position);
 			con.ChangeState(State.Alert); 
-			Debug.Log(con.name + " ���� ������� ����");
+			Debug.Log(con.name + " 에게 방어적인 조작 : "+hit.position);
 		}
 	}
 
 	public Vector3Int FindNearestSightless(UnitController unit)
 	{
-		Vector3Int from = new Vector3Int(100, 100);
-		Vector3Int dest = Vector3Int.zero;
+		Vector3Int from = Perceive.PosToIdxVector(unit.transform.position);
+		Vector3Int dest = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
 		float smallestD = float.MaxValue;
 		//from = Perceive.PosToIdxVector(unit.transform);
 		for (int y = 0; y < Perceive.MAPY; ++y)
@@ -89,6 +92,7 @@ public class EnemyPosGen : MonoBehaviour
 					{
 						dest.x = x;
 						dest.y = y;
+						dest.z = floor;
 						smallestD = dist;
 					}
 				}
@@ -112,8 +116,9 @@ public class EnemyPosGen : MonoBehaviour
 				}
 				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
 				{
-					float num = Perceive.fullMap[y, x, floor].height * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
-					if (num > largestH) 
+					int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 2.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
+					float num = (Perceive.fullMap[y, x, floor].height/* - Perceive.averageHeight*/) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+					if (num * (set.adequateSoldier - units) > largestH) 
 					{
 						v.x = x;
 						v.y = y;
@@ -131,26 +136,28 @@ public class EnemyPosGen : MonoBehaviour
 
 	public void WholeAttack()
 	{
-		for (int i = 0; i < accumulations.Count; i++)
+		while(accumulations.Count > 0)
 		{
-			((UnitBaseState)accumulations[i].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			((UnitBaseState)accumulations[0].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			myControls.Add(accumulations[0]);
+			accumulations.RemoveAt(0);
 		}
-		Debug.Log("�Ѱ���");
+		Debug.Log("총공격명령");
 	}
 
 	public void FindPlaying()
 	{
-		if (EnemyBrain.instance.playerBase != null && curAccumulated >= accumulations.Count)
+		if (EnemyBrain.instance.playerBase != null && accumulations.Count >= set.adequateSoldier)
 		{
 			WholeAttack();
 		}
 		else if (myControls.Count > 0)
 		{
-			//UnitController curC = myControls.Find((x) => { return x.CurrentState == State.Wait; });
-			//if (curC != null)
-			//{
-			//	SamplePos(curC);
-			//}
+			UnitController curC = myControls.Find((x) => { return x?.CurrentState == x?.GetStateDict(State.Wait); });
+			if (curC != null)
+			{
+				SamplePos(curC);
+			}
 			//유닛의 현재 상태를 인지할 수 있도록 하는 것이 무난하겠다.
 		}
 	}

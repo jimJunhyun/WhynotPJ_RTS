@@ -1,32 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-public class Process
-{
-	public Process(IProducable item, float produceTime, Slider progressSlider)
-	{
-		this.item = item;
-		this.produceTime = produceTime;
-		this.progressSlider = progressSlider;
-	}
-
-	public IProducable item;
-	public float produceTime;
-	public Slider progressSlider;
-}
 
 public class Producer : MonoBehaviour
 {
-	[SerializeField]
-	private Transform spawnPosition;
     public IProducable item;
-	public Process curItem;
 	public bool isProducing = false;
 	public bool pSide = false;
 
 	public Queue<IProducable> produceQueue = new Queue<IProducable>();
-	public Stack<Process> processStack = new Stack<Process>();
 
 	private float produceTime;
 	private float progress;
@@ -42,75 +23,66 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / curItem.item.produceTime;
-		
-		if (curItem.progressSlider)
-			curItem.progressSlider.value = progress;
-		curItem.produceTime = produceTime;
+		progress = produceTime / item._produceTime;
 
-		if (produceTime >= curItem.item.produceTime)
+		if (produceTime >= item._produceTime)
 		{
-			curItem.progressSlider?.gameObject.SetActive(false);
-			MakeProduce();
+			Produce();
 		}
-
 	}
 
-    private IProducable MakeProduce()
+	public void AddProduct(IProducable pro)
 	{
-		if (curItem == null) return null;
-
-		UnitController item = PoolManager.Instance.Pop(curItem.item.prefab.gameObject.name) as UnitController;
-		item.isPlayer = pSide;
-		item.transform.position = SetSpawnPoint();
-		IProducable finProduct = item.GetComponent<IProducable>();
-		finProduct.onCompleted?.Invoke();
-		UnitSelectManager.Instance.unitList.Add(item);
-
-		processStack.Pop();
-		Init();
-		SetProduce();
-
-		return finProduct;
-	}
-
-	private void Init()
-	{
-		curItem = null;
-		isProducing = false;
-		produceTime = 0;
-		progress = 0;
-	}
-
-	public void AddProduce(IProducable pro, Slider slider = null)
-	{
-		if (slider.gameObject.activeInHierarchy) return;
-		slider?.gameObject.SetActive(true);
-
-		Init();
-		Process process = new Process(pro, 0, slider);
-		processStack.Push(process);
-
-		if (!isProducing)
+		Debug.Log("아이템 더함.");
+		produceQueue.Enqueue(pro);
+		if (!isProducing) // ���� ����Ǵ� ������ ���� �� ���� ���� ����
 			SetProduce();
 	} 
 
 	private void SetProduce()
 	{
-		if (processStack.Count == 0) return;
-
-		curItem = processStack.Peek();
-		produceTime = curItem.produceTime;
+		if (produceQueue.Count == 0) return;
 		
+		item = produceQueue.Dequeue();
+		
+		Debug.Log(item._myName +" 생산 시작.");
 		isProducing = true;
 	}
 
-	// ���� ��ġ ����
+    private void Produce()
+	{
+		if (item == null) return;
+		//Debug.Log(item._myName + " 생산 완료.");
+		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
+		obj.transform.position = SetSpawnPoint();
+		IProducable finProduct = obj.GetComponent<IProducable>();
+		UnitController c = obj.GetComponent<UnitController>();
+		finProduct._onCompleted?.Invoke();
+		c.isPlayer = pSide;
+		if (pSide)
+		{
+			UnitSelectManager.Instance.unitList.Add(c);
+		}
+		else
+		{
+			EnemyPosGen.instance.myControls.Add(c);
+		}
+
+		
+
+		item = null;
+		isProducing = false;
+		produceTime = 0;
+		progress = 0;
+
+		SetProduce();
+	}
+
 	private Vector3 SetSpawnPoint()
 	{
 		int angle = Random.Range(0, 361);
 		Vector3 pos = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2f;
-		pos += transform.position;
+		pos += transform.position + new Vector3(0, 0.5f, 0);
 		return pos;
 	}
 }

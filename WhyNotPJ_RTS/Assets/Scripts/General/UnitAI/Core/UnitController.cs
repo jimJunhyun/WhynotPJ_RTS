@@ -158,4 +158,28 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         marker.SetActive(false);
         isSelect = false;
 	}
+
+    public IUnitState GetStateDict(State st)
+	{
+        return stateDictionary[st];
+	}
+
+    public bool isSeen() //���� ���� �ʿ�. 
+	{
+        Vector3Int posIdx = Perceive.PosToIdxVector(transform.position);
+        int floor = 0;
+		if (Mathf.Abs(Perceive.fullMap[posIdx.y, posIdx.x, 0].height - transform.position.y) > 1)
+		{
+            floor = 1;
+		}
+        //Debug.Log(Perceive.fullMap[posIdx.y, posIdx.x, 0].height + " : " + transform.position.y);
+		if (isPlayer)
+		{
+            return EnemyEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+		}
+		else
+		{
+            return PlayerEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+        }
+	}
 }

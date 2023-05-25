@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9219555249100079650}
   - component: {fileID: 6889743220010040080}
   - component: {fileID: 1072194862246837430}
-  - component: {fileID: 7985458956151212488}
+  - component: {fileID: 358451316545106941}
   m_Layer: 10
   m_Name: Barricade Middle
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69886290371743415}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalPosition: {x: -0, y: 1.66, z: -0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69886290371743415}
-  m_Mesh: {fileID: -2403651969685901494, guid: 16ae51a364ac726479f48132fcae3c2c, type: 3}
+  m_Mesh: {fileID: -2403651969685901494, guid: e487fafa6767972459d4072e538e6f3e, type: 3}
 --- !u!23 &1072194862246837430
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7985458956151212488
+--- !u!65 &358451316545106941
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.075007625, y: 0.01117098, z: 0.023364032}
-  m_Center: {x: 0, y: 0, z: 0.028317975}
+  m_Center: {x: 0, y: 0, z: 0.011682016}
 --- !u!1 &3251801271781771553
 GameObject:
   m_ObjectHideFlags: 0
