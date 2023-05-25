@@ -29,9 +29,9 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		float selected = Random.Range(0, set.passiveBias + set.warBias);
 
-		UnitBaseState currentState = (con.CurrentState as UnitBaseState);
+		UnitBaseState currentState = (con.CurrentStateScript as UnitBaseState);
 
-		if (con._element.rec >= 5f)
+		if (con.element.rec >= 5f)
 		{
 			Vector3 v = Perceive.IdxVectorToPos(FindNearestSightless(con));
 			NavMeshHit hit;
@@ -138,7 +138,7 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		while(accumulations.Count > 0)
 		{
-			((UnitBaseState)accumulations[0].CurrentState).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			((UnitBaseState)accumulations[0].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
 			myControls.Add(accumulations[0]);
 			accumulations.RemoveAt(0);
 		}
@@ -153,7 +153,7 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			UnitController curC = myControls.Find((x) => { return x?.CurrentState == x?.GetStateDict(State.Wait); });
+			UnitController curC = myControls.Find((x) => { return x?.CurrentStateScript == x?.GetStateDict(State.Wait); });
 			if (curC != null)
 			{
 				SamplePos(curC);

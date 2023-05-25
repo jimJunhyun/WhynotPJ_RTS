@@ -32,31 +32,31 @@ public class EnemyBrain : MonoBehaviour
 			if (producer != null && producer.produceQueue.Count == 0)
 			{
 				Examine();
-				if (product._element.vio > biasMiddle)
+				if (product.element.vio > biasMiddle)
 				{
-					set.violenceBias -= (product._element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
+					set.violenceBias -= (product.element.vio - biasMiddle) / set.vioIncreaseBias / dynamicity;
 				}
 				else
 				{
-					set.violenceBias += set.vioIncreaseBias * (biasMiddle - product._element.vio) * dynamicity;
+					set.violenceBias += set.vioIncreaseBias * (biasMiddle - product.element.vio) * dynamicity;
 				}
-				if (product._element.def > biasMiddle)
+				if (product.element.def > biasMiddle)
 				{
-					set.defendBias -= (product._element.def - biasMiddle) / set.defIncreaseBias / dynamicity;
+					set.defendBias -= (product.element.def - biasMiddle) / set.defIncreaseBias / dynamicity;
 				}
 				else
 				{
-					set.defendBias += (biasMiddle - product._element.def) * set.defIncreaseBias * dynamicity;
+					set.defendBias += (biasMiddle - product.element.def) * set.defIncreaseBias * dynamicity;
 				}
-				if (product._element.rec > biasMiddle)
+				if (product.element.rec > biasMiddle)
 				{
 					if (playerBase == null)
 					{
-						set.reconBias -= (product._element.rec - biasMiddle) / set.initReconIncreaseBias / dynamicity;
+						set.reconBias -= (product.element.rec - biasMiddle) / set.initReconIncreaseBias / dynamicity;
 					}
 					else
 					{
-						set.reconBias -= (product._element.rec - biasMiddle) / set.recIncreaseBias / dynamicity;
+						set.reconBias -= (product.element.rec - biasMiddle) / set.recIncreaseBias / dynamicity;
 					}
 
 				}
@@ -64,11 +64,11 @@ public class EnemyBrain : MonoBehaviour
 				{
 					if (playerBase == null)
 					{
-						set.reconBias += set.initReconIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+						set.reconBias += set.initReconIncreaseBias * (biasMiddle - product.element.rec) * dynamicity;
 					}
 					else
 					{
-						set.reconBias += set.recIncreaseBias * (biasMiddle - product._element.rec) * dynamicity;
+						set.reconBias += set.recIncreaseBias * (biasMiddle - product.element.rec) * dynamicity;
 					}
 				}
 				producer.AddProduct(product);
@@ -86,7 +86,7 @@ public class EnemyBrain : MonoBehaviour
 		
 		producer = FindObjectsOfType<Producer>().ToList<Producer>().Find((p)=>{ return !p.pSide; });
 
-		producable.AddRange(Resources.LoadAll<UnitDefault>("Prefabs/"));
+		producable.AddRange(Resources.LoadAll<UnitController>("Prefabs/"));
 
 		//건물도 추가하기.
 	}

@@ -35,6 +35,6 @@ public class UnitProduceButton : PoolableMono
 
 	public void OnClick()
 	{
-		producer.AddProduce(unit, slider);
+		producer.AddProduct(unit);
 	}
 }
