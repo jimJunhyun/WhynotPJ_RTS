@@ -12,8 +12,13 @@ public class UnitVisuals : MonoBehaviour
 	private void Awake()
 	{
 		unitCtrl = GetComponent<UnitController>();
-		curSeenState = unitCtrl.isSeen();
+		
 		visual = GetComponentInChildren<Animator>().gameObject;
+	}
+
+	private void Start()
+	{
+		curSeenState = unitCtrl.isSeen();
 	}
 
 	private void Update()
