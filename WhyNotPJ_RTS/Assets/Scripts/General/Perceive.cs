@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum GroundState
@@ -95,6 +96,20 @@ public class Perceive
 	public static float averageHeight;
 	
 	public bool isPlayer;
+	public List<UnitController> founds 
+	{
+		get
+		{
+			if (isPlayer)
+			{
+				return EnemyPosGen.instance.myControls.FindAll(x=>x.isSeen());
+			}
+			else
+			{
+				return UnitSelectManager.Instance.unitList.FindAll(x => (x as UnitController).isSeen()).Cast<UnitController>().ToList();
+			}
+		}
+	}
 
 	public const int GROUNDMASK =1 <<  8;
 	public const int CONSTRUCTMASK =1 <<  10;
