@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3794670101295254557}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 0.TutorialMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 7021669551666050461}
   - component: {fileID: 640278974579929684}
   - component: {fileID: 3685027682683743263}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ocean
   m_TagString: Untagged
   m_Icon: {fileID: 0}

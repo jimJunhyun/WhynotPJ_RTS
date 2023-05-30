@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,28 +5,46 @@ public class UnitMove : MonoBehaviour
 {
     private NavMeshHit hit;
     private Transform visualTrm;
+    public Transform VisualTrm => visualTrm;
     private NavMeshAgent navMeshAgent;
     public NavMeshAgent NavMeshAgent => navMeshAgent;
     private NavMeshPath path;
-    private Animator animator;
-
-    private Vector3 lastGround;
-    private float groundDis;
+    private bool isAttack;
+    public bool IsAttack => isAttack;
 
     private void Start()
     {
-        visualTrm = transform.GetChild(1);
+        visualTrm = transform.Find("Visual");
         navMeshAgent = GetComponent<NavMeshAgent>();
         path = new NavMeshPath();
-        animator = visualTrm.GetComponent<Animator>();
     }
 
-    public void SetTargetPosition(Vector3 pos)
+    public bool SetTargetPosition(Vector3 pos)
     {
         if (navMeshAgent.CalculatePath(pos, path))
         {
             navMeshAgent.SetDestination(pos);
+
+            isAttack = false;
+
+            return true;
         }
+
+        return false;
+    }
+
+    public bool SetTargetPosition(Transform target)
+    {
+        if (navMeshAgent.CalculatePath(target.position, path))
+        {
+            navMeshAgent.SetDestination(target.position);
+
+            isAttack = true;
+
+            return true;
+        }
+
+        return false;
     }
 
     public void SetAreaSpeed(float moveSpeed)
@@ -38,32 +54,15 @@ public class UnitMove : MonoBehaviour
         switch (hit.mask)
         {
             case 8:
-                navMeshAgent.speed = moveSpeed * 0.5f/*0.5f는 기획에 따라 변경 가능*/;
-
-                groundDis = Vector3.Distance(lastGround, visualTrm.position);
-
-                if (groundDis <= 20)
-                {
-                    visualTrm.localPosition = new Vector3(0f, -(groundDis / 4), 0f);
-                }
+                navMeshAgent.speed = moveSpeed * 0.5f;
+                visualTrm.localPosition = Vector3.down * 1.5f;
 
                 break;
             default:
                 navMeshAgent.speed = moveSpeed;
                 visualTrm.localPosition = Vector3.zero;
 
-                lastGround = transform.position;
-
                 break;
-        }
-
-        if (navMeshAgent.velocity.sqrMagnitude >= 0.1f)
-        {
-            animator.SetBool("isWalk", true);
-        }
-        else
-        {
-            animator.SetBool("isWalk", false);
         }
     }
 }

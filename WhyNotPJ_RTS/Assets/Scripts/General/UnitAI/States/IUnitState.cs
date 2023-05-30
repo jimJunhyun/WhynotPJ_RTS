@@ -25,4 +25,6 @@ public interface IUnitState
     public void UpdateState();
 
     public void SetUp(Transform agentRoot);
+
+    public void OnHit(UnitController attacker);
 }

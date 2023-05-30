@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 유닛의 정보를 출력하는 UI를 관리하는 클래스
 /// </summary>
-public class UnitInfoUI
+public class UnitInfoUI : MonoBehaviour
 {
     public UnitInfoUI(GameObject prefab, Image image = null, TextMeshProUGUI text = null, Slider health = null)
 	{
@@ -44,7 +44,7 @@ public class UnitListUI : MonoBehaviour
 
     private GameObject uiParent;
 
-    private void Start()
+    private void Awake()
     {
         _contentTrm = GameObject.Find("Content").transform;
         uiParent = GameObject.Find("UnitProducer");
@@ -100,7 +100,6 @@ public class UnitListUI : MonoBehaviour
             }
         }
 
-        print(count);
         for (int i = 0; i < count; i++)
 		{
             unitCardList[i].prefab.gameObject.SetActive(true);

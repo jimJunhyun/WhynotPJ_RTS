@@ -23,9 +23,9 @@ public class Producer : MonoBehaviour
 	private void Processing()
 	{
 		produceTime += Time.deltaTime;
-		progress = produceTime / item._produceTime;
+		progress = produceTime / item.produceTime;
 
-		if (produceTime >= item._produceTime)
+		if (produceTime >= item.produceTime)
 		{
 			Produce();
 		}
@@ -45,7 +45,7 @@ public class Producer : MonoBehaviour
 		
 		item = produceQueue.Dequeue();
 		
-		Debug.Log(item._myName +" 생산 시작.");
+		Debug.Log(item.myName +" 생산 시작.");
 		isProducing = true;
 	}
 
@@ -53,11 +53,11 @@ public class Producer : MonoBehaviour
 	{
 		if (item == null) return;
 		//Debug.Log(item._myName + " 생산 완료.");
-		MonoBehaviour obj = PoolManager.Instance.Pop(item._prefab.gameObject.name);
+		MonoBehaviour obj = PoolManager.Instance.Pop(item.prefab.gameObject.name);
 		obj.transform.position = SetSpawnPoint();
 		IProducable finProduct = obj.GetComponent<IProducable>();
 		UnitController c = obj.GetComponent<UnitController>();
-		finProduct._onCompleted?.Invoke();
+		finProduct.onCompleted?.Invoke();
 		c.isPlayer = pSide;
 		if (pSide)
 		{
