@@ -102,15 +102,15 @@ public class EnemyBrain : MonoBehaviour
 		recAvg /= info.Count;
 		if(vioAvg >= set.fxblStandard)
 		{
-			set[0] += set.fxblIncrement * set.vioIncreaseBias;
+			set[0] += set.fxblIncrement * set.vioIncreaseBias * (vioAvg - set.fxblStandard + 1);
 		}
 		if (defAvg >= set.fxblStandard)
 		{
-			set[1] += set.fxblIncrement * set.defIncreaseBias;
+			set[1] += set.fxblIncrement * set.defIncreaseBias * (defAvg - set.fxblStandard + 1);
 		}
 		if (recAvg >= set.fxblStandard)
 		{
-			set[2] += set.fxblIncrement * set.recIncreaseBias;
+			set[2] += set.fxblIncrement * set.recIncreaseBias * (recAvg - set.fxblStandard + 1);
 		}
 	}
 

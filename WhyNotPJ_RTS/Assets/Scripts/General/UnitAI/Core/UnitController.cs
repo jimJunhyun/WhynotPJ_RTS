@@ -121,17 +121,17 @@ public class UnitController : PoolableMono, IProducable, ISelectable
             return;
         }
 
-//#if UNITY_EDITOR
-//        if (Input.GetMouseButtonDown(0))
-//        {
-//            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-//            {
-//                unitMove.SetTargetPosition(hit.point);
-//            }
-//        }
-//#endif
+#if UNITY_EDITOR
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+			{
+				unitMove.SetTargetPosition(hit.point);
+			}
+		}
+#endif
 
-        currentStateScript.UpdateState();
+		currentStateScript.UpdateState();
     }
 
     public void ChangeState(State type)
@@ -168,9 +168,10 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 	{
         Vector3Int posIdx = Perceive.PosToIdxVector(transform.position);
         int floor = 0;
-		if (Mathf.Abs(Perceive.fullMap[posIdx.y, posIdx.x, 0].height - transform.position.y) > 1)
+		if (Mathf.Abs(Perceive.fullMap[posIdx.y, posIdx.x, 0].height - transform.position.y) > Perceive.HEIGHTTHRESHOLD)
 		{
             floor = 1;
+            Debug.Log("2cmd");
 		}
         //Debug.Log(Perceive.fullMap[posIdx.y, posIdx.x, 0].height + " : " + transform.position.y);
 		if (isPlayer)
