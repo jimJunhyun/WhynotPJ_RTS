@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: -5767092797678055330}
   - component: {fileID: 242562238}
   m_Layer: 14
-  m_Name: Unit
+  m_Name: Peltast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

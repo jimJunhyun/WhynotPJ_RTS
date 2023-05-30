@@ -663,7 +663,6 @@ MonoBehaviour:
   biasMiddle: 5
   dynamicity: 1
   playerBase: {fileID: 442262669}
-  tmp: {fileID: 1829795312683803228, guid: 421e5074ccdbc204990b108083fc29f5, type: 3}
 --- !u!114 &776838860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,6 +1453,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isProducing: 0
   pSide: 0
+--- !u!1 &1864824533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1815088460164482103, guid: d0c6a46a8e74fc14bafc7b641fe5548e, type: 3}
+  m_PrefabInstance: {fileID: 1347148145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1864824542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864824533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d13d27069e1e5c479628a1bf5f175ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1987508611 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6294763429927099438, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
