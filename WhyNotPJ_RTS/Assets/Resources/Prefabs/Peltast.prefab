@@ -145,6 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitController: {fileID: 242562232}
   unitMove: {fileID: 242562238}
+  unitAnimator: {fileID: 0}
+  sendSignTime: 5
 --- !u!114 &1393964142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitController: {fileID: 242562232}
   unitMove: {fileID: 242562238}
+  unitAnimator: {fileID: 0}
 --- !u!114 &1393964141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitController: {fileID: 0}
   unitMove: {fileID: 0}
+  unitAnimator: {fileID: 0}
 --- !u!114 &1393964140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitController: {fileID: 0}
   unitMove: {fileID: 0}
+  unitAnimator: {fileID: 0}
 --- !u!114 &1393964139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitController: {fileID: 0}
   unitMove: {fileID: 0}
+  unitAnimator: {fileID: 0}
 --- !u!1 &1867879821
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,19 +383,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86386bdb511afc043b7642ff3103e9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myName: 
-  produceTime: 5
+  m_myName: 
+  m_produceTime: 0
   vio: 1
   def: 8
   rec: 1
-  isPlayer: 0
+  m_isPlayer: 0
   attackPower: 0
   attackSpeed: 0
   attackRange: 0
   defensePenetration: 0
-  healthPoint: 0
+  m_healthPoint: 0
   defensePower: 0
   moveSpeed: 7
+  detectRange: 5
+  currentState: 0
+  whatIsMainCamp:
+    serializedVersion: 2
+    m_Bits: 0
+  whatIsUnit:
+    serializedVersion: 2
+    m_Bits: 0
+  whatIsConstruction:
+    serializedVersion: 2
+    m_Bits: 0
+  mainCamp: {fileID: 0}
+  enemy: {fileID: 0}
+  construction: {fileID: 0}
   marker: {fileID: 0}
   isSelect: 0
 --- !u!114 &1815088460164482093
@@ -401,10 +421,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815088460164482103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57e73570b7313c245a1419baed45e7a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d13d27069e1e5c479628a1bf5f175ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  marker: {fileID: 1815088460249786162}
 --- !u!114 &-5767092797678055330
 MonoBehaviour:
   m_ObjectHideFlags: 0
