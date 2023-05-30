@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pool<T> where T : MonoBehaviour
+public class Pool<T> where T : PoolableMono
 {
 	private Stack<T> pools = new Stack<T>();
 	private T prefab;

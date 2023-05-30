@@ -8,7 +8,7 @@ public class PoolManager : MonoBehaviour
 
 	[SerializeField] private PoolListSO poolingList;
 
-    private Dictionary<string, Pool<MonoBehaviour>> pools = new Dictionary<string, Pool<MonoBehaviour>>();
+    private Dictionary<string, Pool<PoolableMono>> pools = new Dictionary<string, Pool<PoolableMono>>();
 
 	private void Awake()
 	{
@@ -19,12 +19,12 @@ public class PoolManager : MonoBehaviour
 		}
 	}
 
-	public void CreatePool(MonoBehaviour prefab, Transform parent, int count)
+	public void CreatePool(PoolableMono prefab, Transform parent, int count)
 	{
-		pools.Add(prefab.gameObject.name, new Pool<MonoBehaviour>(prefab, parent, count));
+		pools.Add(prefab.gameObject.name, new Pool<PoolableMono>(prefab, parent, count));
 	}
 
-	public MonoBehaviour Pop(string name)
+	public PoolableMono Pop(string name)
 	{
 		if (!pools.ContainsKey(name))
 		{
@@ -32,11 +32,11 @@ public class PoolManager : MonoBehaviour
 			return null;
 		}
 
-		MonoBehaviour obj = pools[name].Pop();
+		PoolableMono obj = pools[name].Pop();
 		return obj;
 	}
 
-	public void Push(MonoBehaviour obj)
+	public void Push(PoolableMono obj)
 	{
 		pools[obj.gameObject.name].Push(obj);
 	}

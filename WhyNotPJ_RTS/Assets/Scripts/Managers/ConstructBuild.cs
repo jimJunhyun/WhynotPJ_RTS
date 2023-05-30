@@ -1,5 +1,8 @@
+//#define MOBILE
+
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public enum Buildables
@@ -17,7 +20,9 @@ public class ConstructBuild : MonoBehaviour
 	const float BRIDGEXSCALE = 4.5f;
 	const float BRIDGEYSCALE = 0.5f;
 	public const float WALLXSCALE = 7.5f;
-	public const float WALLYSCALE = 5.5f;
+	public const float WALLYSCALE = 2.4f;//벽 가운데
+	public const float WALLBASEYSCALE = 1.66f;//벽 밑
+	public const float WALLTOPYGAP = 4.55f;//벽 위 빈 부분 넓이
 
 	const float RAYDIST = 1.5f; //모델 키
 	const float RAYGAP = 1.2f; //모델 지름
@@ -30,10 +35,9 @@ public class ConstructBuild : MonoBehaviour
 	public Dictionary<int, GroundBreak> strtIdPair = new Dictionary<int, GroundBreak>();
 	
 
-	//test
-	public Transform sPos;
-	public Transform ePos;
-	//test
+	Vector3 sPos;
+	Vector3 ePos;
+	bool valid = false;
 
 	private void Awake()
 	{
@@ -42,63 +46,85 @@ public class ConstructBuild : MonoBehaviour
 
 	private void Start()
 	{
-		Construct(sPos.position, ePos.position, Buildables.Wall);
-		
+		//Construct(Buildables.Wall);
 	}
 
 	private void LateUpdate()
 	{
 		if (Input.GetMouseButtonDown(1))
 		{
-			Construct(sPos.position, ePos.position, Buildables.Wall);
+			StartCoroutine(BuildInp(Buildables.Wall));
 		}
-		
 	}
 
-	public void Construct(Vector3 startPos, Vector3 endPos, Buildables type)
+	public IEnumerator BuildInp(Buildables t)
 	{
-		// 클릭시스템과 병합 시 제거 #
-		Vector3Int sIdx = Perceive.PosToIdxVector(startPos);
-		Vector3Int eIdx = Perceive.PosToIdxVector(endPos);
+
+		valid = false;
+		yield return StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			sPos = vec;
+		}));
+		yield return null;
+		yield return StartCoroutine(DelayGetInput((vec, b) => {
+			valid = b;
+			ePos = vec;
+		}));
+
+		Construct(t);
+	}
+
+	void Construct(Buildables type)
+	{
+		
+
+
+		if (!valid)
+		{
+			return;
+		}
+
+		Vector3Int sIdx = Perceive.PosToIdxVector(sPos);
+		Vector3Int eIdx = Perceive.PosToIdxVector(ePos);
 		if(Perceive.fullMap[sIdx.y, sIdx.x, 0].info == GroundState.Water || Perceive.fullMap[eIdx.y, eIdx.x, 0].info == GroundState.Water)
 		{
 			Debug.Log("물");
 			return;
 		}
-		startPos.y = Perceive.fullMap[sIdx.y, sIdx.x,0].height;
-		endPos.y = Perceive.fullMap[eIdx.y, eIdx.x, 0].height;
-
-		
-
-		// 클릭시스템과 병합 시 제거 #
 		
 		Vector3 pos = new Vector3();
 		GroundBreak b = null;
 		switch (type)
 		{
 			case Buildables.Bridge:
-				if(!BridgeExamine(startPos, endPos, (endPos - startPos).magnitude))
+				if(!BridgeExamine(sPos, ePos, (ePos - sPos).magnitude))
 					return;
 				b = Instantiate(bridge);
 				
-				pos = (startPos + endPos) / 2;
+				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
-				b.transform.LookAt(endPos);
+				b.transform.LookAt(ePos);
 				break;
 			case Buildables.Wall:
-				float highest = startPos.y > endPos.y ? startPos.y : endPos.y;
-				highest += WALLYSCALE;
-				startPos.y = highest;
-				endPos.y = highest;
+				float highest = sPos.y > ePos.y ? sPos.y : ePos.y;
+				highest += WALLBASEYSCALE + WALLYSCALE;
+				sPos.y = highest;
+				ePos.y = highest;
 				float lowest;
-				if(!WallExamine(startPos, endPos, (endPos - startPos).magnitude, out lowest))
+				if(!WallExamine(sPos, ePos, (ePos - sPos).magnitude, out lowest, out highest))
 					return;
 				b = Instantiate(wall);
-
-				
-				pos = (startPos + endPos) / 2;
+				highest += WALLBASEYSCALE + WALLYSCALE;
+				((WallRender)b).lowestPoint = lowest;
+				((WallRender)b).highestPoint = highest;
+				if (sPos.y < highest)
+				{
+					sPos.y = highest;
+					ePos.y = highest;
+				}
+				pos = (sPos + ePos) / 2;
 				b.transform.position = pos;
-				b.transform.LookAt(endPos);
+				b.transform.LookAt(ePos);
 				b.transform.Rotate(0, 90, 0);
 				pos.y = lowest;
 				b.transform.position = pos;
@@ -112,7 +138,7 @@ public class ConstructBuild : MonoBehaviour
 		
 		strtIdPair.Add(StrtNumber, b);
 
-		b.Gen(startPos, endPos, false, StrtNumber++);
+		b.Gen(sPos, ePos, true, StrtNumber++);
 		
 	}
 
@@ -150,12 +176,13 @@ public class ConstructBuild : MonoBehaviour
 		return false;
 	}
 	
-	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint)
+	bool WallExamine(Vector3 startPos, Vector3 endPos, float length, out float lowestPoint, out float highestPoint)
 	{
 		Vector3 p = startPos;
 		Vector3 dir = endPos - startPos;
 		RaycastHit h;
-		lowestPoint = 0;
+		lowestPoint = int.MaxValue;
+		highestPoint = int.MinValue;
 		while(!Approximate(p, endPos, RAYGAP / 2))
 		{
 			Vector3Int v = Perceive.PosToIdxVector(p);
@@ -166,11 +193,15 @@ public class ConstructBuild : MonoBehaviour
 			}
 			if(Physics.Raycast(p, Vector3.down, out h , 100f, Perceive.GROUNDMASK))
 			{
+				Debug.DrawLine(new Vector3(p.x, p.y ,p.z ), h.point, Color.red, 1000f);
 				if(lowestPoint > h.point.y)
 				{
 					lowestPoint = h.point.y;
 				}
-				
+				if(highestPoint < h.point.y)
+				{
+					highestPoint = h.point.y;
+				}
 			}
 			else
 			{
@@ -193,5 +224,40 @@ public class ConstructBuild : MonoBehaviour
 	bool Approximate(Vector3 a, Vector3 b, float err)
 	{
 		return Approximate(a.x, b.x, err) && Approximate(a.y, b.y , err) && Approximate(a.z, b.z, err);
+	}
+
+	IEnumerator DelayGetInput(System.Action<Vector3, bool> callback)
+	{
+
+		Vector3 ret = new Vector3();
+		bool isValid = true;
+		yield return new WaitUntil(()=>{ 
+#if MOBILE
+			return Input.touchCount == 1;
+#else
+			//Debug.Log("!");
+			return Input.GetMouseButtonDown(0);
+#endif
+		});
+
+#if MOBILE
+		Touch t = Input.GetTouch(0);
+		yield return new WaitUntil(() => {
+
+			return t.phase == TouchPhase.Ended;
+
+			});
+#endif
+		RaycastHit hit;
+#if MOBLIE
+		Ray r = Camera.main.ScreenPointToRay(t.position);
+#else
+		Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+#endif
+		if (isValid = Physics.Raycast(r,out hit, Camera.main.farClipPlane, Perceive.GROUNDMASK))
+		{
+			ret = hit.point;
+		}
+		callback(ret, isValid);
 	}
 }
