@@ -93,9 +93,9 @@ public class EnemyBrain : MonoBehaviour
 
 		for (int i = 0; i < info.Count; i++)
 		{
-			vioAvg += info[i]._element[0];
-			defAvg += info[i]._element[1];
-			recAvg += info[i]._element[2];
+			vioAvg += info[i].element[0];
+			defAvg += info[i].element[1];
+			recAvg += info[i].element[2];
 		}
 		vioAvg /= info.Count;
 		defAvg /= info.Count;

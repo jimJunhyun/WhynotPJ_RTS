@@ -166,8 +166,8 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		dragRectangle.position = (start + end) * 0.5f;
 		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
-		debug1.position = start;
-		debug2.position = end;
+		//debug1.position = start;
+		//debug2.position = end;
 	}
 
 	private void CalculateDragRect()
