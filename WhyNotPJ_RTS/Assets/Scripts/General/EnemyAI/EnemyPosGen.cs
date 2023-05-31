@@ -5,6 +5,16 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
+/// <summary>
+/// 전략이란 무엇이며, 언제 사용하는가?
+/// 또한 전략을 사용하기 위해서는 필요한 것이 무엇인가?
+/// 
+/// 
+/// 
+/// </summary>
+
 public class EnemyPosGen : MonoBehaviour
 {
 	public static EnemyPosGen instance;
@@ -42,21 +52,11 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if(set.warBias >= selected)
 		{
-			//if(EnemyBrain.instance.playerBase != null)
-			//{
-			//	NavMeshHit hit;
-			//	NavMesh.SamplePosition(EnemyBrain.instance.playerBase.position, out hit, 100f, NavMesh.AllAreas);
-			//	currentState.unitMove.SetTargetPosition(hit.position);
-			//	con.ChangeState(State.Attack);
-			//	Debug.Log(con.name + "을 적 본진으로 보냄.");
-			//}
-			//else
-			//{
-				con.ChangeState(State.Alert);
-				accumulations.Add(con);
-				myControls.Remove(con);
-				Debug.Log("유닛 하나 축적");
-			//}
+			con.ChangeState(State.Alert);
+			accumulations.Add(con);
+			myControls.Remove(con);
+			Debug.Log("유닛 하나 축적");
+			
 			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
 		else
