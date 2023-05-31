@@ -18,6 +18,7 @@ public class EnemyBrain : MonoBehaviour
 	//[HideInInspector]
 	public Transform playerBase;
 
+
 	void Examine() //할 행동 목록 결정  
 	{
 		//상대 유닛 인식한 후에 그거에 맞게 성향 변동이 있을 예정
@@ -81,7 +82,7 @@ public class EnemyBrain : MonoBehaviour
 	/// 높은거로 판단되봤자 1~10일거라서
 	/// 5부근일듯?
 	/// 
-	/// 고유성향증감률에 영향받음.
+	/// 고유성향증감률에 역영향받음.
 	/// </summary>
 	/// <param name="info"></param>
 	public void ReactTo(List<UnitController> info)
@@ -102,16 +103,17 @@ public class EnemyBrain : MonoBehaviour
 		recAvg /= info.Count;
 		if(vioAvg >= set.fxblStandard)
 		{
-			set[0] += set.fxblIncrement * set.vioIncreaseBias * (vioAvg - set.fxblStandard + 1);
+			set[0] += set.fxblIncrement / set.vioIncreaseBias * (vioAvg - set.fxblStandard + 1);
 		}
 		if (defAvg >= set.fxblStandard)
 		{
-			set[1] += set.fxblIncrement * set.defIncreaseBias * (defAvg - set.fxblStandard + 1);
+			set[1] += set.fxblIncrement / set.defIncreaseBias * (defAvg - set.fxblStandard + 1);
 		}
 		if (recAvg >= set.fxblStandard)
 		{
-			set[2] += set.fxblIncrement * set.recIncreaseBias * (recAvg - set.fxblStandard + 1);
+			set[2] += set.fxblIncrement / set.recIncreaseBias * (recAvg - set.fxblStandard + 1);
 		}
+
 	}
 
 	private void Awake()

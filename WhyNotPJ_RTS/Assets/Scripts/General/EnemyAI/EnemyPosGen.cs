@@ -33,10 +33,10 @@ using UnityEngine.AI;
 /// 섬멸, 우회, 기만책은 각각 공, 수, 기동 성향에 대응된다.
 /// 또한 불리한 전투의 경우 손해 최소화 전략을 사용할 수 있다.
 /// 
-/// 이들은 모두 전투 발생 시에 판단할 수 있는 정황들이다.
-/// 그렇다면 전략은 우선 전투를 인식하는 데에서 사용을 시작할 수 있다.
+/// 전략은 전투를 인식하는 데에서 사용을 시작할 수 있다.
 /// 
-/// 만약 전투가 벌어진다면 싸우는 측을 어떻게 인식시키냐
+/// 전투
+/// 예상 충돌 지점을 마련하고 거기서부터 일정 거리 안에 있는 애들이 참여인원이 되겠다.
 /// 
 /// </summary>
 
@@ -77,10 +77,20 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if(set.warBias >= selected)
 		{
-			con.ChangeState(State.Alert);
-			accumulations.Add(con);
-			myControls.Remove(con);
-			Debug.Log("유닛 하나 축적");
+			if(EnemyEye.instance.perceived.founds.Count > 0)
+			{
+				//전략 사용
+				//가까운놈한테 매칭시키고 공격
+				currentState.unitMove.SetTargetPosition(FindNearestUnit(currentState.transform.position, EnemyEye.instance.perceived.founds));
+			}
+			else
+			{
+				con.ChangeState(State.Alert);
+				accumulations.Add(con);
+				myControls.Remove(con);
+				Debug.Log("유닛 하나 축적");
+			}
+			
 			
 			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
@@ -157,6 +167,22 @@ public class EnemyPosGen : MonoBehaviour
 		//Debug.Log($"{Perceive.IdxVectorToPos(pos)}");
 		//EditorApplication.isPaused = true;
 		return v;
+	}
+
+	Transform FindNearestUnit(Vector3 fromPos, List<UnitController> units)
+	{
+		float dist = float.MaxValue;
+		Transform found = null;
+		for (int i = 0; i < units.Count; i++)
+		{
+			float tempDist;
+			if(dist > (tempDist = (fromPos - units[i].transform.position).magnitude))
+			{
+				found = units[i].transform;
+				dist = tempDist;
+			}
+		}
+		return found;
 	}
 
 	public void WholeAttack()
