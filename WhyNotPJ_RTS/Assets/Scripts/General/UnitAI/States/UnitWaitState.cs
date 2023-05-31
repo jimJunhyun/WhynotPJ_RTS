@@ -37,7 +37,7 @@ public class UnitWaitState : UnitBaseState
 
         if (curSignTime <= 0f)
         {
-            //��� ��ȣ
+            //대기 신호
 
             curSignTime = sendSignTime;
         }
