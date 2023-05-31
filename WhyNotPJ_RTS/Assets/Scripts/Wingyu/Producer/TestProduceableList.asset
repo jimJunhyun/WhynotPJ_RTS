@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TestProduceableList
   m_EditorClassIdentifier: 
   list:
-  - {fileID: 242562232, guid: b0dbcc6f67066a543908c29a336c10e9, type: 3}
+  - {fileID: 242562232, guid: 47410e42fc7268e4bae13c2ecb285456, type: 3}
   - {fileID: 8671127390992376096, guid: 8fbf3e5871f7bd445a3c38761675b425, type: 3}

@@ -81,7 +81,7 @@ public class ClickAndSelectManager : MonoBehaviour
 					}
 					else
 					{
-
+						UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.UnitMove.SetTargetPosition(hit.transform));
 					}
 				}
 				else
