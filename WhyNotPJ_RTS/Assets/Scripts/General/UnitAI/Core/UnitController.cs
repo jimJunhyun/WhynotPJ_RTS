@@ -70,7 +70,7 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     //target
     [HideInInspector]
     public MainCamp mainCamp = null;
-    [HideInInspector]
+    //[HideInInspector]
     public UnitController enemy = null;
     [HideInInspector]
     public GroundBreak construction = null;
@@ -112,6 +112,18 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     private void Start()
     {
         ChangeState(State.Wait);
+
+        //디버그
+
+        if (enemy != null && enemy.isPlayer != isPlayer)
+        {
+            if (unitMove.SetTargetPosition(enemy.transform))
+            {
+                ChangeState(State.Move);
+
+                return;
+            }
+        }
     }
 
     private void Update()
