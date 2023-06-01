@@ -44,11 +44,11 @@ public class Fight
     /// </param>
     /// <param name="pUnits">
     /// 플레이어 유닛 목록.
-    /// 넣지 않으면 AI측 계산인 것으로 간주함
+    /// 넣지 않으면 근처유닛
     /// </param>
     /// <param name="aiUnits">
     /// AI 유닛 목록, accumulatedUnit --> myContorl로 옮길 때 담고 넣어줄 수 있음.
-    /// 넣지 않으면 플레이어측 계산인 것으로 간주함 (아직없음.)
+    /// 안넣으면 그냥 근처 유닛
     /// </param>
     public Fight(Vector3 predPos, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
 	{
@@ -56,30 +56,42 @@ public class Fight
 
         Collider[] c=  Physics.OverlapSphere(predictedPos, NEARPOINTSTANDARD, 1 << 12); //UnitLayer const 로 하나 해서 넣기.
 
-        bool isPSide = aiUnits == null;
+        engagedAIUnits = aiUnits;
+        engagedPlayerUnits = pUnits;
 
-        if(isPSide)
-            engagedPlayerUnits = pUnits;
-        else
-            engagedAIUnits = aiUnits;
-
-		for (int i = 0; i < c.Length; i++)
+        if(engagedAIUnits == null)
 		{
-            UnitController unitCont;
-            if(unitCont = c[i].GetComponent<UnitController>())
-			{
-				if (!isPSide)
-				{
-                    engagedPlayerUnits.Add(unitCont);
-				}
-				else
-				{
-                    engagedAIUnits.Add(unitCont);
-				}
-			}
-		}
+            engagedAIUnits = new List<UnitController>();
+            for (int i = 0; i < c.Length; i++)
+            {
+                UnitController unitCont;
+                if (unitCont = c[i].GetComponent<UnitController>())
+                {
+                    if (!unitCont.isPlayer)
+                        engagedAIUnits.Add(unitCont);
 
-		for (int i = 0; i < engagedAIUnits.Count; ++i)
+                }
+            }
+        }
+
+        if (engagedPlayerUnits == null)
+        {
+            engagedPlayerUnits = new List<UnitController>();
+            for (int i = 0; i < c.Length; i++)
+            {
+                UnitController unitCont;
+                if (unitCont = c[i].GetComponent<UnitController>())
+                {
+                    if (unitCont.isPlayer && unitCont.isSeen())
+                        engagedPlayerUnits.Add(unitCont);
+
+                }
+            }
+        }
+
+
+
+        for (int i = 0; i < engagedAIUnits.Count; ++i)
 		{
             eCostEstime += engagedAIUnits[i].produceTime;
 		}

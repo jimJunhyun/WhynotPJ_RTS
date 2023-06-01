@@ -79,8 +79,10 @@ public class EnemyPosGen : MonoBehaviour
 		{
 			if(EnemyEye.instance.perceived.founds.Count > 0)
 			{
-				//전략 사용
-				//가까운놈한테 매칭시키고 공격
+				if(EnemyBrain.instance.predictedFights != null)
+				{
+
+				}
 				currentState.unitMove.SetTargetPosition(FindNearestUnit(currentState.transform.position, EnemyEye.instance.perceived.founds));
 			}
 			else
@@ -176,7 +178,7 @@ public class EnemyPosGen : MonoBehaviour
 		for (int i = 0; i < units.Count; i++)
 		{
 			float tempDist;
-			if(dist > (tempDist = (fromPos - units[i].transform.position).magnitude))
+			if(dist > (tempDist = (fromPos - units[i].transform.position).sqrMagnitude))
 			{
 				found = units[i].transform;
 				dist = tempDist;
