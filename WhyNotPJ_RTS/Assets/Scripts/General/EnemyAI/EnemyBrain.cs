@@ -92,7 +92,10 @@ public class EnemyBrain : MonoBehaviour
 
 		if(foundPos != null) //새로 발견한 경우일 때만.
 		{
-			predictedFights = new Fight((Vector3)foundPos);
+			
+			Fight f = new Fight((Vector3)foundPos, out bool isActual);
+			if(isActual)
+				predictedFights = f;
 
 			float vioAvg = 0, defAvg = 0, recAvg = 0;
 

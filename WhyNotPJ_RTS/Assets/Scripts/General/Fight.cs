@@ -50,9 +50,15 @@ public class Fight
     /// AI 유닛 목록, accumulatedUnit --> myContorl로 옮길 때 담고 넣어줄 수 있음.
     /// 안넣으면 그냥 근처 유닛
     /// </param>
-    public Fight(Vector3 predPos, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
+    /// <param name="possiblity">
+    /// 실제 전투가 일어날 가능성이 있는지
+    /// true면 충돌이 예상되는거고
+    /// 아니면 한 측이 없어서 별거없는 사건
+    /// </param>
+    public Fight(Vector3 predPos, out bool possiblity, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
 	{
         predictedPos = predPos;
+        possiblity = true;
 
         Collider[] c=  Physics.OverlapSphere(predictedPos, NEARPOINTSTANDARD, 1 << 12); //UnitLayer const 로 하나 해서 넣기.
 
@@ -89,7 +95,8 @@ public class Fight
             }
         }
 
-
+       if(engagedAIUnits == null || engagedPlayerUnits == null || engagedAIUnits.Count == 0 || engagedPlayerUnits.Count == 0)
+            possiblity = false;
 
         for (int i = 0; i < engagedAIUnits.Count; ++i)
 		{
