@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8671127390992376096}
   - component: {fileID: 8671127390992376102}
   - component: {fileID: 8789565717314216923}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Hypaspists
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,11 +110,11 @@ MonoBehaviour:
   def: 0
   rec: 0
   m_isPlayer: 0
-  attackPower: 0
-  attackSpeed: 0
-  attackRange: 0
+  attackPower: 5
+  attackSpeed: 1
+  attackRange: 3
   defensePenetration: 0
-  m_healthPoint: 0
+  m_healthPoint: 1
   defensePower: 0
   moveSpeed: 7
   detectRange: 5

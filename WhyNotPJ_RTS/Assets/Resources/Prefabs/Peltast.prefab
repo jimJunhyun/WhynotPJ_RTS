@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: -5767092797678055330}
   - component: {fileID: 242562238}
   - component: {fileID: 1048648129826982799}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Peltast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -488,24 +488,24 @@ MonoBehaviour:
   def: 8
   rec: 1
   m_isPlayer: 0
-  attackPower: 0
-  attackSpeed: 0
-  attackRange: 0
+  attackPower: 1
+  attackSpeed: 1
+  attackRange: 3
   defensePenetration: 0
-  m_healthPoint: 0
+  m_healthPoint: 5
   defensePower: 0
   moveSpeed: 7
   detectRange: 5
   currentState: 0
   whatIsMainCamp:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   whatIsUnit:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   whatIsConstruction:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   mainCamp: {fileID: 0}
   enemy: {fileID: 0}
   construction: {fileID: 0}
