@@ -14,7 +14,8 @@ public class UnitAlertState : UnitBaseState
         unitController.enemy = null;
         unitController.construction = null;
 
-        if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
+        //경계 시 본진 감지
+        /*if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
         {
             if (unitMove.SetTargetPosition(hitInfo.transform))
             {
@@ -26,7 +27,7 @@ public class UnitAlertState : UnitBaseState
 
                 return;
             }
-        }
+        }*/
 
         opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
         closestDis = unitController.detectRange;
@@ -55,7 +56,8 @@ public class UnitAlertState : UnitBaseState
             }
         }
 
-        opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsConstruction);
+        //경계 시 토목 감지
+        /*opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsConstruction);
         closestDis = unitController.detectRange;
 
         foreach (Collider op in opponents)
@@ -80,7 +82,7 @@ public class UnitAlertState : UnitBaseState
 
                 return;
             }
-        }
+        }*/
 
         unitController.ChangeState(State.Wait);
     }

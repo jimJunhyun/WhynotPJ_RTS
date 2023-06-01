@@ -121,17 +121,17 @@ public class UnitController : PoolableMono, IProducable, ISelectable
             return;
         }
 
-//#if UNITY_EDITOR
-//        if (Input.GetMouseButtonDown(0))
-//        {
-//            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-//            {
-//                unitMove.SetTargetPosition(hit.point);
-//            }
-//        }
-//#endif
+#if UNITY_EDITOR
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+			{
+				unitMove.SetTargetPosition(hit.point);
+			}
+		}
+#endif
 
-        currentStateScript.UpdateState();
+		currentStateScript.UpdateState();
     }
 
     public void ChangeState(State type)
