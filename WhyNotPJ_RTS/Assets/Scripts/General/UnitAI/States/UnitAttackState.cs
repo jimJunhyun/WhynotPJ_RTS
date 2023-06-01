@@ -5,20 +5,35 @@ using UnityEngine;
 
 public class UnitAttackState : UnitBaseState
 {
+    private bool isAttack;
     private float curAttackCoolTime;
 
     public override void OnEnterState()
     {
-        curAttackCoolTime = 0f;
+        unitAnimator.onAnimationEventTrigger += OnAttackHandle;
+        unitAnimator.onAnimationEndTrigger += AttackEndHandle;
     }
 
     public override void OnExitState()
     {
-
+        unitAnimator.onAnimationEventTrigger -= OnAttackHandle;
+        unitAnimator.onAnimationEndTrigger -= AttackEndHandle;
     }
 
     public override void UpdateState()
     {
+        if (isAttack)
+        {
+            return;
+        }
+
+        if (unitController.enemy.currentState == State.Dead)
+        {
+            unitController.ChangeState(State.Alert);
+
+            return;
+        }
+
         curAttackCoolTime -= Time.deltaTime;
 
         if (Vector3.Distance(unitMove.VisualTrm.position, unitController.enemy.transform.position) > unitController.attackRange)
@@ -33,9 +48,22 @@ public class UnitAttackState : UnitBaseState
 
         if (curAttackCoolTime <= 0f)
         {
-            unitController.enemy.CurrentStateScript.OnHit(unitController);
+            isAttack = true;
 
-            curAttackCoolTime = 1f / unitController.attackSpeed;
+            unitAnimator.SetAttackAnimation(isAttack);
         }
+    }
+
+    public void OnAttackHandle()
+    {
+        unitController.enemy.CurrentStateScript.OnHit(unitController);
+    }
+
+    public void AttackEndHandle()
+    {
+        curAttackCoolTime = 1f / unitController.attackSpeed;
+        isAttack = false;
+
+        unitAnimator.SetAttackAnimation(isAttack);
     }
 }

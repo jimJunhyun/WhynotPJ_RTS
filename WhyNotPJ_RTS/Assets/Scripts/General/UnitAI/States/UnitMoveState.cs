@@ -37,6 +37,7 @@ public class UnitMoveState : UnitBaseState
 
     public override void OnExitState()
     {
+        unitMove.NavMeshAgent.ResetPath();
         unitAnimator.SetIsWalk(false);
     }
 

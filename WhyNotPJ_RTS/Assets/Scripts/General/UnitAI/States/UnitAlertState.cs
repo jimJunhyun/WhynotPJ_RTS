@@ -35,14 +35,18 @@ public class UnitAlertState : UnitBaseState
         foreach (Collider op in opponents)
         {
             Transform opTrm = op.transform;
-            float distance = (opTrm.position - transform.position).sqrMagnitude;
+            UnitController opController = opTrm.GetComponent<UnitController>();
+            float distance = (opTrm.position - transform.position).magnitude;
 
-            if (distance < closestDis)
+            if (unitController.isPlayer != opController.isPlayer)
             {
-                closestDis = distance;
-                unitController.mainCamp = null;
-                unitController.enemy = opTrm.GetComponent<UnitController>();
-                unitController.construction = null;
+                if (distance < closestDis)
+                {
+                    closestDis = distance;
+                    unitController.mainCamp = null;
+                    unitController.enemy = opController;
+                    unitController.construction = null;
+                }
             }
         }
 

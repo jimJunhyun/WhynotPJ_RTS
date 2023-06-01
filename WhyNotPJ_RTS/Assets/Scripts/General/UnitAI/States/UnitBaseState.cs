@@ -24,7 +24,7 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
     {
         unitController = agentRoot.GetComponent<UnitController>();
         unitMove = agentRoot.GetComponent<UnitMove>();
-        unitAnimator = agentRoot.GetComponent<UnitAnimator>();
+        unitAnimator = agentRoot.Find("Visual").GetComponent<UnitAnimator>();
     }
 
     public virtual void OnHit(UnitController attacker)
