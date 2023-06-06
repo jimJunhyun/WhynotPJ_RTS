@@ -137,7 +137,6 @@ public class EnemyBrain : MonoBehaviour
 
 		producable.AddRange(Resources.LoadAll<UnitController>("Prefabs/"));
 
-		//건물도 추가하기.
 	}
 
 }

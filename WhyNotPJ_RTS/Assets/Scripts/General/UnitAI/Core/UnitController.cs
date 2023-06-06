@@ -68,7 +68,7 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public UnitMove UnitMove => unitMove;
 
     //target
-    [HideInInspector]
+    //[HideInInspector]
     public MainCamp mainCamp = null;
     [HideInInspector]
     public UnitController enemy = null;
@@ -124,6 +124,8 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 #if UNITY_EDITOR
 		if (Input.GetMouseButtonDown(0))
 		{
+            if(!isPlayer)
+                return;
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
 			{
 				unitMove.SetTargetPosition(hit.point);
@@ -159,10 +161,6 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         isSelect = false;
 	}
 
-    public IUnitState GetStateDict(State st)
-	{
-        return stateDictionary[st];
-	}
 
     public bool isSeen() //���� ���� �ʿ�. 
 	{

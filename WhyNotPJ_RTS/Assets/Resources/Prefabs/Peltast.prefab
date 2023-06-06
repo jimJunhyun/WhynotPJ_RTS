@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_myName: 
-  m_produceTime: 0
+  m_produceTime: 1
   vio: 1
   def: 8
   rec: 1
@@ -437,7 +437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004e9cfbd780dee47901d8d7632cfd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 0
 --- !u!114 &242562238
 MonoBehaviour:
   m_ObjectHideFlags: 0

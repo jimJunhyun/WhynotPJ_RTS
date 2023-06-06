@@ -71,116 +71,108 @@ public class EnemyPosGen : MonoBehaviour
 			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
 			currentState.unitMove.SetTargetPosition(hit.position);
 			
-			//Debug.Log($"정찰적인 조작 : {hit.position}");
-		}
-		else if(set.warBias >= selected)
-		{
-			if(EnemyEye.instance.perceived.founds.Count > 0 && accumulations.Count >= set.adequateSoldier)
-			{
-				if(EnemyBrain.instance.predictedFights != null)
-				{
-					EnemyBrain.instance.predictedFights.engagedAIUnits = accumulations;
-					switch (EnemyBrain.instance.predictedFights.ResultEstimate())
-					{
-						case Result.Draw:
-							{
-								if(set.violenceBias > set.defendBias)
-								{
-									if(set.violenceBias > set.reconBias)
-									{
-										//섬멸-동등
-									}
-									else{
-										//기만-동등
-									}
-								}
-								else
-								{
-									if (set.defendBias > set.reconBias)
-									{
-										//저지-동등
-									}
-									else
-									{
-										//기만-동등
-									}
-								}
-							}break;
-						case Result.EnemyWin:
-							{
-								if (set.violenceBias > set.defendBias)
-								{
-									if (set.violenceBias > set.reconBias)
-									{
-										//섬멸-우세
-									}
-									else
-									{
-										//기만-우세
-									}
-								}
-								else
-								{
-									if (set.defendBias > set.reconBias)
-									{
-										//저지-우세
-									}
-									else
-									{
-										//기만-우세
-									}
-								}
-							}
-							break;
-						case Result.PlayerWin:
-							{
-								if (set.violenceBias > set.defendBias)
-								{
-									if (set.violenceBias > set.reconBias)
-									{
-										//섬멸-열세
-									}
-									else
-									{
-										//기만-열세
-									}
-								}
-								else
-								{
-									if (set.defendBias > set.reconBias)
-									{
-										//저지-열세
-									}
-									else
-									{
-										//기만-열세
-									}
-								}
-							}
-							break;
-					}
-				}
-				currentState.unitMove.SetTargetPosition(FindNearestUnit(currentState.transform.position, EnemyEye.instance.perceived.founds));
-			}
-			else
-			{
-				con.ChangeState(State.Alert);
-				accumulations.Add(con);
-				Debug.Log("유닛 하나 축적");
-			}
-			
-			
-			Debug.Log(con.name + " 에게 공격적인 조작.");
 		}
 		else
 		{
-			Vector3 v = Perceive.IdxVectorToPos(FindHighestHeightIdx());
-			NavMeshHit hit;
-			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
-			currentState.unitMove.SetTargetPosition(hit.position);
-			con.ChangeState(State.Alert); 
-			Debug.Log(con.name + " 에게 방어적인 조작 : "+hit.position);
+			con.ChangeState(State.Wait);
+			accumulations.Add(con);
+			myControls.Remove(con);
+			Debug.Log("유닛 하나 축적");
 		}
+
+
+		//생각해보니 전투를 인식하고 전술을 쓰는건 여기가 아님.
+		//여기는 그냥 추가적인 유닛에 대한 조작일 뿐이고, 실상 전투는 별개로 처리가  들어가야 할 것임.
+		//일단 없는 셈 치고 합치는걸로
+		//if (EnemyEye.instance.perceived.founds.Count > 0 && accumulations.Count >= set.adequateSoldier)
+		//{
+		//	if (EnemyBrain.instance.predictedFights != null)
+		//	{
+		//		EnemyBrain.instance.predictedFights.engagedAIUnits = accumulations;
+		//		switch (EnemyBrain.instance.predictedFights.ResultEstimate())
+		//		{
+		//			case Result.Draw:
+		//				{
+		//					if (set.violenceBias > set.defendBias)
+		//					{
+		//						if (set.violenceBias > set.reconBias)
+		//						{
+		//							//섬멸-동등
+		//						}
+		//						else
+		//						{
+		//							//기만-동등
+		//						}
+		//					}
+		//					else
+		//					{
+		//						if (set.defendBias > set.reconBias)
+		//						{
+		//							//저지-동등
+		//						}
+		//						else
+		//						{
+		//							//기만-동등
+		//						}
+		//					}
+		//				}
+		//				break;
+		//			case Result.EnemyWin:
+		//				{
+		//					if (set.violenceBias > set.defendBias)
+		//					{
+		//						if (set.violenceBias > set.reconBias)
+		//						{
+		//							//섬멸-우세
+		//						}
+		//						else
+		//						{
+		//							//기만-우세
+		//						}
+		//					}
+		//					else
+		//					{
+		//						if (set.defendBias > set.reconBias)
+		//						{
+		//							//저지-우세
+		//						}
+		//						else
+		//						{
+		//							//기만-우세
+		//						}
+		//					}
+		//				}
+		//				break;
+		//			case Result.PlayerWin:
+		//				{
+		//					if (set.violenceBias > set.defendBias)
+		//					{
+		//						if (set.violenceBias > set.reconBias)
+		//						{
+		//							//섬멸-열세
+		//						}
+		//						else
+		//						{
+		//							//기만-열세
+		//						}
+		//					}
+		//					else
+		//					{
+		//						if (set.defendBias > set.reconBias)
+		//						{
+		//							//저지-열세
+		//						}
+		//						else
+		//						{
+		//							//기만-열세
+		//						}
+		//					}
+		//				}
+		//				break;
+		//		}
+		//	}
+		//	currentState.unitMove.SetTargetPosition(FindNearestUnit(currentState.transform.position, EnemyEye.instance.perceived.founds));
+		//}
 	}
 
 	public Vector3Int FindNearestSightless(UnitController unit)
@@ -267,7 +259,14 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		while(accumulations.Count > 0)
 		{
-			((UnitBaseState)accumulations[0].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase.position);
+			if (((UnitBaseState)accumulations[0].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase))
+			{
+				accumulations[0].ChangeState(State.Move);
+			}
+			else{
+				Debug.Log("이동 실패");
+				accumulations[0].ChangeState(State.Wait);
+			}
 			myControls.Add(accumulations[0]);
 			accumulations.RemoveAt(0);
 		}
@@ -278,16 +277,16 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		if (EnemyBrain.instance.playerBase != null && accumulations.Count >= set.adequateSoldier)
 		{
-			WholeAttack();
+			WholeAttack(); //반 임시
 		}
 		else if (myControls.Count > 0)
 		{
-			UnitController curC = myControls.Find((x) => { return x?.CurrentStateScript == x?.GetStateDict(State.Wait); });
+			UnitController curC = myControls.Find((x) => { return x?.currentState == State.Wait; });
 			if (curC != null)
 			{
 				SamplePos(curC);
 			}
-			//유닛의 현재 상태를 인지할 수 있도록 하는 것이 무난하겠다.
+			
 		}
 	}
 }
