@@ -387,9 +387,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_myName: "\uD5E4\uD0C0\uC774\uB85C\uC774"
   m_produceTime: 20
-  vio: 1
-  def: 8
-  rec: 1
+  vio: 8
+  def: 5
+  rec: 2
   m_isPlayer: 0
   attackPower: 80
   attackSpeed: 1.4
