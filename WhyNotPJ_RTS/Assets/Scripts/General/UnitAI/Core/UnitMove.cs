@@ -34,9 +34,11 @@ public class UnitMove : MonoBehaviour
 
     public bool SetTargetPosition(Transform target)
     {
-        if (navMeshAgent.CalculatePath(target.position, new NavMeshPath()))
+        NavMeshHit hit;
+        NavMesh.SamplePosition(target.position, out hit, 10f, NavMesh.AllAreas);
+        if (navMeshAgent.CalculatePath(hit.position, path))
         {
-            navMeshAgent.SetDestination(target.position);
+            navMeshAgent.SetDestination(hit.position);
 
             isAttack = true;
 

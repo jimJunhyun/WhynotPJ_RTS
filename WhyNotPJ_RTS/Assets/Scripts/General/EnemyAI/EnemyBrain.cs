@@ -18,9 +18,10 @@ public class EnemyBrain : MonoBehaviour
 	//[HideInInspector]
 	public Transform playerBase;
 
+	public Fight predictedFights;
+
 	void Examine() //할 행동 목록 결정  
 	{
-		//상대 유닛 인식한 후에 그거에 맞게 성향 변동이 있을 예정
 		producable.Sort(set);
 		product = producable[0];
 	}
@@ -81,37 +82,48 @@ public class EnemyBrain : MonoBehaviour
 	/// 높은거로 판단되봤자 1~10일거라서
 	/// 5부근일듯?
 	/// 
-	/// 고유성향증감률에 영향받음.
+	/// 고유성향증감률에 역영향받음.
 	/// </summary>
 	/// <param name="info"></param>
-	public void ReactTo(List<UnitController> info)
+	public void ReactTo(List<UnitController> info, Vector3? foundPos)
 	{
 		if(info.Count == 0)
 			return;
 
-		float vioAvg = 0, defAvg = 0, recAvg = 0;
+		if(foundPos != null) //새로 발견한 경우일 때만.
+		{
+			
+			Fight f = new Fight((Vector3)foundPos, out bool isActual);
+			if(isActual)
+				predictedFights = f;
 
-		for (int i = 0; i < info.Count; i++)
-		{
-			vioAvg += info[i].element[0];
-			defAvg += info[i].element[1];
-			recAvg += info[i].element[2];
+			float vioAvg = 0, defAvg = 0, recAvg = 0;
+
+			for (int i = 0; i < info.Count; i++)
+			{
+				vioAvg += info[i].element[0];
+				defAvg += info[i].element[1];
+				recAvg += info[i].element[2];
+			}
+			vioAvg /= info.Count;
+			defAvg /= info.Count;
+			recAvg /= info.Count;
+			if (vioAvg >= set.fxblStandard)
+			{
+				set[0] += set.fxblIncrement / set.vioIncreaseBias * (vioAvg - set.fxblStandard + 1);
+			}
+			if (defAvg >= set.fxblStandard)
+			{
+				set[1] += set.fxblIncrement / set.defIncreaseBias * (defAvg - set.fxblStandard + 1);
+			}
+			if (recAvg >= set.fxblStandard)
+			{
+				set[2] += set.fxblIncrement / set.recIncreaseBias * (recAvg - set.fxblStandard + 1);
+			}
 		}
-		vioAvg /= info.Count;
-		defAvg /= info.Count;
-		recAvg /= info.Count;
-		if(vioAvg >= set.fxblStandard)
-		{
-			set[0] += set.fxblIncrement * set.vioIncreaseBias;
-		}
-		if (defAvg >= set.fxblStandard)
-		{
-			set[1] += set.fxblIncrement * set.defIncreaseBias;
-		}
-		if (recAvg >= set.fxblStandard)
-		{
-			set[2] += set.fxblIncrement * set.recIncreaseBias;
-		}
+
+		
+
 	}
 
 	private void Awake()
@@ -125,7 +137,6 @@ public class EnemyBrain : MonoBehaviour
 
 		producable.AddRange(Resources.LoadAll<UnitController>("Prefabs/"));
 
-		//건물도 추가하기.
 	}
 
 }
