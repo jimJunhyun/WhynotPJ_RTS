@@ -411,7 +411,7 @@ MonoBehaviour:
   mainCamp: {fileID: 0}
   enemy: {fileID: 0}
   construction: {fileID: 0}
-  marker: {fileID: 0}
+  marker: {fileID: 1815088460249786162}
   isSelect: 0
 --- !u!114 &1815088460164482093
 MonoBehaviour:
@@ -437,7 +437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004e9cfbd780dee47901d8d7632cfd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 0
 --- !u!114 &242562238
 MonoBehaviour:
   m_ObjectHideFlags: 0
