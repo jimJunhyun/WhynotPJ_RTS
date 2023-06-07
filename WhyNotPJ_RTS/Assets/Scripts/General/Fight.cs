@@ -12,7 +12,6 @@ public enum Result
 /// <summary>
 /// 전투 데이터를 담는 클래스
 /// 
-/// 발생할 전투를 예상하는 데에 사용된다.
 /// 적군에게만 쓰이도록 할 예정.
 /// 플레이어에게 정보 제공하는데도 쓸 수 있겠지만, 수정이 필요함.
 /// </summary>
@@ -25,7 +24,7 @@ public class Fight
 
     public float pCostEstime;
     public float eCostEstime;
-
+    
     public Vector3 predictedPos;
 
     float err = 5f;

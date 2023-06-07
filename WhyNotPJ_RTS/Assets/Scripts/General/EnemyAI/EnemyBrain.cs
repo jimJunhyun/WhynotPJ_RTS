@@ -18,7 +18,7 @@ public class EnemyBrain : MonoBehaviour
 	//[HideInInspector]
 	public Transform playerBase;
 
-	public Fight predictedFights;
+	public List<Fight> ongoingFights;
 
 	void Examine() //할 행동 목록 결정  
 	{
