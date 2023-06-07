@@ -25,18 +25,30 @@ public class EnemyEye : MonoBehaviour
 	private void LateUpdate()
 	{
 		perceived.UpdateMap();
-		if(!ListComparison<UnitController>(foundUnits, perceived.founds))
+		if(!ListComparison<UnitController>(foundUnits, perceived.founds, out Vector3? p))
 		{
 			foundUnits = perceived.founds;
-			EnemyBrain.instance.ReactTo(foundUnits);
+			EnemyBrain.instance.ReactTo(foundUnits, p);
 		}
 	}
 
 
-	bool ListComparison<T>(List<T> left, List<T> right)
-	{
+	bool ListComparison<T>(List<T> left, List<T> right, out Vector3? pos)
+		where T : MonoBehaviour
+	{ 
+		pos = null;
 		IEnumerable<T> diff1 = left.Except(right);
 		IEnumerable<T> diff2 = right.Except(left);
+
+		if (diff2.Any())
+		{
+			List<T> diffs = new List<T>(diff2);
+			for (int i = 0; i < diff2.Count(); i++)
+			{
+				pos += diffs[i].transform.position;
+			}
+			pos /= diff2.Count();
+		}
 
 		return !diff1.Any() && !diff2.Any();
 	}

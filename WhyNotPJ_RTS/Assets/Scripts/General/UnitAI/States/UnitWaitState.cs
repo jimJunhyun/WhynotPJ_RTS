@@ -12,7 +12,7 @@ public class UnitWaitState : UnitBaseState
     public override void OnEnterState()
     {
         unitController.mainCamp = null;
-        unitController.enemy = null;
+        //unitController.enemy = null;
         unitController.construction = null;
         curSignTime = sendSignTime;
     }
@@ -24,10 +24,7 @@ public class UnitWaitState : UnitBaseState
 
     public override void UpdateState()
     {
-        if (unitMove.NavMeshAgent.velocity.sqrMagnitude >= 0.1f)
-        {
-            unitController.ChangeState(State.Move);
-        }
+
     }
 
     public override void SetUp(Transform agentRoot)

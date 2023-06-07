@@ -216,12 +216,12 @@ public class ConstructBuild : MonoBehaviour
 		return true;
 	}
 
-	bool Approximate(float a, float b, float err)
+	public static bool Approximate(float a, float b, float err)
 	{
 		return Mathf.Abs(a - b) < err;
 	}
 
-	bool Approximate(Vector3 a, Vector3 b, float err)
+	public static bool Approximate(Vector3 a, Vector3 b, float err)
 	{
 		return Approximate(a.x, b.x, err) && Approximate(a.y, b.y , err) && Approximate(a.z, b.z, err);
 	}
