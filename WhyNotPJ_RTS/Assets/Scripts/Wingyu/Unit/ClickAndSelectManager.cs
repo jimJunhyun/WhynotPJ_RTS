@@ -99,13 +99,16 @@ public class ClickAndSelectManager : MonoBehaviour
 					UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
 						selected.UnitMove.SetTargetPosition(hit.transform);
 						selected.enemy = unit;
-						selected.ChangeState(Core.State.Move);
 					});
 				}
 			}
 			else
 			{
-				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.UnitMove.SetTargetPosition(hit.point));
+				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => {
+					unit.UnitMove.SetTargetPosition(hit.point);
+					if (unit.currentState != Core.State.Move)
+						unit.ChangeState(Core.State.Move);
+				});
 			}
 		}
 	}

@@ -122,15 +122,15 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         }
 
 #if UNITY_EDITOR
-		if (Input.GetMouseButtonDown(0))
-		{
-            if(!isPlayer)
-                return;
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-			{
-				unitMove.SetTargetPosition(hit.point);
-			}
-		}
+		//if (Input.GetMouseButtonDown(0))
+		//{
+  //          if(!isPlayer)
+  //              return;
+		//	if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+		//	{
+		//		unitMove.SetTargetPosition(hit.point);
+		//	}
+		//}
 #endif
 
 		currentStateScript.UpdateState();
