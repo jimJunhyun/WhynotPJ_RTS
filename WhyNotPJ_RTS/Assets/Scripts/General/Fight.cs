@@ -38,8 +38,7 @@ public class Fight
     /// 생성자.
     /// </summary>
     /// <param name="predPos">
-    /// 전투가 벌어질 것 같은 곳.
-    /// 양 측 진행 방향의 사이 지점같은 느낌
+    /// 전투가 벌어진 곳. 최초 타격 지점임
     /// </param>
     /// <param name="pUnits">
     /// 플레이어 유닛 목록.
@@ -49,15 +48,9 @@ public class Fight
     /// AI 유닛 목록, accumulatedUnit --> myContorl로 옮길 때 담고 넣어줄 수 있음.
     /// 안넣으면 그냥 근처 유닛
     /// </param>
-    /// <param name="possiblity">
-    /// 실제 전투가 일어날 가능성이 있는지
-    /// true면 충돌이 예상되는거고
-    /// 아니면 한 측이 없어서 별거없는 사건
-    /// </param>
-    public Fight(Vector3 predPos, out bool possiblity, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
+    public Fight(Vector3 predPos, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
 	{
         predictedPos = predPos;
-        possiblity = true;
 
         Collider[] c=  Physics.OverlapSphere(predictedPos, NEARPOINTSTANDARD, 1 << 12); //UnitLayer const 로 하나 해서 넣기.
 
@@ -93,9 +86,6 @@ public class Fight
                 }
             }
         }
-
-       if(engagedAIUnits == null || engagedPlayerUnits == null || engagedAIUnits.Count == 0 || engagedPlayerUnits.Count == 0)
-            possiblity = false;
 
         for (int i = 0; i < engagedAIUnits.Count; ++i)
 		{
