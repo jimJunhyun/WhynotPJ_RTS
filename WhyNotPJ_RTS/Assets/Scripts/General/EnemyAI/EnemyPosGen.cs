@@ -206,38 +206,38 @@ public class EnemyPosGen : MonoBehaviour
 		return dest;
 	}
 
-	public Vector3Int FindHighestHeightIdx()
-	{
-		float largestH = float.MinValue;
-		Vector3Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
-		for (int y = 0; y < Perceive.MAPY; y++)
-		{
-			for (int x = 0; x < Perceive.MAPX; x++)
-			{
-				int floor = 0;
-				if (Perceive.fullMap[y, x, 1].Id != 0)
-				{
-					floor = 1;
-				}
-				if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
-				{
-					int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 2.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
-					float num = (Perceive.fullMap[y, x, floor].height/* - Perceive.averageHeight*/) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
-					if (num * (set.adequateSoldier - units) > largestH) 
-					{
-						v.x = x;
-						v.y = y;
-						largestH = num;
-					}
+	//public Vector3Int FindHighestHeightIdx()
+	//{
+	//	float largestH = float.MinValue;
+	//	Vector3Int v = Perceive.PosToIdxVector(EnemyBrain.instance.transform.position);
+	//	for (int y = 0; y < Perceive.MAPY; y++)
+	//	{
+	//		for (int x = 0; x < Perceive.MAPX; x++)
+	//		{
+	//			int floor = 0;
+	//			if (Perceive.fullMap[y, x, 1].Id != 0)
+	//			{
+	//				floor = 1;
+	//			}
+	//			if (EnemyEye.instance.perceived.map[y, x, floor] > 0)
+	//			{
+	//				int units = Physics.OverlapSphere(Perceive.IdxVectorToPos(new Vector3Int(x, y)), 2.5f, 1 << 14).Length; //일단 14를 너놨는데, 나중에 레이어 충돌 생기면 바꾸고 상수로 따로 가져갈거임.
+	//				float num = (Perceive.fullMap[y, x, floor].height/* - Perceive.averageHeight*/) * set.heightBias  - MapData.GetDist(Perceive.IdxVectorToPos(new Vector3Int(x, y)), EnemyBrain.instance.transform.position) * set.distBias;
+	//				if (num * (set.adequateSoldier - units) > largestH) 
+	//				{
+	//					v.x = x;
+	//					v.y = y;
+	//					largestH = num;
+	//				}
 					
-				}
-			}
-		}
-		//Debug.Log(pos);
-		//Debug.Log($"{Perceive.IdxVectorToPos(pos)}");
-		//EditorApplication.isPaused = true;
-		return v;
-	}
+	//			}
+	//		}
+	//	}
+	//	//Debug.Log(pos);
+	//	//Debug.Log($"{Perceive.IdxVectorToPos(pos)}");
+	//	//EditorApplication.isPaused = true;
+	//	return v;
+	//}
 
 	Transform FindNearestUnit(Vector3 fromPos, List<UnitController> units)
 	{
