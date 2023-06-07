@@ -68,7 +68,7 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public UnitMove UnitMove => unitMove;
 
     //target
-    //[HideInInspector]
+    [HideInInspector]
     public MainCamp mainCamp = null;
     [HideInInspector]
     public UnitController enemy = null;

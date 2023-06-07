@@ -14,7 +14,8 @@ public class UnitAlertState : UnitBaseState
         unitController.enemy = null;
         unitController.construction = null;
 
-        if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
+        //��� �� ���� ����
+        /*if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
         {
             
             if (unitMove.SetTargetPosition(hitInfo.transform))
@@ -27,7 +28,7 @@ public class UnitAlertState : UnitBaseState
 
                 return;
             }
-        }
+        }*/
 
         opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
         closestDis = unitController.detectRange;
@@ -46,7 +47,7 @@ public class UnitAlertState : UnitBaseState
                     {
                         closestDis = distance;
                         unitController.mainCamp = null;
-                        unitController.enemy = opTrm.GetComponent<UnitController>();
+                        unitController.enemy = opCtrl;
                         unitController.construction = null;
                     }
                 }
@@ -64,8 +65,8 @@ public class UnitAlertState : UnitBaseState
             }
         }
 
-
-        opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsConstruction);
+        //��� �� ��� ����
+        /*opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsConstruction);
         closestDis = unitController.detectRange;
 
         foreach (Collider op in opponents)
@@ -90,7 +91,7 @@ public class UnitAlertState : UnitBaseState
 
                 return;
             }
-        }
+        }*/ 
 
         unitController.ChangeState(State.Wait);
     }

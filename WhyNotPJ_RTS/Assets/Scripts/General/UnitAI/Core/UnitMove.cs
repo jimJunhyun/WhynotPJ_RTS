@@ -8,20 +8,19 @@ public class UnitMove : MonoBehaviour
     public Transform VisualTrm => visualTrm;
     private NavMeshAgent navMeshAgent;
     public NavMeshAgent NavMeshAgent => navMeshAgent;
-    private NavMeshPath path;
     private bool isAttack;
     public bool IsAttack => isAttack;
 
-    private void Start()
+    private void Awake()
     {
+        isAttack = true;
         visualTrm = transform.Find("Visual");
         navMeshAgent = GetComponent<NavMeshAgent>();
-        path = new NavMeshPath();
     }
 
     public bool SetTargetPosition(Vector3 pos)
     {
-        if (navMeshAgent.CalculatePath(pos, path))
+        if (navMeshAgent.CalculatePath(pos, new NavMeshPath()))
         {
             navMeshAgent.SetDestination(pos);
 
@@ -37,7 +36,7 @@ public class UnitMove : MonoBehaviour
     {
         NavMeshHit hit;
         NavMesh.SamplePosition(target.position, out hit, 10f, NavMesh.AllAreas);
-        if (navMeshAgent.CalculatePath(hit.position, path))
+        if (navMeshAgent.CalculatePath(hit.position, new NavMeshPath()))
         {
             navMeshAgent.SetDestination(hit.position);
 
