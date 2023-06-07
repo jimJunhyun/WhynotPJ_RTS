@@ -40,6 +40,11 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
         else
         {
             unitController.ChangeState(State.Alert);
+
+			if (!unitController.isPlayer)
+			{
+                EnemyBrain.instance.CalculateFight(unitController);
+			}
         }
     }
 }

@@ -9,6 +9,20 @@ public enum Result
     EnemyWin,
 }
 
+public enum Tactics
+{
+    None = -1,
+    AllOut,
+    HammerNAnvil,
+    Blitzkrieg,
+    XXXXXXXXXX,
+    Defend,
+    Guerilla,
+    Encumber,
+    Feint, 
+    Random
+}
+
 /// <summary>
 /// 전투 데이터를 담는 클래스
 /// 
@@ -27,7 +41,14 @@ public class Fight
     
     public Vector3 predictedPos;
 
-    float err = 5f;
+    public Tactics useTactic;
+
+    public bool IsInvalidFight
+	{
+        get => engagedAIUnits.Count == 0 || engagedPlayerUnits.Count == 0;
+	}
+
+    float err = 10f;
 
     public Result ResultEstimate()
 	{
@@ -56,6 +77,8 @@ public class Fight
 
         engagedAIUnits = aiUnits;
         engagedPlayerUnits = pUnits;
+
+        useTactic = Tactics.None;
 
         if(engagedAIUnits == null)
 		{

@@ -31,9 +31,15 @@ public class EnemyEye : MonoBehaviour
 			EnemyBrain.instance.ReactTo(foundUnits, p);
 		}
 	}
+	public static bool ListComparison<T>(List<T> left, List<T> right)
+	{
+		IEnumerable<T> diff1 = left.Except(right);
+		IEnumerable<T> diff2 = right.Except(left);
 
+		return !diff1.Any() && !diff2.Any();
+	}
 
-	bool ListComparison<T>(List<T> left, List<T> right, out Vector3? pos)
+	public static bool ListComparison<T>(List<T> left, List<T> right, out Vector3? pos)
 		where T : MonoBehaviour
 	{ 
 		pos = null;

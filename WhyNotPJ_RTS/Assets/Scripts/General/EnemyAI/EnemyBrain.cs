@@ -20,6 +20,13 @@ public class EnemyBrain : MonoBehaviour
 
 	public List<Fight> ongoingFights;
 
+	Action onFightUpdated;
+
+	public void AddFightUpdate(Action act)
+	{
+		onFightUpdated += act;
+	}
+
 	void Examine() //할 행동 목록 결정  
 	{
 		producable.Sort(set);
@@ -117,9 +124,17 @@ public class EnemyBrain : MonoBehaviour
 				set[2] += set.fxblIncrement / set.recIncreaseBias * (recAvg - set.fxblStandard + 1);
 			}
 		}
+	}
 
-		
-
+	public void CalculateFight(UnitController con)
+	{
+		Fight f = new Fight(con.transform.position);
+		if (!f.IsInvalidFight)
+		{
+			ongoingFights.Add(f);
+			onFightUpdated.Invoke();
+		}
+			
 	}
 
 	private void Awake()
@@ -133,6 +148,19 @@ public class EnemyBrain : MonoBehaviour
 
 		producable.AddRange(Resources.LoadAll<UnitController>("Prefabs/"));
 
+	}
+
+	private void Start()
+	{
+		EnemyDiffSet.instance.AddUpdateActs(Decide);
+	}
+
+	private void Update()
+	{
+		if(ongoingFights.RemoveAll((x) => x.IsInvalidFight) > 0)
+		{
+			onFightUpdated.Invoke();
+		}
 	}
 
 }
