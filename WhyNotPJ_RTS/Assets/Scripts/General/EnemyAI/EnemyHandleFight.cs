@@ -169,6 +169,6 @@ public class EnemyHandleFight : MonoBehaviour
 
 	private void Update()
 	{
-		fightDetailTactic.Invoke();
+		fightDetailTactic?.Invoke();
 	}
 }

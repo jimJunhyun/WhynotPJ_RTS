@@ -132,7 +132,7 @@ public class EnemyBrain : MonoBehaviour
 		if (!f.IsInvalidFight)
 		{
 			ongoingFights.Add(f);
-			onFightUpdated.Invoke();
+			onFightUpdated?.Invoke();
 		}
 			
 	}
@@ -157,9 +157,9 @@ public class EnemyBrain : MonoBehaviour
 
 	private void Update()
 	{
-		if(ongoingFights.RemoveAll((x) => x.IsInvalidFight) > 0)
+		if(ongoingFights?.RemoveAll((x) => x.IsInvalidFight) > 0)
 		{
-			onFightUpdated.Invoke();
+			onFightUpdated?.Invoke();
 		}
 	}
 
