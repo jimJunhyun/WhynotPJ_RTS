@@ -102,6 +102,16 @@ public class ClickAndSelectManager : MonoBehaviour
 					});
 				}
 			}
+			else if (hit.transform.TryGetComponent(out MainCamp camp))
+			{
+				UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
+					selected.UnitMove.SetTargetPosition(hit.transform);
+					selected.mainCamp = camp;
+					if (selected.currentState != Core.State.Move)
+						selected.ChangeState(Core.State.Move);
+					print("CAMP!");
+				});
+			}
 			else
 			{
 				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => {
