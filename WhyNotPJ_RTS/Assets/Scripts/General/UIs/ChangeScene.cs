@@ -12,4 +12,12 @@ public class ChangeScene : MonoBehaviour
     {
         SceneChanger.instance.Change(name);
     }
+    public void NonAsyncChanger(int idx)
+    {
+        SceneChanger.instance.NonAsyncChange(idx);
+    }
+    public void NonAsyncChanger(string name)
+    {
+        SceneChanger.instance.NonAsyncChange(name);
+    }
 }

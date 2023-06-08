@@ -8,6 +8,7 @@ public class SceneChanger : MonoBehaviour
 {
 	Canvas loadingScreen;
 	Slider progressBar;
+	Image mapImg;
 
 	public static SceneChanger instance;
 
@@ -18,7 +19,7 @@ public class SceneChanger : MonoBehaviour
 
 		progressBar = GetComponentInChildren<Slider>();
 		loadingScreen = GetComponentInChildren<Canvas>();
-
+		mapImg = GameObject.Find("MapImg").GetComponent<Image>();
 		loadingScreen.gameObject.SetActive(false);
 	}
 	public async void Change(int idx)
@@ -48,5 +49,19 @@ public class SceneChanger : MonoBehaviour
 		await System.Threading.Tasks.Task.Delay(1000);
 		loadingScreen.gameObject.SetActive(false);
 		//loading.allowSceneActivation = true;
+	}
+
+	public void NonAsyncChange(int idx)
+	{
+		SceneManager.LoadScene(idx);
+	}
+	public void NonAsyncChange(string name)
+	{
+		SceneManager.LoadScene(name);
+	}
+
+	public void SetLoadImage(Sprite img)
+	{
+		mapImg.sprite = img;
 	}
 }
