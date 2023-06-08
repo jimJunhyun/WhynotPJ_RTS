@@ -84,4 +84,10 @@ public class UnitSelectManager : MonoBehaviour
 		newUnit.OnDeselectUnit();
 		selectedList.Remove(newUnit);
 	}
+
+	//현재 선택된 유닛중 선택한 이름의 유닛만 추출
+	public void ExtractUnitOfName(string name)
+	{
+		selectedList = SelectedUnitList.FindAll(x => x.myName == name).Cast<ISelectable>().ToList();
+	}
 }
