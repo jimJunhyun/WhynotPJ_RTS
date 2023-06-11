@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Stage 1
   m_EditorClassIdentifier: 
   stageName: "\uD560\uB9AC\uCE74\uB974\uB098\uC18C\uC2A4"
+  sceneName: Play
   image: {fileID: 21300000, guid: 61148156d17f9634abcb308c69f003be, type: 3}
   additionalInfo: "\uACF5\uC131\uCD94 \uD68D\uB4DD \uAC00\uB2A5"

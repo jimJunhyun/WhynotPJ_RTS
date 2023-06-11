@@ -24,7 +24,9 @@ public class ShowInfo : MonoBehaviour
 		detailInfo = GameObject.Find("DetailInfo").GetComponent<TextMeshProUGUI>();
 		GetComponentsInChildren(visuals);
 		GetComponentsInChildren(txts);
-		Off();
+		
+		SetInfo(1);
+		On();
 	}
 
 	void Off()
@@ -52,12 +54,6 @@ public class ShowInfo : MonoBehaviour
 
 	public void SetInfo(int order)
 	{
-		if(stage != null && stages[order - 1].stageName == stage.stageName)
-		{
-			stage = null;
-			Off();
-			return;
-		}
 		stage = stages[order - 1];
 		stageName.text = stage.stageName;
 		mapImg.sprite = stage.image;
