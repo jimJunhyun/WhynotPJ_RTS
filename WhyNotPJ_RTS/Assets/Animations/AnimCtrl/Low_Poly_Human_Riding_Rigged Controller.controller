@@ -112,7 +112,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Low_Poly_Human_Rigged Controller
+  m_Name: Low_Poly_Human_Riding_Rigged Controller
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isWalk
