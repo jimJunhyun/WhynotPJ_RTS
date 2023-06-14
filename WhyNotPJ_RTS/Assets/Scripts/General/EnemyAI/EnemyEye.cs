@@ -19,7 +19,7 @@ public class EnemyEye : MonoBehaviour
 		perceived.ResetMap(false);
 
 		
-		perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
+		//perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
 	}
 	
 	private void LateUpdate()

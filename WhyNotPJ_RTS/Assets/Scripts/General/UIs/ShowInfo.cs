@@ -27,6 +27,7 @@ public class ShowInfo : MonoBehaviour
 		
 		SetInfo(1);
 		On();
+		Debug.Log("Loaded");
 	}
 
 	void Off()

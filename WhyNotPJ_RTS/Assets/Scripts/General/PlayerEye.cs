@@ -14,7 +14,7 @@ public class PlayerEye : MonoBehaviour
 		instance = this;
 
 		perceived.ResetMap(true);
-		perceived.AllEnableTmp();
+		//perceived.AllEnableTmp();
 	}
 
 	private void LateUpdate()

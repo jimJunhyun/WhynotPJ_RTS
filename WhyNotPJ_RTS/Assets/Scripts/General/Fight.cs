@@ -33,8 +33,8 @@ public class Fight
 {
     const float NEARPOINTSTANDARD = 20f;
 
-    public List<UnitController> engagedPlayerUnits;
-    public List<UnitController> engagedAIUnits;
+    public List<UnitManageData> engagedPlayerUnits;
+    public List<UnitManageData> engagedAIUnits;
 
     public float pCostEstime;
     public float eCostEstime;
@@ -69,7 +69,7 @@ public class Fight
     /// AI 유닛 목록, accumulatedUnit --> myContorl로 옮길 때 담고 넣어줄 수 있음.
     /// 안넣으면 그냥 근처 유닛
     /// </param>
-    public Fight(Vector3 predPos, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
+    public Fight(Vector3 predPos, List<UnitManageData> pUnits = null, List<UnitManageData> aiUnits = null)
 	{
         predictedPos = predPos;
 
@@ -82,14 +82,14 @@ public class Fight
 
         if(engagedAIUnits == null)
 		{
-            engagedAIUnits = new List<UnitController>();
+            engagedAIUnits = new List<UnitManageData>();
             for (int i = 0; i < c.Length; i++)
             {
                 UnitController unitCont;
                 if (unitCont = c[i].GetComponent<UnitController>())
                 {
                     if (!unitCont.isPlayer)
-                        engagedAIUnits.Add(unitCont);
+                        engagedAIUnits.Add(new UnitManageData(unitCont, false));
 
                 }
             }
@@ -97,14 +97,14 @@ public class Fight
 
         if (engagedPlayerUnits == null)
         {
-            engagedPlayerUnits = new List<UnitController>();
+            engagedPlayerUnits = new List<UnitManageData>();
             for (int i = 0; i < c.Length; i++)
             {
                 UnitController unitCont;
                 if (unitCont = c[i].GetComponent<UnitController>())
                 {
                     if (unitCont.isPlayer && unitCont.isSeen())
-                        engagedPlayerUnits.Add(unitCont);
+                        engagedPlayerUnits.Add(new UnitManageData(unitCont, false));
 
                 }
             }
@@ -112,11 +112,11 @@ public class Fight
 
         for (int i = 0; i < engagedAIUnits.Count; ++i)
 		{
-            eCostEstime += engagedAIUnits[i].produceTime;
+            eCostEstime += engagedAIUnits[i].con.produceTime;
 		}
         for (int i = 0; i < engagedPlayerUnits.Count; ++i)
         {
-            pCostEstime += engagedPlayerUnits[i].produceTime;
+            pCostEstime += engagedPlayerUnits[i].con.produceTime;
         }
     }
 }

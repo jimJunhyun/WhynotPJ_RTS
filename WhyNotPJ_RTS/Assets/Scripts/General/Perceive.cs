@@ -93,7 +93,7 @@ public class Perceive
 	public const int MAPX = 200;
 	public const int MAPY = 200;
 	public static MapData[,,] fullMap = new MapData[MAPY, MAPX, 2]; //여기에 지형 관련 정보를 모두 저장.
-	public static float averageHeight;
+	//public static float averageHeight;
 	
 	public bool isPlayer;
 	public List<UnitController> founds 
@@ -102,7 +102,13 @@ public class Perceive
 		{
 			if (isPlayer)
 			{
-				return EnemyPosGen.instance.myControls.FindAll(x=>x.isSeen());
+				List<UnitManageData> enemyCont = EnemyPosGen.instance.myControls.FindAll(x => x.con.isSeen());
+				List<UnitController> c = new List<UnitController>();
+				for (int i = 0; i < enemyCont.Count; i++)
+				{
+					c.Add(enemyCont[i].con);
+				}
+				return c;
 			}
 			else
 			{
@@ -154,12 +160,12 @@ public class Perceive
 					else
 					{
 						fullMap[y, x, 0].info = GroundState.Ground;
-						averageHeight += fullMap[y, x, 0].height;
+						//averageHeight += fullMap[y, x, 0].height;
 					}
 				}
 			}
 		}
-		averageHeight /= 40000;
+		//averageHeight /= 40000;
 		
 	}
 

@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 5566421042062507604}
   - component: {fileID: 8671127390992376096}
   - component: {fileID: 8671127390992376102}
+  - component: {fileID: -6461909782437702265}
+  - component: {fileID: -6118255012974237678}
   - component: {fileID: 8789565717314216923}
   m_Layer: 9
   m_Name: Pezhetairos
@@ -105,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_myName: "\uD398\uC81C\uD0C0\uB85C\uC774"
-  m_produceTime: 15
+  m_produceTime: 2
   vio: 6
   def: 10
   rec: 2
@@ -143,6 +145,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b5e4c8bf5287e549bba645ad082342e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6461909782437702265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018425977650041263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d13d27069e1e5c479628a1bf5f175ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6118255012974237678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018425977650041263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004e9cfbd780dee47901d8d7632cfd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8789565717314216923

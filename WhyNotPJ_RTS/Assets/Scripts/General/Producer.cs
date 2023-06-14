@@ -65,7 +65,7 @@ public class Producer : MonoBehaviour
 		}
 		else
 		{
-			EnemyPosGen.instance.myControls.Add(c);
+			EnemyPosGen.instance.myControls.Add(new UnitManageData(c, true));
 		}
 
 		

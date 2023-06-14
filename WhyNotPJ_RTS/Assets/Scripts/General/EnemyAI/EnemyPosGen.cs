@@ -5,6 +5,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
+[System.Serializable]
+public class UnitManageData //지휘에 필요한 정보들
+{
+	public UnitController con;
+	public bool isReceivingCommand;
+
+	public UnitManageData(UnitController cont, bool isReceiving)
+	{
+		con = cont;
+		isReceivingCommand = isReceiving;
+	}
+}
+
 public class EnemyPosGen : MonoBehaviour
 {
 	public static EnemyPosGen instance;
@@ -15,31 +28,33 @@ public class EnemyPosGen : MonoBehaviour
 
 	//public GameObject sphere;
 
-	public List<UnitController> myControls = new List<UnitController>();
-	public List<UnitController> accumulations = new List<UnitController>();
+	public List<UnitManageData> myControls = new List<UnitManageData>();
+	public List<UnitManageData> accumulations = new List<UnitManageData>();
 	public List<IBuilding> buildings = new List<IBuilding>();
 
 	
 
-	public void SamplePos(UnitController con)
+	public void SamplePos(UnitManageData con)
 	{
 
-		UnitBaseState currentState = (con.CurrentStateScript as UnitBaseState);
+		UnitBaseState currentState = (con.con.CurrentStateScript as UnitBaseState);
 
-		if (con.element.rec >= 5f)
+		if (con.con.element.rec >= 5f)
 		{
-			Vector3 v = Perceive.IdxVectorToPos(FindNearestSightless(con));
+			Vector3 v = Perceive.IdxVectorToPos(FindNearestSightless(con.con));
 			NavMeshHit hit;
 			NavMesh.SamplePosition(v, out hit, 100f, NavMesh.AllAreas);
-			currentState.unitMove.SetTargetPosition(hit.position);
+			if (currentState.unitMove.SetTargetPosition(hit.position)) 
+				con.con.ChangeState(State.Move);
 			
 		}
 		else
 		{
-			con.ChangeState(State.Wait);
+			con.isReceivingCommand = false;
+			con.con.ChangeState(State.Wait);
 			accumulations.Add(con);
 			myControls.Remove(con);
-			Debug.Log("유닛 하나 축적");
+			Debug.Log("유닛 하나 축적 : " + con.con.myName);
 		}
 
 
@@ -132,13 +147,13 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		while(accumulations.Count > 0)
 		{
-			if (((UnitBaseState)accumulations[0].CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase))
+			if (((UnitBaseState)accumulations[0].con.CurrentStateScript).unitMove.SetTargetPosition(EnemyBrain.instance.playerBase))
 			{
-				accumulations[0].ChangeState(State.Move);
+				accumulations[0].con.ChangeState(State.Move);
 			}
 			else{
 				Debug.Log("이동 실패");
-				accumulations[0].ChangeState(State.Wait);
+				accumulations[0].con.ChangeState(State.Wait);
 			}
 			myControls.Add(accumulations[0]);
 			accumulations.RemoveAt(0);
@@ -154,9 +169,10 @@ public class EnemyPosGen : MonoBehaviour
 		}
 		else if (myControls.Count > 0)
 		{
-			UnitController curC = myControls.Find((x) => { return x?.currentState == State.Wait; });
+			UnitManageData curC = myControls.Find((x) => x.con.currentState == State.Wait && x?.isReceivingCommand == true );
 			if (curC != null)
 			{
+				
 				SamplePos(curC);
 			}
 			
