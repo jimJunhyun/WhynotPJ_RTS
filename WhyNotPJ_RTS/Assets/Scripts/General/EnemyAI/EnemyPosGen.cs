@@ -77,6 +77,7 @@ public class EnemyPosGen : MonoBehaviour
 				if(Perceive.fullMap[y, x, 1].Id != 0)
 				{
 					floor = 1;
+					Debug.Log("2ㅊ으");
 				}
 				if (EnemyEye.instance.perceived.map[y, x, floor] <= 0)
 				{
@@ -172,7 +173,7 @@ public class EnemyPosGen : MonoBehaviour
 			UnitManageData curC = myControls.Find((x) => x.con.currentState == State.Wait && x?.isReceivingCommand == true );
 			if (curC != null)
 			{
-				
+				//Debug.Log($"{curC.con.myName} found, {curC.con.currentState} && {curC.isReceivingCommand}");
 				SamplePos(curC);
 			}
 			

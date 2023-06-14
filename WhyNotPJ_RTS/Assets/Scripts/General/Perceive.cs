@@ -162,6 +162,7 @@ public class Perceive
 						fullMap[y, x, 0].info = GroundState.Ground;
 						//averageHeight += fullMap[y, x, 0].height;
 					}
+					
 				}
 			}
 		}
