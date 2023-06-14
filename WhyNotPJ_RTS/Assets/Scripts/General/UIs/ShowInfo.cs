@@ -20,13 +20,12 @@ public class ShowInfo : MonoBehaviour
 	private void Awake()
 	{
 		stageName = GameObject.Find("StageName").GetComponent<TextMeshProUGUI>();
-		mapImg = GameObject.Find("MapImg").GetComponent<Image>();
+		mapImg = GameObject.Find("MapPreviewImg").GetComponent<Image>();
 		detailInfo = GameObject.Find("DetailInfo").GetComponent<TextMeshProUGUI>();
 		GetComponentsInChildren(visuals);
 		GetComponentsInChildren(txts);
 		
 		SetInfo(1);
-		On();
 		Debug.Log("Loaded");
 	}
 
