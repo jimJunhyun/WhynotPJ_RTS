@@ -111,7 +111,7 @@ MonoBehaviour:
   m_isPlayer: 0
   attackPower: 36
   attackSpeed: 1.1
-  attackRange: 1
+  attackRange: 3
   defensePenetration: 10
   m_healthPoint: 150
   defensePower: 60

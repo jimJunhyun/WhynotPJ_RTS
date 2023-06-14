@@ -1100,6 +1100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ecd50b962afc614ba51801c1f8110a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSide: 1
   currentHealth: 100
 --- !u!65 &282532398
 BoxCollider:
@@ -1206,7 +1207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398008902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11, y: 1.06, z: 0}
+  m_LocalPosition: {x: 69.58, y: 1.06, z: -59.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1328,6 +1329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ecd50b962afc614ba51801c1f8110a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSide: 0
   currentHealth: 1000
 --- !u!65 &645101337
 BoxCollider:
@@ -2104,6 +2106,7 @@ GameObject:
   - component: {fileID: 1040204971}
   - component: {fileID: 1040204969}
   - component: {fileID: 1040204973}
+  - component: {fileID: 1040204974}
   m_Layer: 0
   m_Name: SelectTest
   m_TagString: Untagged
@@ -2157,6 +2160,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0757d6daf2cb64c9268ba477def2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1040204974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040204968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc864c23d1c9454f87c82bd248fb4ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bridgeYErr: 0.5
+  bridge: {fileID: -2009880267833801732, guid: 27756deaaf6e18d49ac2a39116febdd3, type: 3}
+  wall: {fileID: 9069388623709111244, guid: 3d0b797aab24afe438110a3b26834351, type: 3}
 --- !u!1 &1063950626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,7 +2794,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993449899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 71.1, y: 0.5, z: -60.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2801,7 +2819,7 @@ MonoBehaviour:
   movementTime: 0.3
   zoomTime: 0.05
   zoomSensitive: 5
-  currentZoomValue: -6
+  currentZoomValue: -10
   minZoomValue: -100
   maxZoomValue: -4
   rotateSensitive: 0.2

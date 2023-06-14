@@ -15,9 +15,10 @@ public class MainCamp : MonoBehaviour, IProducable
 
     public GameObject prefab => gameObject;
 
+    public bool playerSide;
     public bool isPlayer
     {
-        get => true;
+        get => playerSide;
         set => isPlayer = true;
     }
     public float healthPoint => 0f;

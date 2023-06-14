@@ -17,6 +17,7 @@ public class ClickAndSelectManager : MonoBehaviour
     private UnitSelectManager unitManager;	// ������ ���� & ������ ����ϴ� UnitManager Ŭ����
 
 	public bool isDraging = false;
+	private bool isUI = false;
 
 	private void Awake()
 	{
@@ -35,12 +36,20 @@ public class ClickAndSelectManager : MonoBehaviour
 		{
 			Touch touch = Input.GetTouch(0);
 
-			//�巡�� ����
-			DragSelect(touch);
+			if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+				isUI = true;
+			else
+				DragSelect(touch);
 
 			// �հ����� ���� ��
 			if (touch.phase == TouchPhase.Ended)
 			{
+				print(isUI);
+				if (isUI)
+				{
+					isUI = false;
+					return;
+				}
 				if (CameraController.camState == CameraState.MOVING)
 				{
 					CameraController.camState = CameraState.NONE;
@@ -58,7 +67,8 @@ public class ClickAndSelectManager : MonoBehaviour
 				return;
 			}
 
-			CheckUnit(Input.mousePosition);
+			if (!EventSystem.current.IsPointerOverGameObject() && CameraController.camState != CameraState.DRAGSELECTING)
+				CheckUnit(Input.mousePosition);
 
 			if (start - end == Vector3.zero || CameraController.camState != CameraState.DRAGSELECTING)
 				return;
@@ -86,7 +96,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		RaycastHit hit;
 		Ray ray = mainCam.ScreenPointToRay(screenPos);
-		if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 300f))
+		if (Physics.Raycast(ray, out hit, 300f))
 		{
 			if (hit.transform.TryGetComponent(out UnitController unit))
 			{
@@ -104,6 +114,10 @@ public class ClickAndSelectManager : MonoBehaviour
 			}
 			else if (hit.transform.TryGetComponent(out MainCamp camp))
 			{
+				if (camp.isPlayer == true)
+				{
+					return;
+				}
 				UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
 					selected.UnitMove.SetTargetPosition(hit.transform);
 					selected.mainCamp = camp;
@@ -125,7 +139,9 @@ public class ClickAndSelectManager : MonoBehaviour
 
 	public void SetState()
 	{
+		print("Before: " + CameraController.camState.ToString());
 		CameraController.camState = CameraController.camState == CameraState.DRAGSELECTING ? CameraState.NONE : CameraState.DRAGSELECTING;
+		print("After: " + CameraController.camState.ToString());
 	}
 
 	private void DragSelect()
