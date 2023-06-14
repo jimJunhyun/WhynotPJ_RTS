@@ -394,7 +394,7 @@ MonoBehaviour:
   attackPower: 80
   attackSpeed: 1.4
   attackRange: 2
-  defensePenetration: 30
+  defensePenetration: 20
   m_healthPoint: 400
   defensePower: 70
   moveSpeed: 3

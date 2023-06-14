@@ -116,7 +116,7 @@ MonoBehaviour:
   defensePenetration: 30
   m_healthPoint: 300
   defensePower: 80
-  moveSpeed: 0.75
+  moveSpeed: 0.8
   detectRange: 5
   currentState: 0
   whatIsMainCamp:
@@ -604,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1fd2e102257c2b640aa1bb26aeeedcbb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1fd2e102257c2b640aa1bb26aeeedcbb, type: 3}
       propertyPath: m_LocalPosition.x
