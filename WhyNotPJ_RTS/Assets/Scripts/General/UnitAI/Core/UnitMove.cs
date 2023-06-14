@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class UnitMove : MonoBehaviour
 {
+    private UnitController unitController;
+
     private NavMeshHit hit;
     private Transform visualTrm;
     public Transform VisualTrm => visualTrm;
@@ -11,11 +13,14 @@ public class UnitMove : MonoBehaviour
     private bool isAttack;
     public bool IsAttack => isAttack;
 
+    public Vector3 destination;
+
     private void Awake()
     {
         isAttack = true;
         visualTrm = transform.Find("Visual");
         navMeshAgent = GetComponent<NavMeshAgent>();
+        unitController = GetComponent<UnitController>();
     }
 
     public bool SetTargetPosition(Vector3 pos)

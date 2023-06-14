@@ -38,6 +38,7 @@ public class UnitMoveState : UnitBaseState
     public override void OnExitState()
     {
         unitMove.NavMeshAgent.ResetPath();
+        unitMove.destination = transform.position;
         unitAnimator.SetIsWalk(false);
     }
 
@@ -76,7 +77,7 @@ public class UnitMoveState : UnitBaseState
         }
         else
         {
-            if (unitMove.NavMeshAgent.remainingDistance <= 0f)
+            if (unitMove.NavMeshAgent.remainingDistance <= 0f && !unitMove.NavMeshAgent.pathPending)
             {
                 unitController.ChangeState(State.Wait);
             }
