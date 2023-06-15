@@ -18,7 +18,8 @@ public class ChangeUnitCnt : MonoBehaviour
 	{
 		if(prevUnitAmt != UnitSelectManager.Instance.unitList.Count)
 		{
-
+			prevUnitAmt = UnitSelectManager.Instance.unitList.Count;
+			unitText.text = prevUnitAmt.ToString();
 		}
 	}
 }

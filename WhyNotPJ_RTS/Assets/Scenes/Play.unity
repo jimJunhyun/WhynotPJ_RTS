@@ -218,9 +218,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6294763430404704835, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6294763430404704835, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6294763430404704835, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6294763430497121358, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0005493164
+      value: -0.00048828125
       objectReference: {fileID: 0}
     - target: {fileID: 6294763430807048203, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_AnchorMax.x
@@ -436,7 +448,6 @@ GameObject:
   - component: {fileID: 776838859}
   - component: {fileID: 776838860}
   - component: {fileID: 776838861}
-  - component: {fileID: 776838862}
   - component: {fileID: 776838863}
   m_Layer: 0
   m_Name: E
@@ -507,18 +518,6 @@ MonoBehaviour:
   calcRad: 5
   myControls: []
   accumulations: []
---- !u!114 &776838862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776838857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9df76a5c1ec342249bcf54969adcd0ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &776838863
 MonoBehaviour:
   m_ObjectHideFlags: 0
