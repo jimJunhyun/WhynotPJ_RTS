@@ -5,20 +5,13 @@ using UnityEngine;
 
 public class UnitMoveState : UnitBaseState
 {
+    private Collider[] opponents;
+
     public override void OnEnterState()
     {
         if (unitMove.IsAttack)
         {
-            if (unitController.mainCamp != null)
-            {
-                if (true/*������ ��ȿ���� ����, �� ������ �����*/)
-                {
-                    unitController.ChangeState(State.Alert);
-
-                    return;
-                }
-            }
-            else if (unitController.enemy != null)
+            if (unitController.enemy != null)
             {
                 if (unitController.enemy.currentState == State.Dead)
                 {
@@ -27,7 +20,8 @@ public class UnitMoveState : UnitBaseState
                     return;
                 }
             }
-            else if (unitController.construction != null)
+            //이동 시작 시 토목 유효성 검사
+            /*else if (unitController.construction != null)
             {
                 if (unitController.construction.isBroken)
                 {
@@ -35,7 +29,7 @@ public class UnitMoveState : UnitBaseState
 
                     return;
                 }
-            }
+            }*/
         }
 
         unitAnimator.SetIsWalk(true);
@@ -43,6 +37,8 @@ public class UnitMoveState : UnitBaseState
 
     public override void OnExitState()
     {
+        unitMove.NavMeshAgent.ResetPath();
+        unitMove.destination = transform.position;
         unitAnimator.SetIsWalk(false);
     }
 
@@ -52,16 +48,7 @@ public class UnitMoveState : UnitBaseState
 
         if (unitMove.IsAttack)
         {
-            if (unitController.mainCamp != null)
-            {
-                if (true/*������ ��ȿ���� ����, �� ������ �����*/)
-                {
-                    unitController.ChangeState(State.Alert);
-
-                    return;
-                }
-            }
-            else if (unitController.enemy != null)
+            if (unitController.enemy != null)
             {
                 if (unitController.enemy.currentState == State.Dead)
                 {
@@ -69,8 +56,16 @@ public class UnitMoveState : UnitBaseState
 
                     return;
                 }
+
+                if (Vector3.Distance(unitMove.VisualTrm.position, unitController.enemy.transform.position) <= unitController.attackRange)
+                {
+                    unitController.ChangeState(State.Attack);
+
+                    return;
+                }
             }
-            else if (unitController.construction != null)
+            //이동 중 토목 유효성 검사
+            /*else if (unitController.construction != null)
             {
                 if (unitController.construction.isBroken)
                 {
@@ -78,13 +73,11 @@ public class UnitMoveState : UnitBaseState
 
                     return;
                 }
-            }
-
-            //���� ���� �̳��� ������ ����
+            }*/
         }
         else
         {
-            if (unitMove.NavMeshAgent.remainingDistance <= 0f)
+            if (unitMove.NavMeshAgent.remainingDistance <= 0f && !unitMove.NavMeshAgent.pathPending)
             {
                 unitController.ChangeState(State.Wait);
             }

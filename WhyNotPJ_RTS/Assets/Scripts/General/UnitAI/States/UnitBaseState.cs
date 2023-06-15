@@ -24,7 +24,7 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
     {
         unitController = agentRoot.GetComponent<UnitController>();
         unitMove = agentRoot.GetComponent<UnitMove>();
-        unitAnimator = agentRoot.GetComponent<UnitAnimator>();
+        unitAnimator = agentRoot.Find("Visual").GetComponent<UnitAnimator>();
     }
 
     public virtual void OnHit(UnitController attacker)
@@ -40,6 +40,11 @@ public abstract class UnitBaseState : MonoBehaviour, IUnitState
         else
         {
             unitController.ChangeState(State.Alert);
+
+			if (!unitController.isPlayer)
+			{
+                //EnemyBrain.instance.CalculateFight(unitController);
+			}
         }
     }
 }

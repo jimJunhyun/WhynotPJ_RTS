@@ -47,21 +47,10 @@ public class ClickAndSelectManager : MonoBehaviour
 					return;
 				}
 
-				RaycastHit hit;
-				Ray ray = mainCam.ScreenPointToRay(Input.GetTouch(0).position);
-
-				if (Physics.Raycast(ray, out hit, 100f, unitLayer))
-				{
-					if (hit.transform.TryGetComponent(out UnitController unit))
-					{
-						if (unit.isPlayer == true)
-							UnitSelectManager.Instance.ClickSelectUnit(unit);
-					}
-				}
+				CheckUnit(Input.GetTouch(0).position);
 			}
 		}
-
-		if (Input.GetMouseButtonUp(0))
+		else if (Input.GetMouseButtonUp(0))
 		{
 			if (CameraController.camState == CameraState.MOVING)
 			{
@@ -69,26 +58,7 @@ public class ClickAndSelectManager : MonoBehaviour
 				return;
 			}
 
-			RaycastHit hit;
-			Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-			if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 100f))
-			{
-				if (hit.transform.TryGetComponent(out UnitController unit))
-				{
-					if (unit.isPlayer == true)
-					{
-						UnitSelectManager.Instance.ClickSelectUnit(unit);
-					}
-					else
-					{
-
-					}
-				}
-				else
-				{
-					UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => unit.UnitMove.SetTargetPosition(hit.point));
-				}
-			}
+			CheckUnit(Input.mousePosition);
 
 			if (start - end == Vector3.zero || CameraController.camState != CameraState.DRAGSELECTING)
 				return;
@@ -109,6 +79,37 @@ public class ClickAndSelectManager : MonoBehaviour
 		else if (Input.GetMouseButton(0))
 		{
 			DragSelect();
+		}
+	}
+
+	private void CheckUnit(Vector3 screenPos)
+	{
+		RaycastHit hit;
+		Ray ray = mainCam.ScreenPointToRay(screenPos);
+		if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 300f))
+		{
+			if (hit.transform.TryGetComponent(out UnitController unit))
+			{
+				if (unit.isPlayer == true)
+				{
+					UnitSelectManager.Instance.ClickSelectUnit(unit);
+				}
+				else
+				{
+					UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
+						selected.UnitMove.SetTargetPosition(hit.transform);
+						selected.enemy = unit;
+					});
+				}
+			}
+			else
+			{
+				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => {
+					unit.UnitMove.SetTargetPosition(hit.point);
+					if (unit.currentState != Core.State.Move)
+						unit.ChangeState(Core.State.Move);
+				});
+			}
 		}
 	}
 
@@ -166,8 +167,6 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		dragRectangle.position = (start + end) * 0.5f;
 		dragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
-		//debug1.position = start;
-		//debug2.position = end;
 	}
 
 	private void CalculateDragRect()

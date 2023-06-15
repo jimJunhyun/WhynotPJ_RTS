@@ -12,13 +12,24 @@ public enum Diff
 
 public class EnemyDiffSet : MonoBehaviour
 {
+	public static EnemyDiffSet instance;
+
 	public Diff difficulty;
 	public bool breakFlag = false;
 	
 	
 	float delSec = 0.2f;
+
+	System.Action updateActs;
+
+	public void AddUpdateActs(System.Action act)
+	{
+		updateActs += act;
+	}
+
 	private void Awake()
 	{ 
+		instance = this;
 		if(difficulty == Diff.Easy)
 		{
 			delSec = 0.09f;
@@ -41,8 +52,7 @@ public class EnemyDiffSet : MonoBehaviour
 				yield return null;
 			else
 				yield return new WaitForSeconds(delSec);
-			EnemyBrain.instance.Decide();
-			EnemyPosGen.instance.FindPlaying();
+			updateActs.Invoke();
 		}
 	}
 }

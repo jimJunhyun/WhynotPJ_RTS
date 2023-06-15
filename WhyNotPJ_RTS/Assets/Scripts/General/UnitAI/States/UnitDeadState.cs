@@ -6,8 +6,8 @@ public class UnitDeadState : UnitBaseState
 {
     public override void OnEnterState()
     {
-        //»ç¸Á Ã³¸®
-        transform.parent.gameObject.SetActive(false);
+        unitAnimator.SetDeath();
+        Invoke("DeadPush", 4f);
     }
 
     public override void OnExitState()
@@ -18,5 +18,11 @@ public class UnitDeadState : UnitBaseState
     public override void UpdateState()
     {
         //DO Nothing
+    }
+
+    public void DeahPush()
+    {
+        PoolManager.Instance.Push(unitController);
+        CancelInvoke();
     }
 }
