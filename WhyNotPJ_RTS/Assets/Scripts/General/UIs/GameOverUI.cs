@@ -18,6 +18,7 @@ public class GameOverUI : MonoBehaviour
 	public void On()
 	{
 		timeText.text = ChangeTime.instance.leftTimetoTextMS;
+		StageManager.instance.NextStage();
 		canvas.enabled = true;
 	}
 	public void Off()
