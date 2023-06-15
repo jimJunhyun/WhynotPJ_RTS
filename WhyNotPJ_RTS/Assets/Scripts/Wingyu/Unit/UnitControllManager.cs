@@ -6,9 +6,9 @@ using System.Linq;
 /// <summary>
 /// 유닛 선택 기능을 테스트하기 위한 유닛 선택 컨트롤 클래스. 추후 개선 필요.
 /// </summary>
-public class UnitSelectManager : MonoBehaviour
+public class UnitControllManager : MonoBehaviour
 {
-	public static UnitSelectManager Instance;
+	public static UnitControllManager Instance;
 
     public	List<ISelectable> unitList;			// 게임상에 존재하는 모든 유닛 리스트
     private List<ISelectable> selectedList;		// 선택된 유닛 리스트

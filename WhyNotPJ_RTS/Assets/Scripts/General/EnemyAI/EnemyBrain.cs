@@ -30,7 +30,7 @@ public class EnemyBrain : MonoBehaviour
 	{
 		if(producable.Count > 0)
 		{
-			if (producer != null && producer.produceQueue.Count == 0)
+			if (producer != null && producer.produceList.Count == 0)
 			{
 				Examine();
 				if (product.element.vio > biasMiddle)

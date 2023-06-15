@@ -14,7 +14,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	private Vector3 end = Vector2.zero;
 
     private Camera mainCam;
-    private UnitSelectManager unitManager;	// ������ ���� & ������ ����ϴ� UnitManager Ŭ����
+    private UnitControllManager unitManager;	// ������ ���� & ������ ����ϴ� UnitManager Ŭ����
 
 	public bool isDraging = false;
 	private bool isUI = false;
@@ -24,7 +24,7 @@ public class ClickAndSelectManager : MonoBehaviour
 		mainCam = Camera.main;
 
 		// ���ָŴ��� ����,, ���� ���� ��ġ ���� �ʿ�
-		unitManager = GetComponent<UnitSelectManager>();
+		unitManager = GetComponent<UnitControllManager>();
 
 		DrawDragRectangle();
 	}
@@ -102,11 +102,11 @@ public class ClickAndSelectManager : MonoBehaviour
 			{
 				if (unit.isPlayer == true)
 				{
-					UnitSelectManager.Instance.ClickSelectUnit(unit);
+					UnitControllManager.Instance.ClickSelectUnit(unit);
 				}
 				else
 				{
-					UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
+					UnitControllManager.Instance.SelectedUnitList.ForEach(selected => {
 						selected.UnitMove.SetTargetPosition(hit.transform);
 						selected.enemy = unit;
 					});
@@ -118,7 +118,7 @@ public class ClickAndSelectManager : MonoBehaviour
 				{
 					return;
 				}
-				UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
+				UnitControllManager.Instance.SelectedUnitList.ForEach(selected => {
 					selected.UnitMove.SetTargetPosition(hit.transform);
 					selected.mainCamp = camp;
 					if (selected.currentState != Core.State.Move)
@@ -128,7 +128,7 @@ public class ClickAndSelectManager : MonoBehaviour
 			}
 			else
 			{
-				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => {
+				UnitControllManager.Instance.SelectedUnitList.ForEach(unit => {
 					unit.UnitMove.SetTargetPosition(hit.point);
 					if (unit.currentState != Core.State.Move)
 						unit.ChangeState(Core.State.Move);
@@ -232,15 +232,15 @@ public class ClickAndSelectManager : MonoBehaviour
 	/// </summary>
 	private void SelectUnits()
 	{
-		UnitSelectManager.Instance.DeselectAll();
-		foreach (UnitController unit in UnitSelectManager.Instance.unitList)
+		UnitControllManager.Instance.DeselectAll();
+		foreach (UnitController unit in UnitControllManager.Instance.unitList)
 		{
 			if (unit.isPlayer == false)
 				continue;
 
 			if (unit.CanDragSelect && dragRect.Contains(mainCam.WorldToScreenPoint(unit.transform.position)))
 			{
-				UnitSelectManager.Instance.DragSelectUnit(unit);
+				UnitControllManager.Instance.DragSelectUnit(unit);
 			}
 		}
 	}
