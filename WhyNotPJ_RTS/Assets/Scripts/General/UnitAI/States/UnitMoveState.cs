@@ -32,13 +32,18 @@ public class UnitMoveState : UnitBaseState
             }*/
         }
 
+        unitMove.NavMeshAgent.updatePosition = true;
+
         unitAnimator.SetIsWalk(true);
+
+        //어디선가 Move State를 계속 부름
     }
 
     public override void OnExitState()
     {
-        unitMove.NavMeshAgent.ResetPath();
-        unitMove.destination = transform.position;
+        unitMove.NavMeshAgent.updatePosition = false;
+        unitMove.NavMeshAgent.velocity = Vector3.zero;
+        
         unitAnimator.SetIsWalk(false);
     }
 
@@ -57,7 +62,7 @@ public class UnitMoveState : UnitBaseState
                     return;
                 }
 
-                if (Vector3.Distance(unitMove.VisualTrm.position, unitController.enemy.transform.position) <= unitController.attackRange)
+                if ((unitController.enemy.transform.position - unitMove.VisualTrm.position).magnitude <= unitController.attackRange)
                 {
                     unitController.ChangeState(State.Attack);
 

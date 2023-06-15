@@ -36,7 +36,7 @@ public class UnitAttackState : UnitBaseState
 
         curAttackCoolTime -= Time.deltaTime;
 
-        if (Vector3.Distance(unitMove.VisualTrm.position, unitController.enemy.transform.position) > unitController.attackRange)
+        if ((unitController.enemy.transform.position - unitMove.VisualTrm.position).magnitude > unitController.attackRange)
         {
             if (unitMove.SetTargetPosition(unitController.enemy.transform))
             {
