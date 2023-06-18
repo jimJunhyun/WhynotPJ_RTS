@@ -7,24 +7,44 @@ public class StageManager : MonoBehaviour
     public static StageManager instance;
 	public int preparedStageCount = 2;
 
+	
 	//도전 가능한 최고 스테이지
-	int curProgressingStage = 1;
+	int curMaxStage = 1;
+	//현재 플레이중인 스테이지
+	int? curProgressingStage = null;
+	public SetStage Stage
+	{
+		get;
+		set;
+	}
 
-	public int progressingStage => curProgressingStage;
+	public int? progressingStage
+	{ 
+		get => curProgressingStage;
+		set => curProgressingStage = value;
+	} 
+	public int maxStage => curMaxStage;
 
 	private void Awake()
 	{
-		instance = this;
-		DontDestroyOnLoad(this);
+		if(instance == null)
+			instance = this;
+			DontDestroyOnLoad(this);
 	}
 
 	public void NextStage()
 	{
-		if(preparedStageCount < curProgressingStage)
+		if(curMaxStage == curProgressingStage && preparedStageCount >= curProgressingStage + 1)
 		{
-
-			curProgressingStage += 1;
+			Debug.Log("NEXTSTAGE");
+			curMaxStage += 1;
 		}
 		
+	}
+
+	public void SetPlayingStage(int s, SetStage stgInfo)
+	{
+		curProgressingStage = s;
+		Stage = stgInfo;
 	}
 }

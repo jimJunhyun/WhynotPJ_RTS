@@ -12,6 +12,8 @@ public class SceneChanger : MonoBehaviour
 
 	public static SceneChanger instance;
 
+	bool processingScene = false;
+
 	private void Awake()
 	{
 		instance = this;
@@ -27,12 +29,14 @@ public class SceneChanger : MonoBehaviour
 		AsyncOperation loading = SceneManager.LoadSceneAsync(idx);
 		//loading.allowSceneActivation = false;
 		loadingScreen.gameObject.SetActive(true);
+		processingScene = true;
 		while (!loading.isDone)
 		{
 			await System.Threading.Tasks.Task.Delay(100);
 			progressBar.value = loading.progress;
 		}
 		await System.Threading.Tasks.Task.Delay(1000);
+		processingScene = false;
 		loadingScreen.gameObject.SetActive(false);
 		//loading.allowSceneActivation = true;
 	}
@@ -41,12 +45,14 @@ public class SceneChanger : MonoBehaviour
 		AsyncOperation loading = SceneManager.LoadSceneAsync(name);
 		//loading.allowSceneActivation = false;
 		loadingScreen.gameObject.SetActive(true);
+		processingScene = true;
 		while (!loading.isDone)
 		{
 			await System.Threading.Tasks.Task.Delay(100);
 			progressBar.value = loading.progress;
 		}
 		await System.Threading.Tasks.Task.Delay(1000);
+		processingScene = false;
 		loadingScreen.gameObject.SetActive(false);
 		//loading.allowSceneActivation = true;
 	}
@@ -62,6 +68,7 @@ public class SceneChanger : MonoBehaviour
 
 	public void SetLoadImage(Sprite img)
 	{
-		mapImg.sprite = img;
+		if(!processingScene)
+			mapImg.sprite = img;
 	}
 }
