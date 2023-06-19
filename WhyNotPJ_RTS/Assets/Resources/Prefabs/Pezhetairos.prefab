@@ -113,11 +113,11 @@ MonoBehaviour:
   m_isPlayer: 0
   attackPower: 60
   attackSpeed: 1.25
-  attackRange: 16
+  attackRange: 8
   defensePenetration: 30
   m_healthPoint: 300
   defensePower: 80
-  moveSpeed: 0.8
+  moveSpeed: 1
   detectRange: 20
   currentState: 0
   whatIsMainCamp:

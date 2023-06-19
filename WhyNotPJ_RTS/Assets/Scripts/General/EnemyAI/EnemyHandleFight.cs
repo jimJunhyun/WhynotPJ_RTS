@@ -35,12 +35,13 @@ public class EnemyHandleFight : MonoBehaviour
 
 	private void Awake()
 	{
-		prevFight = EnemyBrain.instance.ongoingFights;
+		
 	}
 
 	private void Start()
 	{
-		EnemyBrain.instance.AddFightUpdate(UpdateFightStatus);
+        prevFight = EnemyBrain.instance.ongoingFights;
+        EnemyBrain.instance.AddFightUpdate(UpdateFightStatus);
 	}
 
 	public void UpdateFightStatus()
