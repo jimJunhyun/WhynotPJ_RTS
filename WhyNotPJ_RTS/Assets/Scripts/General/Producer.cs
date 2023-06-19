@@ -7,6 +7,8 @@ public class Producer : MonoBehaviour
 	public bool isProducing = false;
 	public bool pSide = false;
 
+	public float speedTmp = 10;
+
 	public Queue<IProducable> produceQueue = new Queue<IProducable>();
 
 	private float produceTime;
@@ -22,7 +24,7 @@ public class Producer : MonoBehaviour
 
 	private void Processing()
 	{
-		produceTime += Time.deltaTime;
+		produceTime += Time.deltaTime * speedTmp;
 		progress = produceTime / item.produceTime;
 
 		if (produceTime >= item.produceTime)
@@ -65,7 +67,7 @@ public class Producer : MonoBehaviour
 		}
 		else
 		{
-			EnemyPosGen.instance.myControls.Add(c);
+			EnemyPosGen.instance.myControls.Add(new UnitManageData(c, true));
 		}
 
 		

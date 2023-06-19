@@ -9,10 +9,23 @@ public enum Result
     EnemyWin,
 }
 
+public enum Tactics
+{
+    None = -1,
+    AllOut,
+    HammerNAnvil,
+    Blitzkrieg,
+    XXXXXXXXXX,
+    Defend,
+    Guerilla,
+    Encumber,
+    Feint, 
+    Random
+}
+
 /// <summary>
 /// 전투 데이터를 담는 클래스
 /// 
-/// 발생할 전투를 예상하는 데에 사용된다.
 /// 적군에게만 쓰이도록 할 예정.
 /// 플레이어에게 정보 제공하는데도 쓸 수 있겠지만, 수정이 필요함.
 /// </summary>
@@ -20,15 +33,22 @@ public class Fight
 {
     const float NEARPOINTSTANDARD = 20f;
 
-    public List<UnitController> engagedPlayerUnits;
-    public List<UnitController> engagedAIUnits;
+    public List<UnitManageData> engagedPlayerUnits;
+    public List<UnitManageData> engagedAIUnits;
 
     public float pCostEstime;
     public float eCostEstime;
-
+    
     public Vector3 predictedPos;
 
-    float err = 5f;
+    public Tactics useTactic;
+
+    public bool IsInvalidFight
+	{
+        get => engagedAIUnits.Count == 0 || engagedPlayerUnits.Count == 0;
+	}
+
+    float err = 10f;
 
     public Result ResultEstimate()
 	{
@@ -39,8 +59,7 @@ public class Fight
     /// 생성자.
     /// </summary>
     /// <param name="predPos">
-    /// 전투가 벌어질 것 같은 곳.
-    /// 양 측 진행 방향의 사이 지점같은 느낌
+    /// 전투가 벌어진 곳. 최초 타격 지점임
     /// </param>
     /// <param name="pUnits">
     /// 플레이어 유닛 목록.
@@ -50,31 +69,27 @@ public class Fight
     /// AI 유닛 목록, accumulatedUnit --> myContorl로 옮길 때 담고 넣어줄 수 있음.
     /// 안넣으면 그냥 근처 유닛
     /// </param>
-    /// <param name="possiblity">
-    /// 실제 전투가 일어날 가능성이 있는지
-    /// true면 충돌이 예상되는거고
-    /// 아니면 한 측이 없어서 별거없는 사건
-    /// </param>
-    public Fight(Vector3 predPos, out bool possiblity, List<UnitController> pUnits = null, List<UnitController> aiUnits = null)
+    public Fight(Vector3 predPos, List<UnitManageData> pUnits = null, List<UnitManageData> aiUnits = null)
 	{
         predictedPos = predPos;
-        possiblity = true;
 
         Collider[] c=  Physics.OverlapSphere(predictedPos, NEARPOINTSTANDARD, 1 << 12); //UnitLayer const 로 하나 해서 넣기.
 
         engagedAIUnits = aiUnits;
         engagedPlayerUnits = pUnits;
 
+        useTactic = Tactics.None;
+
         if(engagedAIUnits == null)
 		{
-            engagedAIUnits = new List<UnitController>();
+            engagedAIUnits = new List<UnitManageData>();
             for (int i = 0; i < c.Length; i++)
             {
                 UnitController unitCont;
                 if (unitCont = c[i].GetComponent<UnitController>())
                 {
                     if (!unitCont.isPlayer)
-                        engagedAIUnits.Add(unitCont);
+                        engagedAIUnits.Add(new UnitManageData(unitCont, false));
 
                 }
             }
@@ -82,29 +97,26 @@ public class Fight
 
         if (engagedPlayerUnits == null)
         {
-            engagedPlayerUnits = new List<UnitController>();
+            engagedPlayerUnits = new List<UnitManageData>();
             for (int i = 0; i < c.Length; i++)
             {
                 UnitController unitCont;
                 if (unitCont = c[i].GetComponent<UnitController>())
                 {
                     if (unitCont.isPlayer && unitCont.isSeen())
-                        engagedPlayerUnits.Add(unitCont);
+                        engagedPlayerUnits.Add(new UnitManageData(unitCont, false));
 
                 }
             }
         }
 
-       if(engagedAIUnits == null || engagedPlayerUnits == null || engagedAIUnits.Count == 0 || engagedPlayerUnits.Count == 0)
-            possiblity = false;
-
         for (int i = 0; i < engagedAIUnits.Count; ++i)
 		{
-            eCostEstime += engagedAIUnits[i].produceTime;
+            eCostEstime += engagedAIUnits[i].con.produceTime;
 		}
         for (int i = 0; i < engagedPlayerUnits.Count; ++i)
         {
-            pCostEstime += engagedPlayerUnits[i].produceTime;
+            pCostEstime += engagedPlayerUnits[i].con.produceTime;
         }
     }
 }

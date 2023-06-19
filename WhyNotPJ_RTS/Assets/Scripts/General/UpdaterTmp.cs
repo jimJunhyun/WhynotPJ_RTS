@@ -15,12 +15,24 @@ public class UpdaterTmp : MonoBehaviour
 
 	private void Start()
 	{
-		PlayerEye.instance.perceived.AddOnUpd(prevPos, 10);
+		Vector3Int vec = Perceive.PosToIdxVector(transform.position);
+		prevPos = vec;
+		if (unit.isPlayer)
+		{
+			PlayerEye.instance.perceived.AddOffUpd(prevPos, 10);
+			
+			PlayerEye.instance.perceived.AddOnUpd(prevPos, 10);
+		}
+		else
+		{
+			EnemyEye.instance.perceived.AddOnUpd(prevPos, 10);
+		}
+
 	}
 	void Update()
     {
-		Vector3Int vec =  Perceive.PosToIdxVector(transform.position);
-        if(Mathf.Abs(prevPos.x - vec.x )> 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
+		Vector3Int vec = Perceive.PosToIdxVector(transform.position);
+		if (Mathf.Abs(prevPos.x - vec.x) > 1 || Mathf.Abs(prevPos.y - vec.y) > 1)
 		{
 			if (unit.isPlayer)
 			{
@@ -33,12 +45,11 @@ public class UpdaterTmp : MonoBehaviour
 			{
 				prevPos = vec;
 				EnemyEye.instance.perceived.AddOnUpd(prevPos, 10);
-				//Debug.Log($"적 시야 새로고침됨. {prevPos}");
 			}
-			
-			
+
+
 		}
-    }
+	}
 
 	
 }
