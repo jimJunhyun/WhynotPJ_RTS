@@ -224,12 +224,12 @@ MonoBehaviour:
   m_isPlayer: 0
   attackPower: 28
   attackSpeed: 1
-  attackRange: 1
+  attackRange: 4
   defensePenetration: 10
   m_healthPoint: 100
   defensePower: 30
   moveSpeed: 2
-  detectRange: 5
+  detectRange: 20
   currentState: 0
   whatIsMainCamp:
     serializedVersion: 2
