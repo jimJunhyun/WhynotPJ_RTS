@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: d7ed0583a2a352a45af1dd7a75dc7c7b
   - enabled: 1
-    path: Assets/Scenes/Play.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
     path: Assets/Scenes/StageSelection.unity
     guid: e3fbc5a62bb83e848827ab273ea7f3e8
+  - enabled: 1
+    path: Assets/Scenes/WiIngyu.unity
+    guid: 19bab7d4ca1054845bfa1876edc16689
   m_configObjects: {}
