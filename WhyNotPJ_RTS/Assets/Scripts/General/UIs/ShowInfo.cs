@@ -9,6 +9,7 @@ public class ShowInfo : MonoBehaviour
 {
 	public List<SetStage> stages;
     SetStage stage;
+	public SetStage Stage => stage;
 
 	TextMeshProUGUI stageName;
 	Image mapImg;
@@ -16,6 +17,8 @@ public class ShowInfo : MonoBehaviour
 
 	List<Image> visuals = new List<Image>();
 	List<TextMeshProUGUI> txts = new List<TextMeshProUGUI>();
+
+	int curSel = 1;
 
 	private void Awake()
 	{
@@ -25,7 +28,7 @@ public class ShowInfo : MonoBehaviour
 		GetComponentsInChildren(visuals);
 		GetComponentsInChildren(txts);
 		
-		SetInfo(1);
+		SetInfo(StageManager.instance.progressingStage == null || StageManager.instance.progressingStage == 0 ? 1 : (int)StageManager.instance.progressingStage);
 		Debug.Log("Loaded");
 	}
 
@@ -60,6 +63,8 @@ public class ShowInfo : MonoBehaviour
 		
 		detailInfo.text = stage.additionalInfo;
 		SceneChanger.instance.SetLoadImage(stage.image);
+		ShowButtons.instance.SetSelected(order, stage);
+		curSel = order;
 		On();
 	}
 
@@ -67,6 +72,7 @@ public class ShowInfo : MonoBehaviour
 	{
 		if(stage == null)
 			return;
+		StageManager.instance.SetPlayingStage(curSel, stage);
 		SceneChanger.instance.Change(stage.sceneName);
 	}
 }
