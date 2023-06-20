@@ -21,6 +21,7 @@ public class UnitMove : MonoBehaviour
 
     public bool SetTargetPosition(Vector3 pos)
     {
+        Debug.Log(navMeshAgent.name + " " + navMeshAgent.isOnNavMesh);
         if (navMeshAgent.CalculatePath(pos, new NavMeshPath()))
         {
             navMeshAgent.ResetPath();
@@ -38,6 +39,7 @@ public class UnitMove : MonoBehaviour
     {
         NavMeshHit hit;
         NavMesh.SamplePosition(target.position, out hit, 10f, NavMesh.AllAreas);
+        
         if (navMeshAgent.CalculatePath(hit.position, new NavMeshPath()))
         {
             navMeshAgent.ResetPath();
