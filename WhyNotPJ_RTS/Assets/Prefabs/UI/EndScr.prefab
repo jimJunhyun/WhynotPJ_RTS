@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 8063673896671270421}
   - component: {fileID: 8063673896671270422}
   m_Layer: 5
-  m_Name: TimeText
+  m_Name: ResultTimeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
