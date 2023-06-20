@@ -88,7 +88,7 @@ public class ClickAndSelectManager : MonoBehaviour
 		Ray ray = mainCam.ScreenPointToRay(screenPos);
 		if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 300f))
 		{
-			if (hit.transform.TryGetComponent(out UnitController unit))
+			if (hit.transform != null && hit.transform.TryGetComponent(out UnitController unit))
 			{
 				if (unit.isPlayer == true)
 				{

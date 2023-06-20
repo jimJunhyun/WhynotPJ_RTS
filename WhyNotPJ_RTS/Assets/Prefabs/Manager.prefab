@@ -117,4 +117,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   dragRectangle: {fileID: 0}
+  debug1: {fileID: 0}
+  debug2: {fileID: 0}
   isDraging: 0
