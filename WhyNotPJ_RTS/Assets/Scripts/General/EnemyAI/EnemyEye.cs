@@ -28,7 +28,7 @@ public class EnemyEye : MonoBehaviour
 		if(!ListComparison<UnitController>(foundUnits, perceived.founds, out Vector3? p))
 		{
 			foundUnits = perceived.founds;
-			EnemyBrain.instance.ReactTo(foundUnits, p);
+			//EnemyBrain.instance.ReactTo(foundUnits, p);
 		}
 	}
 	public static bool ListComparison<T>(List<T> left, List<T> right)

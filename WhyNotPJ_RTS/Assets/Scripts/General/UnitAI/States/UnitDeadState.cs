@@ -7,6 +7,7 @@ public class UnitDeadState : UnitBaseState
     public override void OnEnterState()
     {
         unitAnimator.SetDeath();
+        unitMove.NavMeshAgent.ResetPath();
         Invoke("DeadPush", 4f);
     }
 
@@ -20,9 +21,8 @@ public class UnitDeadState : UnitBaseState
         //DO Nothing
     }
 
-    public void DeahPush()
+    public void DeadPush()
     {
         PoolManager.Instance.Push(unitController);
-        CancelInvoke();
     }
 }

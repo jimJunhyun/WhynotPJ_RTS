@@ -122,15 +122,15 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         }
 
 #if UNITY_EDITOR
-		//if (Input.GetMouseButtonDown(0))
-		//{
-  //          if(!isPlayer)
-  //              return;
-		//	if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-		//	{
-		//		unitMove.SetTargetPosition(hit.point);
-		//	}
-		//}
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //          if(!isPlayer)
+        //              return;
+        //	if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        //	{
+        //		unitMove.SetTargetPosition(hit.point);
+        //	}
+        //}
 #endif
 
 		currentStateScript.UpdateState();
@@ -180,5 +180,33 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 		{
             return PlayerEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
         }
-	}
+    }
+
+    public void InitTarget()
+    {
+        mainCamp = null;
+        enemy = null;
+        construction = null;
+    }
+
+    public void InitTarget(MainCamp mainCamp)
+    {
+        this.mainCamp = mainCamp;
+        enemy = null;
+        construction = null;
+    }
+
+    public void InitTarget(UnitController enemy)
+    {
+        mainCamp = null;
+        this.enemy = enemy;
+        construction = null;
+    }
+
+    public void InitTarget(GroundBreak construction)
+    {
+        mainCamp = null;
+        enemy = null;
+        this.construction = construction;
+    }
 }
