@@ -19,6 +19,11 @@ public class UnitVisuals : MonoBehaviour
 	private void Start()
 	{
 		curSeenState = unitCtrl.isSeen();
+		if (!unitCtrl.isPlayer)
+		{
+
+			visual.SetActive(curSeenState);
+		}
 	}
 
 	private void Update()

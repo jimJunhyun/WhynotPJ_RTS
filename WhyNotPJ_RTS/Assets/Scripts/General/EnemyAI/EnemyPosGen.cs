@@ -164,7 +164,7 @@ public class EnemyPosGen : MonoBehaviour
 
 	public void FindPlaying()
 	{
-		if (EnemyBrain.instance.playerBase != null && accumulations.Count >= EnemyBrain.instance.set.adequateSoldier)
+		if (EnemyEye.instance.foundBase && accumulations.Count >= EnemyBrain.instance.set.adequateSoldier)
 		{
 			WholeAttack(); //반 임시
 		}

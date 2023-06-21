@@ -69,6 +69,7 @@ public class Producer : MonoBehaviour
 		isProducing = false;
 		produceList.Add(item);
 	}
+	public System.Action OnProducedUnit;
 
 	private void Update()
 	{
@@ -107,6 +108,7 @@ public class Producer : MonoBehaviour
 		if (pSide)
 		{
 			UnitSelectManager.Instance.unitList.Add(unit);
+			OnProducedUnit.Invoke();
 		}
 		else
 		{
