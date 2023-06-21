@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,6 +10,8 @@ public class ChangeTime : MonoBehaviour
 	public static ChangeTime instance;
 
     public int maxMinute;
+
+	public UnityEvent onTimeLimit;
 
 	TextMeshProUGUI timeText;
 
@@ -47,7 +50,7 @@ public class ChangeTime : MonoBehaviour
 			if(prevTime <= 0.0f)
 			{
 				Time.timeScale = 0f;
-				Debug.Log("³¡");
+				onTimeLimit?.Invoke();
 			}
 		}
 	}

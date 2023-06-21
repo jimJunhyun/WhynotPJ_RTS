@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MainCamp : MonoBehaviour, IProducable
 {
@@ -27,6 +28,8 @@ public class MainCamp : MonoBehaviour, IProducable
 
 	public float currentHealth = 100;
 
+    public UnityEvent OnDestroyed;
+
     public void OnHit(UnitController attacker)
 	{
         currentHealth -= attacker.attackPower * (1f - (0 - attacker.defensePenetration) / (0 - attacker.defensePenetration + 100f));
@@ -34,6 +37,7 @@ public class MainCamp : MonoBehaviour, IProducable
         if (currentHealth <= 0f)
         {
             currentHealth = 0f;
+            OnDestroyed?.Invoke();
         }
     }
 }

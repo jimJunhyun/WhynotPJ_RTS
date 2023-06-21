@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProducingUnit
 {
@@ -69,7 +70,7 @@ public class Producer : MonoBehaviour
 		isProducing = false;
 		produceList.Add(item);
 	}
-	public System.Action OnProducedUnit;
+	public UnityAction OnProducedUnit;
 
 	private void Update()
 	{
