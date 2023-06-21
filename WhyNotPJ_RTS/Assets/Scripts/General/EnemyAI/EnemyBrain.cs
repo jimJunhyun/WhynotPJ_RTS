@@ -37,6 +37,7 @@ public class EnemyBrain : MonoBehaviour
 	{
 		if(producable.Count > 0)
 		{
+			//Debug.Log("DEcidine");
 			if (producer != null && !producer.isProducing)
 			{
 				Examine();
