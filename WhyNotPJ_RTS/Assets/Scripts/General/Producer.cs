@@ -108,7 +108,7 @@ public class Producer : MonoBehaviour
 		if (pSide)
 		{
 			UnitSelectManager.Instance.unitList.Add(unit);
-			OnProducedUnit.Invoke();
+			OnProducedUnit?.Invoke();
 		}
 		else
 		{
