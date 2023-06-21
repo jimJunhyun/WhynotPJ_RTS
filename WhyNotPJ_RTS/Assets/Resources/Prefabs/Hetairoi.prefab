@@ -389,6 +389,7 @@ MonoBehaviour:
   def: 5
   rec: 2
   m_isPlayer: 0
+  m_image: {fileID: 21300000, guid: b93d713194521a442bab9e1b5663e3fc, type: 3}
   attackPower: 80
   attackSpeed: 1.4
   attackRange: 8
@@ -448,7 +449,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5e4c8bf5287e549bba645ad082342e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {x: 0, y: 0, z: 0}
 --- !u!1 &1815088460249786162
 GameObject:
   m_ObjectHideFlags: 0

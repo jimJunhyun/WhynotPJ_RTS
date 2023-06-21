@@ -37,6 +37,7 @@ public class UnitProduceButton : PoolableMono
 		nameText.text = unit.name;
 		this.producer = producer;
 		button.onClick.AddListener(ProduceUnit);
+		image.sprite = nextUnit.image;
 	}
 
 	public void SetData(Buildables buildable, ConstructBuild construct)

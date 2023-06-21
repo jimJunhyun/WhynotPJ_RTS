@@ -15,6 +15,8 @@ public class MainCamp : MonoBehaviour, IProducable
 
     public GameObject prefab => gameObject;
 
+	public Sprite image => null;
+
     public bool playerSide;
     public bool isPlayer
     {
@@ -22,7 +24,8 @@ public class MainCamp : MonoBehaviour, IProducable
         set => isPlayer = true;
     }
     public float healthPoint => 0f;
-    public float currentHealth = 100;
+
+	public float currentHealth = 100;
 
     public void OnHit(UnitController attacker)
 	{

@@ -17,12 +17,15 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 
     [SerializeField]
     private bool m_isPlayer;
+    [SerializeField]
+    private Sprite m_image;
 
     public string myName => m_myName;
     public float produceTime => m_produceTime;
     public Element element => new Element(vio, def, rec);
     public Action onCompleted => m_onCompleted;
 	public GameObject prefab => gameObject;
+	public Sprite image => m_image;
 
     public bool isPlayer
 	{

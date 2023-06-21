@@ -228,6 +228,38 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 82bc7cbbb357a884da63b4d869e1dd30, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e66c5503d351544bbe0211a235414ac, type: 3}
+--- !u!1 &60334041 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1604167177612152515, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
+  m_PrefabInstance: {fileID: 203198388}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &60334046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60334041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecd50b962afc614ba51801c1f8110a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSide: 0
+  currentHealth: 100
+--- !u!65 &60334047
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60334041}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0629316, y: 0.059306968, z: 0.03622655}
+  m_Center: {x: 0.000000010759379, y: 0.0086369775, z: -0.0046194945}
 --- !u!1 &115380348
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,6 +312,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1734075104, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
+      propertyPath: m_Shape
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1734075104, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1734075104, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
+      propertyPath: m_Center.y
+      value: 0.026
+      objectReference: {fileID: 0}
+    - target: {fileID: 1734075104, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
+      propertyPath: m_Extents.y
+      value: 0.015
+      objectReference: {fileID: 0}
     - target: {fileID: 3794670101295254557, guid: ce9b11d5467810645b1c1dbf206b3d42, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -740,7 +788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7048583047199597966, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -46.99994
+      value: -47
       objectReference: {fileID: 0}
     - target: {fileID: 8133593117626488541, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1167,7 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 2012424276}
-  movementMultiply: 0.08
+  movementMultiply: 0.19
   movementTime: 0.3
   zoomTime: 0.05
   zoomSensitive: 5

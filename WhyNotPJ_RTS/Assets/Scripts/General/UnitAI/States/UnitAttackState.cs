@@ -27,7 +27,7 @@ public class UnitAttackState : UnitBaseState
             return;
         }
 
-        if (unitController.enemy.currentState == State.Dead)
+        else if (unitController.enemy?.currentState == State.Dead)
         {
             unitController.ChangeState(State.Alert);
 
@@ -36,7 +36,7 @@ public class UnitAttackState : UnitBaseState
 
         curAttackCoolTime -= Time.deltaTime;
 
-        if ((unitController.enemy.transform.position - unitMove.VisualTrm.position).magnitude > unitController.attackRange)
+        if (unitController.enemy != null && (unitController.enemy.transform.position - unitMove.VisualTrm.position).magnitude > unitController.attackRange)
         {
             if (unitMove.SetTargetPosition(unitController.enemy.transform))
             {
@@ -56,7 +56,8 @@ public class UnitAttackState : UnitBaseState
 
     public void OnAttackHandle()
     {
-        unitController.enemy.CurrentStateScript.OnHit(unitController);
+        unitController.enemy?.CurrentStateScript.OnHit(unitController);
+        unitController.mainCamp?.OnHit(unitController);
     }
 
     public void AttackEndHandle()
