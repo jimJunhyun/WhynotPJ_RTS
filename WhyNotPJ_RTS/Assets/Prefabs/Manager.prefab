@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 698971952}
   - component: {fileID: 698971953}
   - component: {fileID: 7686076959578444777}
+  - component: {fileID: 1489376606}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -124,6 +125,18 @@ MonoBehaviour:
   dragRectangle: {fileID: 0}
   isDraging: 0
 --- !u!114 &7686076959578444777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848127466192260183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0cb51d942c6fc45b944ec27f17c7ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1489376606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
