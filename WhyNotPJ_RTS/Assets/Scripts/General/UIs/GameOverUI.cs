@@ -39,9 +39,9 @@ public class GameOverUI : MonoBehaviour
 		Off();
 	}
 
-	public void On(OverMessage message)
+	public void On(int message)
 	{
-		if (message == OverMessage.Clear)
+		if (message == ((int)OverMessage.Clear))
 		{
 			timeText.text = ChangeTime.instance.leftTimetoTextMS;
 			string str = StageManager.instance.Stage.additionalInfo;
@@ -56,10 +56,10 @@ public class GameOverUI : MonoBehaviour
 			string str = "";
 			switch (message)
 			{
-				case OverMessage.TimeOver:
+				case ((int)OverMessage.TimeOver):
 					str = "시간 초과";
 					break;
-				case OverMessage.Defeat:
+				case ((int)OverMessage.Defeat):
 					str = "본진 파괴";
 					break;
 				default:

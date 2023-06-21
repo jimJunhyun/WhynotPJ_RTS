@@ -5,11 +5,14 @@ using TMPro;
 
 public class UnitCounter : MonoBehaviour
 {
+	public static UnitCounter instance;
+
 	TextMeshProUGUI unitCountTxt;
     int unitNum = 0;
 
 	private void Awake()
 	{
+		instance = this;
 		unitCountTxt = GameObject.Find("UnitCountTxt").GetComponent<TextMeshProUGUI>();
 		unitCountTxt.text = unitNum.ToString();
 	}

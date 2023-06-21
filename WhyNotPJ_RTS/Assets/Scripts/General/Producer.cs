@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProducingUnit
 {
@@ -26,6 +27,7 @@ public class Producer : MonoBehaviour
 	private float produceTime; //생산 시간
 	private float progress; //생산 진행도
 	public float Progress => progress;
+
 
 	// 유닛을 생산 리스트에 추가
 	public void AddProduct(IProducable pro, UnitProduceButton produceBtn = null)
@@ -69,7 +71,7 @@ public class Producer : MonoBehaviour
 		isProducing = false;
 		produceList.Add(item);
 	}
-	public System.Action OnProducedUnit;
+	
 
 	private void Update()
 	{
@@ -108,7 +110,7 @@ public class Producer : MonoBehaviour
 		if (pSide)
 		{
 			UnitSelectManager.Instance.unitList.Add(unit);
-			OnProducedUnit?.Invoke();
+			UnitCounter.instance.AddUnit();
 		}
 		else
 		{
