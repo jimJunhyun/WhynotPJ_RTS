@@ -53,7 +53,18 @@ public class UnitMoveState : UnitBaseState
 
         if (unitMove.IsAttack)
         {
-            if (unitController.enemy != null)
+            if (unitController.mainCamp != null)
+            {
+                if (Vector3.Distance(unitMove.VisualTrm.position, unitController.mainCamp.transform.position) <= unitController.attackRange)
+                {
+                    unitController.ChangeState(State.Attack);
+
+                    return;
+                }
+
+                return;
+            }
+            else if (unitController.enemy != null)
             {
                 if (unitController.enemy.currentState == State.Dead)
                 {

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum Buildables
 {
@@ -39,26 +40,16 @@ public class ConstructBuild : MonoBehaviour
 	Vector3 ePos;
 	bool valid = false;
 
+	public UnityEvent OnStartConstruction = null;
+
 	private void Awake()
 	{
 		instance = this;
 	}
 
-	private void Start()
-	{
-		//Construct(Buildables.Wall);
-	}
-
-	private void LateUpdate()
-	{
-		if (Input.GetMouseButtonDown(1))
-		{
-			StartCoroutine(BuildInp(Buildables.Wall));
-		}
-	}
-
 	public IEnumerator BuildInp(Buildables t)
 	{
+		OnStartConstruction?.Invoke();
 
 		valid = false;
 		yield return StartCoroutine(DelayGetInput((vec, b) => {

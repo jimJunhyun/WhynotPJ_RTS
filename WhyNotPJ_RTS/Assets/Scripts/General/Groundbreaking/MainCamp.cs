@@ -15,10 +15,22 @@ public class MainCamp : MonoBehaviour, IProducable
 
     public GameObject prefab => gameObject;
 
+    public bool playerSide;
     public bool isPlayer
     {
-        get => true;
+        get => playerSide;
         set => isPlayer = true;
     }
     public float healthPoint => 0f;
+    public float currentHealth = 100;
+
+    public void OnHit(UnitController attacker)
+	{
+        currentHealth -= attacker.attackPower * (1f - (0 - attacker.defensePenetration) / (0 - attacker.defensePenetration + 100f));
+
+        if (currentHealth <= 0f)
+        {
+            currentHealth = 0f;
+        }
+    }
 }

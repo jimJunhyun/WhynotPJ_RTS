@@ -13,23 +13,23 @@ public class UnitAlertState : UnitBaseState
         unitController.InitTarget();
         unitMove.NavMeshAgent.ResetPath();
 
-        //��� �� ���� ����
-        /*if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
-        {
-            
-            if (unitMove.SetTargetPosition(hitInfo.transform))
-            {
-                unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
-                unitController.enemy = null;
-                unitController.construction = null;
+		//��� �� ���� ����
+		if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
+		{
 
-                unitController.ChangeState(State.Move);
+			if (unitMove.SetTargetPosition(hitInfo.transform))
+			{
+				unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
+				unitController.enemy = null;
+				unitController.construction = null;
 
-                return;
-            }
-        }*/
+				unitController.ChangeState(State.Move);
 
-        opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
+				return;
+			}
+		}
+
+		opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
         closestDis = unitController.detectRange;
 
         foreach (Collider op in opponents)

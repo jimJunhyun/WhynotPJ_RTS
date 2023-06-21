@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum CameraState
 {
@@ -44,6 +45,7 @@ public class CameraController : MonoBehaviour
 	public Vector3 targetZoomPosition;
 
 	private Plane plane;
+	private bool isUI = false;
 
 	private LayerMask groundLayer;
 
@@ -88,7 +90,14 @@ public class CameraController : MonoBehaviour
 		if (Input.touchCount == 1)
 		{
 			delta1 = PlanePositionDelta(Input.GetTouch(0));
-			if (Input.GetTouch(0).phase == TouchPhase.Moved)
+
+			if (Input.GetTouch(0).phase == TouchPhase.Began)
+			{
+				if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+					isUI = true;
+			}
+
+			if (Input.GetTouch(0).phase == TouchPhase.Moved && !isUI)
 			{
 				RaycastHit hit;
 				Physics.Raycast(transform.position + new Vector3(0, 100, 0), Vector3.down, out hit, 110f, 1 << groundLayer);
@@ -99,6 +108,9 @@ public class CameraController : MonoBehaviour
 				targetPosition += delta1 * movementMultiply;
 				camState = CameraState.MOVING;
 			}
+
+			if (Input.GetTouch(0).phase == TouchPhase.Ended)
+				isUI = false;
 		}
 
 		//목표값 설정

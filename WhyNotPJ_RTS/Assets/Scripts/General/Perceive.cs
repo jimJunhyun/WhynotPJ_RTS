@@ -112,7 +112,7 @@ public class Perceive
 			}
 			else
 			{
-				return UnitSelectManager.Instance.unitList.Cast<UnitController>().ToList().FindAll(x=>x.isSeen());
+				return UnitControllManager.Instance.unitList.Cast<UnitController>().ToList().FindAll(x=>x.isSeen());
 			}
 		}
 	}
