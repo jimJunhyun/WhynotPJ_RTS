@@ -89,7 +89,7 @@ public class UnitListUI : MonoBehaviour
 
     public void ShowUnitInfo()
 	{
-        int count = UnitControllManager.Instance.SelectedUnitList.Count;
+        int count = UnitSelectManager.Instance.SelectedUnitList.Count;
         uiParent.gameObject.SetActive(true);
 
         foreach (UnitInfoUI ui in unitCardList)
@@ -103,7 +103,7 @@ public class UnitListUI : MonoBehaviour
         for (int i = 0; i < count; i++)
 		{
             unitCardList[i].prefab.gameObject.SetActive(true);
-            unitCardList[i].text.text = UnitControllManager.Instance.SelectedUnitList[i]?.gameObject.name;
+            unitCardList[i].text.text = UnitSelectManager.Instance.SelectedUnitList[i]?.gameObject.name;
             unitCardList[i].image.sprite = image;
         }
 	}
@@ -125,7 +125,7 @@ public class UnitListUI : MonoBehaviour
     {
         GameObject obj = null;
 
-        foreach (UnitController item in UnitControllManager.Instance.SelectedUnitList)
+        foreach (UnitController item in UnitSelectManager.Instance.SelectedUnitList)
         {
             selectedList.Add(item);
         }

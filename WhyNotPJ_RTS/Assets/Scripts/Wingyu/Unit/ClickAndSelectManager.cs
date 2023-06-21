@@ -6,9 +6,6 @@ public class ClickAndSelectManager : MonoBehaviour
     [SerializeField] private LayerMask unitLayer;
 	[SerializeField] private RectTransform dragRectangle;	// ���콺�� �巡���� ������ ����ȭ�ϴ� Image UI�� RectTransform
 
-	public RectTransform debug1;
-	public RectTransform debug2;
-
 	private Rect dragRect;
 	private Vector3 start = Vector2.zero;
 	private Vector3 end = Vector2.zero;

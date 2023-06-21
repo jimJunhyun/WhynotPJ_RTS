@@ -106,7 +106,7 @@ public class Producer : MonoBehaviour
 		unit.isPlayer = pSide;
 		if (pSide)
 		{
-			UnitControllManager.Instance.unitList.Add(unit);
+			UnitSelectManager.Instance.unitList.Add(unit);
 		}
 		else
 		{
