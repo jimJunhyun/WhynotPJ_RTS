@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5848127466192260180}
   - component: {fileID: 698971952}
   - component: {fileID: 698971953}
-  - component: {fileID: 1767549420}
+  - component: {fileID: 7686076959578444777}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -65,6 +65,9 @@ MonoBehaviour:
   bridgeYErr: 2
   bridge: {fileID: 9069388623709111244, guid: 3d0b797aab24afe438110a3b26834351, type: 3}
   wall: {fileID: -2009880267833801732, guid: 27756deaaf6e18d49ac2a39116febdd3, type: 3}
+  OnStartConstruction:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5848127466192260181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,10 +122,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   dragRectangle: {fileID: 0}
-  debug1: {fileID: 0}
-  debug2: {fileID: 0}
   isDraging: 0
---- !u!114 &1767549420
+--- !u!114 &7686076959578444777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,6 +132,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5848127466192260183}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc0757d6daf2cb64c9268ba477def2dd, type: 3}
+  m_Script: {fileID: 11500000, guid: af0cb51d942c6fc45b944ec27f17c7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
