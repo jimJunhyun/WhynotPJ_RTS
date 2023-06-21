@@ -132,6 +132,10 @@ MonoBehaviour:
   mainCamp: {fileID: 0}
   enemy: {fileID: 0}
   construction: {fileID: 0}
+  teamMat:
+  - {fileID: 2100000, guid: 16ca4ff526c0cc24d8f0ab7828ff92ed, type: 2}
+  - {fileID: 2100000, guid: 35513373f8f8d5f45925ea0aa244186f, type: 2}
+  helmetRenderer: {fileID: 483539342204341957}
   marker: {fileID: 7018425977733575338}
   isSelect: 0
 --- !u!114 &9071063491879834429
@@ -507,6 +511,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1072e0dd6c6f4fc43a87888f7ceb8164, type: 3}
+--- !u!23 &483539342204341957 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 1072e0dd6c6f4fc43a87888f7ceb8164, type: 3}
+  m_PrefabInstance: {fileID: 1257759773322285633}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1942053442214245090
 PrefabInstance:
   m_ObjectHideFlags: 0
