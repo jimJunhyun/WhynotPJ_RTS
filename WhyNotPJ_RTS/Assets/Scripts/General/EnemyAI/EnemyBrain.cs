@@ -37,7 +37,8 @@ public class EnemyBrain : MonoBehaviour
 	{
 		if(producable.Count > 0)
 		{
-			if (producer != null && producer.produceList.Count == 0)
+			//Debug.Log("DEcidine");
+			if (producer != null && !producer.isProducing)
 			{
 				Examine();
 				if (product.element.vio > biasMiddle)

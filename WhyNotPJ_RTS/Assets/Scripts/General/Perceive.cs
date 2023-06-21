@@ -88,7 +88,7 @@ public struct MapUpdateBhv
 
 public class Perceive
 {
-	public const int HEIGHTTHRESHOLD = 2;
+	public const int HEIGHTTHRESHOLD = 5;
 
 	public const int MAPX = 200;
 	public const int MAPY = 200;
