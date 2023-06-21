@@ -22,11 +22,16 @@ public class EnemyEye : MonoBehaviour
 		instance = this;
 
 		perceived.ResetMap(false);
-		pBaseIdx = Perceive.PosToIdxVector(EnemyBrain.instance.playerBase.position);
+		
 		
 		//perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
 	}
-	
+
+	private void Start()
+	{
+		pBaseIdx = Perceive.PosToIdxVector(EnemyBrain.instance.playerBase.position);
+	}
+
 	private void LateUpdate()
 	{
 		perceived.UpdateMap();
@@ -40,7 +45,7 @@ public class EnemyEye : MonoBehaviour
 		if(!ListComparison<UnitController>(foundUnits, perceived.founds, out Vector3? p))
 		{
 			foundUnits = perceived.founds;
-			EnemyBrain.instance.ReactTo(foundUnits, p);
+			//EnemyBrain.instance.ReactTo(foundUnits, p);
 		}
 	}
 	public static bool ListComparison<T>(List<T> left, List<T> right)

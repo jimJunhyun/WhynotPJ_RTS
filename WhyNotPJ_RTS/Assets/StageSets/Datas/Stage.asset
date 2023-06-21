@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Stage
   m_EditorClassIdentifier: 
   stageName: "\uC544\uD14C\uB124"
-  sceneName: Play
+  sceneName: WiIngyu
   image: {fileID: 21300000, guid: 619f2e1b5f263494db62af6f49775b23, type: 3}
   additionalInfo: "\uD638\uD50C\uB9AC\uD14C\uC2A4 \uD68D\uB4DD \uAC00\uB2A5"

@@ -17,17 +17,24 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 
     [SerializeField]
     private bool m_isPlayer;
+    [SerializeField]
+    private Sprite m_image;
 
     public string myName => m_myName;
     public float produceTime => m_produceTime;
     public Element element => new Element(vio, def, rec);
     public Action onCompleted => m_onCompleted;
 	public GameObject prefab => gameObject;
+	public Sprite image => m_image;
 
     public bool isPlayer
 	{
         get => m_isPlayer;
-		set => m_isPlayer = value;
+        set
+        {
+            m_isPlayer = value;
+            helmetRenderer.material = isPlayer ? teamMat[0] : teamMat[1];
+        }
 	}
     #endregion
 
@@ -74,6 +81,11 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public UnitController enemy = null;
     [HideInInspector]
     public GroundBreak construction = null;
+
+    [SerializeField]
+    private List<Material> teamMat;
+    [SerializeField]
+    private MeshRenderer helmetRenderer;
 
     //test
     public GameObject marker;
@@ -122,15 +134,15 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         }
 
 #if UNITY_EDITOR
-		//if (Input.GetMouseButtonDown(0))
-		//{
-  //          if(!isPlayer)
-  //              return;
-		//	if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-		//	{
-		//		unitMove.SetTargetPosition(hit.point);
-		//	}
-		//}
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //          if(!isPlayer)
+        //              return;
+        //	if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        //	{
+        //		unitMove.SetTargetPosition(hit.point);
+        //	}
+        //}
 #endif
 
 		currentStateScript.UpdateState();
@@ -180,5 +192,33 @@ public class UnitController : PoolableMono, IProducable, ISelectable
 		{
             return PlayerEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
         }
-	}
+    }
+
+    public void InitTarget()
+    {
+        mainCamp = null;
+        enemy = null;
+        construction = null;
+    }
+
+    public void InitTarget(MainCamp mainCamp)
+    {
+        this.mainCamp = mainCamp;
+        enemy = null;
+        construction = null;
+    }
+
+    public void InitTarget(UnitController enemy)
+    {
+        mainCamp = null;
+        this.enemy = enemy;
+        construction = null;
+    }
+
+    public void InitTarget(GroundBreak construction)
+    {
+        mainCamp = null;
+        enemy = null;
+        this.construction = construction;
+    }
 }

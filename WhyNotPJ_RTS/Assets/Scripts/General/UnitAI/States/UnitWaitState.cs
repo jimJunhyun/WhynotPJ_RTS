@@ -11,9 +11,8 @@ public class UnitWaitState : UnitBaseState
 
     public override void OnEnterState()
     {
-        unitController.mainCamp = null;
-        //unitController.enemy = null;
-        unitController.construction = null;
+        unitController.InitTarget();
+
         curSignTime = sendSignTime;
     }
 

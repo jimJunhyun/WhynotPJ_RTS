@@ -10,27 +10,25 @@ public class UnitAlertState : UnitBaseState
 
     public override void OnEnterState()
     {
-        unitController.mainCamp = null;
-        unitController.enemy = null;
-        unitController.construction = null;
+        unitController.InitTarget();
+        unitMove.NavMeshAgent.ResetPath();
 
-        //��� �� ���� ����
-        /*if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
+        if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
         {
-            
+
             if (unitMove.SetTargetPosition(hitInfo.transform))
             {
                 unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
                 unitController.enemy = null;
                 unitController.construction = null;
 
-                unitController.ChangeState(State.Move);
-
+				unitController.ChangeState(State.Move);
                 return;
             }
-        }*/
+        }
+		
 
-        opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
+		opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
         closestDis = unitController.detectRange;
 
         foreach (Collider op in opponents)
@@ -39,16 +37,15 @@ public class UnitAlertState : UnitBaseState
             UnitController opCtrl;
 			if (opCtrl = opTrm.GetComponent<UnitController>())
 			{
-                if(opCtrl.isPlayer != unitController.isPlayer && opCtrl.isSeen())
+                if(opCtrl.currentState != State.Dead && opCtrl.isPlayer != unitController.isPlayer && opCtrl.isSeen())
 				{
                     float distance = (opTrm.position - transform.position).sqrMagnitude;
 
                     if (distance < closestDis)
                     {
                         closestDis = distance;
-                        unitController.mainCamp = null;
-                        unitController.enemy = opCtrl;
-                        unitController.construction = null;
+
+                        unitController.InitTarget(opCtrl);
                     }
                 }
 			}

@@ -1,10 +1,9 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class UnitMove : MonoBehaviour
 {
-    private UnitController unitController;
-
     private NavMeshHit hit;
     private Transform visualTrm;
     public Transform VisualTrm => visualTrm;
@@ -13,20 +12,19 @@ public class UnitMove : MonoBehaviour
     private bool isAttack;
     public bool IsAttack => isAttack;
 
-    public Vector3 destination;
-
     private void Awake()
     {
         isAttack = true;
         visualTrm = transform.Find("Visual");
         navMeshAgent = GetComponent<NavMeshAgent>();
-        unitController = GetComponent<UnitController>();
     }
 
     public bool SetTargetPosition(Vector3 pos)
     {
+        Debug.Log(navMeshAgent.name + " " + navMeshAgent.isOnNavMesh);
         if (navMeshAgent.CalculatePath(pos, new NavMeshPath()))
         {
+            navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(pos);
 
             isAttack = false;
@@ -41,8 +39,10 @@ public class UnitMove : MonoBehaviour
     {
         NavMeshHit hit;
         NavMesh.SamplePosition(target.position, out hit, 10f, NavMesh.AllAreas);
+        
         if (navMeshAgent.CalculatePath(hit.position, new NavMeshPath()))
         {
+            navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(hit.position);
 
             isAttack = true;

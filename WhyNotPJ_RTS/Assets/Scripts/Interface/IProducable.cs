@@ -59,6 +59,7 @@ public interface IProducable
 	public Element element { get; }
 	public Action onCompleted { get; }
 	public GameObject prefab { get; }
+	public Sprite image { get; }
 
 	public bool isPlayer { get; set; }
 	public float healthPoint { get; }

@@ -7,20 +7,26 @@ using UnityEngine.UI;
 public class UnitProduceButton : PoolableMono
 {
     private UnitController unit;
+	private Buildables buildable;
 
-    private TextMeshProUGUI textmesh;
+	[SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI timeText;
+	[SerializeField] private Image slider;
 	private Button button;
-	private Slider slider;
 
 	private Producer producer;
+	private ConstructBuild construct;
+
+	private void Awake()
+	{
+		button = GetComponent<Button>();
+	}
 
 	private void Init()
 	{
-		textmesh = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-		button = GetComponent<Button>();
-		slider = GetComponentInChildren<Slider>();
-		slider.gameObject.SetActive(false);
 		transform.localScale = Vector3.one;
+		timeText.gameObject.SetActive(false);
 	}
 
 	public void SetData(UnitController nextUnit, Producer producer)
@@ -28,13 +34,43 @@ public class UnitProduceButton : PoolableMono
 		Init();
 
 		unit = nextUnit;
-		textmesh.text = unit.name;
+		nameText.text = unit.name;
 		this.producer = producer;
-		button.onClick.AddListener(OnClick);
+		button.onClick.AddListener(ProduceUnit);
+		image.sprite = nextUnit.image;
 	}
 
-	public void OnClick()
+	public void SetData(Buildables buildable, ConstructBuild construct)
 	{
-		producer.AddProduct(unit);
+		Init();
+
+		this.buildable = buildable;
+		nameText.text = buildable.ToString();
+		this.construct = construct;
+		button.onClick.AddListener(ConstructBuilding);
+	}
+
+	public void SetTimeAndSlider(float time, float percent)
+	{
+		slider.fillAmount = percent;
+
+		if (time <= 0)
+		{
+			timeText.gameObject.SetActive(false);
+			return;
+		}
+
+		timeText.gameObject.SetActive(true);
+		timeText.text = $"{(int)time}s";
+	}
+
+	public void ProduceUnit()
+	{
+		producer.AddProduct(unit, this);
+	}
+
+	public void ConstructBuilding()
+	{
+		construct.StartCoroutine(construct.BuildInp(buildable));
 	}
 }

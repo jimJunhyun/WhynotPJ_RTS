@@ -6,9 +6,6 @@ public class ClickAndSelectManager : MonoBehaviour
     [SerializeField] private LayerMask unitLayer;
 	[SerializeField] private RectTransform dragRectangle;	// ���콺�� �巡���� ������ ����ȭ�ϴ� Image UI�� RectTransform
 
-	public RectTransform debug1;
-	public RectTransform debug2;
-
 	private Rect dragRect;
 	private Vector3 start = Vector2.zero;
 	private Vector3 end = Vector2.zero;
@@ -17,6 +14,8 @@ public class ClickAndSelectManager : MonoBehaviour
     private UnitSelectManager unitManager;	// ������ ���� & ������ ����ϴ� UnitManager Ŭ����
 
 	public bool isDraging = false;
+	private bool isUI = false;
+	private bool canSelect = true;
 
 	private void Awake()
 	{
@@ -30,22 +29,41 @@ public class ClickAndSelectManager : MonoBehaviour
 
 	private void Update()
 	{
-		// Ŭ�� �̺�Ʈ
+		if (!canSelect && Input.touchCount == 0)
+			canSelect = true;
+
+		if (Input.touchCount >= 2 || !canSelect)
+		{
+			canSelect = false;
+			return;
+		}
+
+
 		if (Input.touchCount == 1)
 		{
 			Touch touch = Input.GetTouch(0);
 
-			//�巡�� ����
-			DragSelect(touch);
+			if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+			{
+				isUI = true;
+			}
+			else
+				DragSelect(touch);
 
 			// �հ����� ���� ��
 			if (touch.phase == TouchPhase.Ended)
 			{
+				if (isUI)
+				{
+					isUI = false;
+					return;
+				}
 				if (CameraController.camState == CameraState.MOVING)
 				{
 					CameraController.camState = CameraState.NONE;
 					return;
 				}
+
 
 				CheckUnit(Input.GetTouch(0).position);
 			}
@@ -58,7 +76,8 @@ public class ClickAndSelectManager : MonoBehaviour
 				return;
 			}
 
-			CheckUnit(Input.mousePosition);
+			if (!EventSystem.current.IsPointerOverGameObject() && CameraController.camState != CameraState.DRAGSELECTING)
+				CheckUnit(Input.mousePosition);
 
 			if (start - end == Vector3.zero || CameraController.camState != CameraState.DRAGSELECTING)
 				return;
@@ -86,7 +105,7 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		RaycastHit hit;
 		Ray ray = mainCam.ScreenPointToRay(screenPos);
-		if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, 300f))
+		if (Physics.Raycast(ray, out hit, 300f))
 		{
 			if (hit.transform.TryGetComponent(out UnitController unit))
 			{
@@ -97,17 +116,37 @@ public class ClickAndSelectManager : MonoBehaviour
 				else
 				{
 					UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
-						selected.UnitMove.SetTargetPosition(hit.transform);
-						selected.enemy = unit;
+						if (selected.UnitMove.SetTargetPosition(unit.transform))
+                        {
+							selected.InitTarget(unit);
+                            selected.ChangeState(Core.State.Move);
+                        }
 					});
 				}
 			}
+			else if (hit.transform.TryGetComponent(out MainCamp camp))
+			{
+				if (camp.isPlayer == true)
+				{
+					return;
+				}
+				UnitSelectManager.Instance.SelectedUnitList.ForEach(selected =>
+				{
+					selected.UnitMove.SetTargetPosition(hit.transform);
+					selected.mainCamp = camp;
+					if (selected.currentState != Core.State.Move)
+						selected.ChangeState(Core.State.Move);
+					print("CAMP!");
+				});
+			}
 			else
 			{
-				UnitSelectManager.Instance.SelectedUnitList.ForEach(unit => {
-					unit.UnitMove.SetTargetPosition(hit.point);
-					if (unit.currentState != Core.State.Move)
-						unit.ChangeState(Core.State.Move);
+				UnitSelectManager.Instance.SelectedUnitList.ForEach(selected => {
+                    if (selected.UnitMove.SetTargetPosition(hit.point))
+                    {
+						selected.InitTarget();
+						selected.ChangeState(Core.State.Move);
+                    }
 				});
 			}
 		}
@@ -132,6 +171,8 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		if (CameraController.camState != CameraState.DRAGSELECTING)
 			return;
+
+		print("Dragging");
 
 		// �巡�� �̺�Ʈ - ����
 		if (touch.phase == TouchPhase.Began)
