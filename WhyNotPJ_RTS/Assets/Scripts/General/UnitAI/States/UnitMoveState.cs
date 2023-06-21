@@ -102,7 +102,7 @@ public class UnitMoveState : UnitBaseState
         }
         else
         {
-            if (unitMove.NavMeshAgent.remainingDistance <= 0.5f && !unitMove.NavMeshAgent.pathPending)
+            if (unitMove.NavMeshAgent.remainingDistance <= unitMove.NavMeshAgent.stoppingDistance && !unitMove.NavMeshAgent.pathPending)
             {
                 unitController.ChangeState(State.Wait);
             }
