@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class UnitMoveState : UnitBaseState
 {
-    private Collider[] opponents;
+    private bool isPending;
+    private float requireTime, trafficCounter = 0f;
 
     public override void OnEnterState()
     {
@@ -33,10 +34,11 @@ public class UnitMoveState : UnitBaseState
         }
 
         unitMove.NavMeshAgent.updatePosition = true;
+        isPending = false;
 
         unitAnimator.SetIsWalk(true);
 
-        //어디선가 Move State를 계속 부름
+        //전투 중에 어디선가 Move State를 계속 부름(그래서 순간이동하는 것으로 추정)
     }
 
     public override void OnExitState()
@@ -50,6 +52,13 @@ public class UnitMoveState : UnitBaseState
     public override void UpdateState()
     {
         unitMove.SetAreaSpeed(unitController.moveSpeed);
+
+        if (!isPending && !unitMove.NavMeshAgent.pathPending)
+        {
+            isPending = true;
+            requireTime = unitMove.NavMeshAgent.remainingDistance / unitController.moveSpeed;
+            trafficCounter = unitMove.NavMeshAgent.stoppingDistance = 0f;
+        }
 
         if (unitMove.IsAttack)
         {
@@ -93,9 +102,21 @@ public class UnitMoveState : UnitBaseState
         }
         else
         {
-            if (unitMove.NavMeshAgent.remainingDistance <= 0f && !unitMove.NavMeshAgent.pathPending)
+            if (unitMove.NavMeshAgent.remainingDistance <= 0.5f && !unitMove.NavMeshAgent.pathPending)
             {
                 unitController.ChangeState(State.Wait);
+            }
+            
+            if (isPending)
+            {
+                if (trafficCounter < requireTime)
+                {
+                    trafficCounter += Time.deltaTime;
+                }
+                else
+                {
+                    unitMove.NavMeshAgent.stoppingDistance += Time.deltaTime;
+                }
             }
         }
     }

@@ -30,7 +30,11 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public bool isPlayer
 	{
         get => m_isPlayer;
-		set => m_isPlayer = value;
+        set
+        {
+            m_isPlayer = value;
+            helmetRenderer.material = isPlayer ? teamMat[0] : teamMat[1];
+        }
 	}
     #endregion
 
@@ -77,6 +81,11 @@ public class UnitController : PoolableMono, IProducable, ISelectable
     public UnitController enemy = null;
     [HideInInspector]
     public GroundBreak construction = null;
+
+    [SerializeField]
+    private List<Material> teamMat;
+    [SerializeField]
+    private MeshRenderer helmetRenderer;
 
     //test
     public GameObject marker;

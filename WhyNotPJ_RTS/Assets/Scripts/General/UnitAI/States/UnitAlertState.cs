@@ -13,21 +13,20 @@ public class UnitAlertState : UnitBaseState
         unitController.InitTarget();
         unitMove.NavMeshAgent.ResetPath();
 
-		//��� �� ���� ����
-		if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
-		{
+        if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
+        {
 
-			if (unitMove.SetTargetPosition(hitInfo.transform))
-			{
-				unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
-				unitController.enemy = null;
-				unitController.construction = null;
+            if (unitMove.SetTargetPosition(hitInfo.transform))
+            {
+                unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
+                unitController.enemy = null;
+                unitController.construction = null;
 
 				unitController.ChangeState(State.Move);
-
-				return;
-			}
-		}
+                return;
+            }
+        }
+		
 
 		opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
         closestDis = unitController.detectRange;
