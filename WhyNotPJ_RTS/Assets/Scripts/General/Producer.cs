@@ -15,6 +15,8 @@ public class Producer : MonoBehaviour
 	private float progress;
 	public float Progress => progress;
 
+	public System.Action OnProducedUnit;
+
 	private void Update()
 	{
 		if (!isProducing) return;
@@ -64,6 +66,7 @@ public class Producer : MonoBehaviour
 		if (pSide)
 		{
 			UnitSelectManager.Instance.unitList.Add(c);
+			OnProducedUnit.Invoke();
 		}
 		else
 		{

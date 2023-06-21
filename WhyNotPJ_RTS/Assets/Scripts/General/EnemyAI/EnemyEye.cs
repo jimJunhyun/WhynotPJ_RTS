@@ -12,12 +12,17 @@ public class EnemyEye : MonoBehaviour
 
 	List<UnitController> foundUnits = new List<UnitController>();
 
+
+	public bool foundBase = false;
+
+	Vector3Int pBaseIdx;
+
 	private void Awake()
 	{
 		instance = this;
 
 		perceived.ResetMap(false);
-
+		pBaseIdx = Perceive.PosToIdxVector(EnemyBrain.instance.playerBase.position);
 		
 		//perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
 	}
@@ -25,6 +30,13 @@ public class EnemyEye : MonoBehaviour
 	private void LateUpdate()
 	{
 		perceived.UpdateMap();
+		if (!foundBase)
+		{
+			if(perceived.map[pBaseIdx.x, pBaseIdx.y, 0] > 0)
+			{
+				foundBase = true;
+			}
+		}
 		if(!ListComparison<UnitController>(foundUnits, perceived.founds, out Vector3? p))
 		{
 			foundUnits = perceived.founds;

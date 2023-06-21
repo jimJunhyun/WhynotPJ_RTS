@@ -27,17 +27,27 @@ public class Pauser : MonoBehaviour
 	{
 		if (paused)
 		{
-			paused = false;
-			img.sprite = twoCapsule;
-			Time.timeScale = 1;
-			pausePanel.SetActive(false);
+			Continue();
 		}
 		else
 		{
-			paused = true;
-			img.sprite = reuleauxTr;
-			Time.timeScale = 0;
-			pausePanel.SetActive(true);
+			Stop();
 		}
+	}
+
+	public void Stop()
+	{
+		paused = true;
+		img.sprite = reuleauxTr;
+		Time.timeScale = 0;
+		pausePanel.SetActive(true);
+	}
+
+	public void Continue()
+	{
+		paused = false;
+		img.sprite = twoCapsule;
+		Time.timeScale = 1;
+		pausePanel.SetActive(false);
 	}
 }

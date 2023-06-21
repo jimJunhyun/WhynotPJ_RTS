@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 19dc4e2ca9549894e8038e6c26002bad, type: 2}
+--- !u!114 &55194826 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8063673897955581405, guid: bd7ba6580e0a4f348a2a62e4dbb13621, type: 3}
+  m_PrefabInstance: {fileID: 8063673896965254343}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df610b06077a4c74dbd800ca733a974e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &322324424
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130,6 +141,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 565850719, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 55194826}
     - target: {fileID: 6294763430187312715, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -224,6 +239,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6294763430807048203, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6294763430807048203, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
