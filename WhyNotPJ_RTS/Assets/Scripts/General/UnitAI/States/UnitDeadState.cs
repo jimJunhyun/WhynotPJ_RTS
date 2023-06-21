@@ -8,6 +8,7 @@ public class UnitDeadState : UnitBaseState
     {
         unitAnimator.SetDeath();
         unitMove.NavMeshAgent.ResetPath();
+        UnitCounter.instance.DecreaseUnit();
         Invoke("DeadPush", 4f);
     }
 
