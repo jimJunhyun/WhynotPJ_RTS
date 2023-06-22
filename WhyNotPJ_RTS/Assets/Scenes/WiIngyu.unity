@@ -704,61 +704,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 828652661}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1987019214}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Stop
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: On
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Pauser, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GameOverUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 322324426, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
-      propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6294763430187312715, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_Name
       value: Canvas

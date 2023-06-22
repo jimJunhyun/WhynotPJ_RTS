@@ -24,12 +24,12 @@ public class EnemyEye : MonoBehaviour
 		perceived.ResetMap(false);
 		
 		
-		//perceived.AddOnUpd(Perceive.PosToIdxVector(transform.position), 10);
 	}
 
 	private void Start()
 	{
 		pBaseIdx = Perceive.PosToIdxVector(EnemyBrain.instance.playerBase.position);
+		perceived.AddOnUpd(pBaseIdx, 10);
 	}
 
 	private void LateUpdate()

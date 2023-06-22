@@ -22,6 +22,9 @@ public class EnemyBrain : MonoBehaviour
 
 	Action onFightUpdated;
 
+	[HideInInspector]
+	public MainCamp myCamp;
+
 	public void AddFightUpdate(Action act)
 	{
 		onFightUpdated += act;
@@ -37,7 +40,7 @@ public class EnemyBrain : MonoBehaviour
 	{
 		if(producable.Count > 0)
 		{
-			//Debug.Log("DEcidine");
+			
 			if (producer != null && !producer.isProducing)
 			{
 				Examine();
@@ -149,6 +152,7 @@ public class EnemyBrain : MonoBehaviour
 
 		producable.AddRange(Resources.LoadAll<UnitController>("Prefabs/"));
 
+		myCamp = GameObject.Find("WhyNot_RTS_Castle_Enemy").GetComponent<MainCamp>();
 	}
 
 	private void Start()

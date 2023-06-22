@@ -183,6 +183,13 @@ public class EnemyPosGen : MonoBehaviour
 	private void Awake()
 	{
 		instance = this;
+
+		EnemyBrain.instance.myCamp.AddOnDamaged(()=>{
+			for (int i = 0; i < accumulations.Count; i++)
+			{
+				accumulations[i].con.ChangeState(State.Alert);
+			}
+			});
 	}
 
 	private void Start()

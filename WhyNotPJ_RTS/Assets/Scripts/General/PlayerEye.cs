@@ -14,6 +14,8 @@ public class PlayerEye : MonoBehaviour
 		instance = this;
 
 		perceived.ResetMap(true);
+
+		perceived.AddOnUpd(Perceive.PosToIdxVector(GameObject.Find("WhyNot_RTS_Castle_Player").transform.position), 10);
 		//perceived.AllEnableTmp();
 	}
 
