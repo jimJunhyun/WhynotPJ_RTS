@@ -759,6 +759,10 @@ PrefabInstance:
       propertyPath: onTimeLimit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3545022029765333635, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6294763430187312715, guid: 4f6a49a95a1db4c499e6899495f1f647, type: 3}
       propertyPath: m_Name
       value: Canvas

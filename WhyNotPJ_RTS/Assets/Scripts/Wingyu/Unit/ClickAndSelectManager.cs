@@ -30,7 +30,10 @@ public class ClickAndSelectManager : MonoBehaviour
 	private void Update()
 	{
 		if (!canSelect && Input.touchCount == 0)
+		{
+			CameraController.camState = CameraState.NONE;
 			canSelect = true;
+		}
 
 		if (Input.touchCount >= 2 || !canSelect)
 		{
@@ -122,6 +125,7 @@ public class ClickAndSelectManager : MonoBehaviour
                             selected.ChangeState(Core.State.Move);
                         }
 					});
+					UnitSelectManager.Instance.DeselectAll();
 				}
 			}
 			else if (hit.transform.TryGetComponent(out MainCamp camp))
@@ -136,8 +140,8 @@ public class ClickAndSelectManager : MonoBehaviour
 					selected.mainCamp = camp;
 					if (selected.currentState != Core.State.Move)
 						selected.ChangeState(Core.State.Move);
-					print("CAMP!");
 				});
+				UnitSelectManager.Instance.DeselectAll();
 			}
 			else
 			{
@@ -148,6 +152,7 @@ public class ClickAndSelectManager : MonoBehaviour
 						selected.ChangeState(Core.State.Move);
                     }
 				});
+				UnitSelectManager.Instance.DeselectAll();
 			}
 		}
 	}
@@ -171,8 +176,6 @@ public class ClickAndSelectManager : MonoBehaviour
 	{
 		if (CameraController.camState != CameraState.DRAGSELECTING)
 			return;
-
-		print("Dragging");
 
 		// �巡�� �̺�Ʈ - ����
 		if (touch.phase == TouchPhase.Began)
