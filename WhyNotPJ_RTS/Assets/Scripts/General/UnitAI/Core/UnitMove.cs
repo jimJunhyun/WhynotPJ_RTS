@@ -21,7 +21,6 @@ public class UnitMove : MonoBehaviour
 
     public bool SetTargetPosition(Vector3 pos)
     {
-        Debug.Log(navMeshAgent.name + " " + navMeshAgent.isOnNavMesh);
         if (navMeshAgent.CalculatePath(pos, new NavMeshPath()))
         {
             navMeshAgent.ResetPath();
@@ -46,7 +45,7 @@ public class UnitMove : MonoBehaviour
             navMeshAgent.SetDestination(hit.position);
 
             isAttack = true;
-
+            Debug.Log("Attacking : " + target.name);
             return true;
         }
 

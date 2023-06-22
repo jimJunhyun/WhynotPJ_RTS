@@ -38,7 +38,8 @@ public class MainCamp : MonoBehaviour, IProducable
         if (currentHealth <= 0f)
         {
             currentHealth = 0f;
-            OnDestroyed?.Invoke();
+            if(OnDestroyed != null)
+                OnDestroyed?.Invoke();
         }
     }
 
