@@ -118,8 +118,8 @@ MonoBehaviour:
   defensePenetration: 30
   m_healthPoint: 300
   defensePower: 80
-  moveSpeed: 1
-  detectRange: 20
+  moveSpeed: 3
+  detectRange: 30
   currentState: 0
   whatIsMainCamp:
     serializedVersion: 2

@@ -1362,14 +1362,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 2012424276}
-  movementMultiply: 0.19
+  movementMultiply: 0.3
   movementTime: 0.3
-  zoomTime: 0.05
+  zoomTime: 0.1
   zoomSensitive: 5
   currentZoomValue: -6
   minZoomValue: -100
   maxZoomValue: -4
-  rotateSensitive: 0.2
+  rotateSensitive: 0.4
   cameraYOffset: 0.5
   targetPosition: {x: 0, y: 0, z: 0}
   targetZoomPosition: {x: 0, y: 0, z: 0}

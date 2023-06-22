@@ -230,7 +230,7 @@ MonoBehaviour:
   m_healthPoint: 100
   defensePower: 30
   moveSpeed: 2
-  detectRange: 20
+  detectRange: 30
   currentState: 0
   whatIsMainCamp:
     serializedVersion: 2
