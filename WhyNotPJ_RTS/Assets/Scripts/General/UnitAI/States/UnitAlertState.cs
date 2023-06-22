@@ -15,7 +15,6 @@ public class UnitAlertState : UnitBaseState
 
         if (Physics.SphereCast(unitMove.VisualTrm.position, unitController.detectRange, Vector3.down, out RaycastHit hitInfo, 0f, unitController.whatIsMainCamp))
         {
-
             if (unitMove.SetTargetPosition(hitInfo.transform))
             {
                 unitController.mainCamp = hitInfo.transform.GetComponent<MainCamp>();
@@ -23,22 +22,22 @@ public class UnitAlertState : UnitBaseState
                 unitController.construction = null;
 
 				unitController.ChangeState(State.Move);
+
                 return;
             }
         }
-		
 
 		opponents = Physics.OverlapSphere(unitMove.VisualTrm.position, unitController.detectRange, unitController.whatIsUnit);
-        closestDis = unitController.detectRange;
+        closestDis = unitController.detectRange * unitController.detectRange;
 
         foreach (Collider op in opponents)
         {
             Transform opTrm = op.transform;
             UnitController opCtrl;
-			if (opCtrl = opTrm.GetComponent<UnitController>())
-			{
-                if(opCtrl.currentState != State.Dead && opCtrl.isPlayer != unitController.isPlayer && opCtrl.isSeen())
-				{
+			if (opTrm.TryGetComponent(out opCtrl))
+            {
+                if (opCtrl.currentState != State.Dead && opCtrl.isPlayer != unitController.isPlayer && opCtrl.isSeen())
+                {
                     float distance = (opTrm.position - transform.position).sqrMagnitude;
 
                     if (distance < closestDis)
@@ -54,6 +53,11 @@ public class UnitAlertState : UnitBaseState
 
         if (unitController.enemy != null)
         {
+            if (!unitController.isPlayer)
+            {
+                print("적 설정 완료");
+            }
+
             if (unitMove.SetTargetPosition(unitController.enemy.transform))
             {
                 unitController.ChangeState(State.Move);
