@@ -186,11 +186,11 @@ public class UnitController : PoolableMono, IProducable, ISelectable
         //Debug.Log(Perceive.fullMap[posIdx.y, posIdx.x, 0].height + " : " + transform.position.y);
 		if (isPlayer)
 		{
-            return EnemyEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+            return EnemyEye.instance.perceived.map[posIdx.x, posIdx.y, floor] >= 1;
 		}
 		else
 		{
-            return PlayerEye.instance.perceived.map[posIdx.y, posIdx.x, floor] >= 1;
+            return PlayerEye.instance.perceived.map[posIdx.x, posIdx.y, floor] >= 1;
         }
     }
 

@@ -28,16 +28,22 @@ public class MainCamp : MonoBehaviour, IProducable
 
 	public float currentHealth = 100;
 
+    public Action onDamaged;
     public UnityEvent OnDestroyed;
 
     public void OnHit(UnitController attacker)
 	{
         currentHealth -= attacker.attackPower * (1f - (0 - attacker.defensePenetration) / (0 - attacker.defensePenetration + 100f));
-
+        onDamaged.Invoke();
         if (currentHealth <= 0f)
         {
             currentHealth = 0f;
             OnDestroyed?.Invoke();
         }
     }
+
+    public void AddOnDamaged(Action onDam)
+	{
+        onDamaged += onDam;
+	}
 }

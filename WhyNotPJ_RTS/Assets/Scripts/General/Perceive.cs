@@ -319,27 +319,27 @@ public class Perceive
 			xIdx = pos.x + (int)xAccumulate;
 			xIdx = xIdx < 0 ? 0 : xIdx >= MAPX ? MAPX - 1 : xIdx;
 			yIdx = yIdx < 0 ? 0 : yIdx >= MAPY ? MAPY - 1 : yIdx;
-			if (fullMap[yIdx, xIdx, 0].height <= height + HEIGHTTHRESHOLD)
+			if (fullMap[xIdx, yIdx, 0].height <= height + HEIGHTTHRESHOLD)
 			{
 				if (isOn)
 				{
-					map[yIdx, xIdx, 0] += 1;
+					map[xIdx, yIdx, 0] += 1;
 				}
 				else
 				{
-					map[yIdx, xIdx, 0] -= 1;
+					map[xIdx, yIdx, 0] -= 1;
 				}
-				if (fullMap[yIdx, xIdx, 1].Id != 0 && fullMap[yIdx, xIdx, 1].height <= height + HEIGHTTHRESHOLD)
+				if (fullMap[xIdx, yIdx, 1].Id != 0 && fullMap[xIdx, yIdx, 1].height <= height + HEIGHTTHRESHOLD)
 				{
 					if (isOn)
 					{
-						map[yIdx, xIdx, 1] += 1;
+						map[xIdx, yIdx, 1] += 1;
 					}
 					else
 					{
-						map[yIdx, xIdx, 1] -= 1;
+						map[xIdx, yIdx, 1] -= 1;
 					}
-					foundStrts.Add(ConstructBuild.instance.strtIdPair[fullMap[yIdx, xIdx, 1].Id]);
+					foundStrts.Add(ConstructBuild.instance.strtIdPair[fullMap[xIdx, yIdx, 1].Id]);
 				}
 			}
 			else
