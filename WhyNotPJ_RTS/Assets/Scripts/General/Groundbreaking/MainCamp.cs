@@ -34,7 +34,7 @@ public class MainCamp : MonoBehaviour, IProducable
     public void OnHit(UnitController attacker)
 	{
         currentHealth -= attacker.attackPower * (1f - (0 - attacker.defensePenetration) / (0 - attacker.defensePenetration + 100f));
-        onDamaged.Invoke();
+        onDamaged?.Invoke();
         if (currentHealth <= 0f)
         {
             currentHealth = 0f;
