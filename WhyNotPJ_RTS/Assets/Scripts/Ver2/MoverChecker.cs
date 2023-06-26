@@ -1,59 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public enum Dir
-{
-    Up,
-    Down,
-    Left,
-    Right
-}
 
-[System.Serializable]
-public class AttackRanges
+[Serializable]
+public class AttackRange
 {
-    public Dir direction;
-    public int attack;
+    public int xDistance;
+    public int yDistance;
+    public int atk;
 }
 
 public class MoverChecker : MonoBehaviour
 {
-    public float rayDist = 0.5f;
+    public List<AttackRange> ranges;
+	Dictionary<AttackRange, UnitMover> rangeAttackingPair = new Dictionary<AttackRange, UnitMover>();
 
-    public List<AttackRanges> ranges;
+
+
 
 	private void Update()
 	{
 		for (int i = 0; i < ranges.Count; i++)
 		{
-            Vector2 direction = Vector2.zero;
-			RaycastHit2D hit;
-			switch (ranges[i].direction)
+			if (CheckCell(ranges[i], out UnitMover foundUnit))
 			{
-				case Dir.Up:
-					direction = Vector2.up;
-					break;
-				case Dir.Down:
-					direction = Vector2.down;
-					break;
-				case Dir.Left:
-					direction = Vector2.left;
-					break;
-				case Dir.Right:
-					direction = Vector2.right;
-					break;
-			}
-
-
-			if(hit = Physics2D.Raycast(transform.position, direction, rayDist))
-			{
-				UnitMover unit;
-				if (unit = hit.collider.GetComponent<UnitMover>())
+				if (!rangeAttackingPair.ContainsKey(ranges[i]))
 				{
-					unit.hp -= ranges[i].attack;
+					foundUnit.attackedBy.Add(ranges[i]);
+					rangeAttackingPair.Add(ranges[i], foundUnit);
 				}
 			}
+			else
+			{
+				if (rangeAttackingPair.ContainsKey(ranges[i]))
+				{
+					rangeAttackingPair[ranges[i]].attackedBy.Remove(ranges[i]);
+					rangeAttackingPair.Remove(ranges[i]);
+				}
+			}
+		}
+	}
+
+	bool CheckCell(AttackRange rng, out UnitMover mover)
+	{
+		mover = null;
+		Vector3 dest = transform.position + (transform.right * rng.xDistance) + (transform.up * rng.yDistance);
+		Collider2D c;
+		if(c = Physics2D.OverlapBox(dest, Vector2.one * 0.8f, 0))
+		{
+			if (mover = c.GetComponent<UnitMover>())
+			{
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+
+	public void OnDrawGizmos()
+	{
+		for (int i = 0; i < ranges.Count; i++)
+		{
+			Vector3 dest = transform.position + (transform.right * ranges[i].xDistance) + (transform.up * ranges[i].yDistance);
+			Gizmos.DrawWireCube(dest, Vector3.one * 0.9f);
 		}
 	}
 }
