@@ -64,7 +64,7 @@ public class UnitAttackState : UnitBaseState
     {
         curAttackCoolTime = 1f / unitController.attackSpeed;
         isAttack = false;
-
+        
         unitAnimator.SetAttackAnimation(isAttack);
     }
 }

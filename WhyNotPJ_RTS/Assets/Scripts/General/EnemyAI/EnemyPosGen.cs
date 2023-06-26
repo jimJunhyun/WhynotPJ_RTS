@@ -184,16 +184,19 @@ public class EnemyPosGen : MonoBehaviour
 	{
 		instance = this;
 
-		EnemyBrain.instance.myCamp.AddOnDamaged(()=>{
-			for (int i = 0; i < accumulations.Count; i++)
-			{
-				accumulations[i].con.ChangeState(State.Alert);
-			}
-			});
+		
 	}
 
 	private void Start()
 	{
 		EnemyDiffSet.instance.AddUpdateActs(FindPlaying);
+		EnemyBrain.instance.myCamp.AddOnDamaged(() => {
+			for (int i = 0; i < accumulations.Count; i++)
+			{
+				Debug.Log($"{accumulations[i].con.myName} 반격시킴.");
+				accumulations[i].con.ChangeState(State.Alert);
+			}
+			Debug.Log("BASE ATTACKED > REVENGE");
+		});
 	}
 }
