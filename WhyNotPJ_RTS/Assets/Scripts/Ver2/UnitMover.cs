@@ -27,6 +27,8 @@ public class UnitMover : MonoBehaviour
 
 	public List<AttackRange> attackedBy;
 
+	List<InflictedAnomaly> curStatus = new List<InflictedAnomaly>();
+
 	bool movable = true;
 	float prevMove;
 
@@ -100,6 +102,19 @@ public class UnitMover : MonoBehaviour
 		if (CurHp <= 0)
 		{
 			Destroy(gameObject);
+		}
+	}
+
+	public void InflictDistort(AnomalyIndex anomaly)
+	{
+		if(curStatus.Exists(item => item.info.Id == (((int)anomaly) + 1)))
+		{
+			//if()
+			curStatus.Find(item => item.info.Id == (((int)anomaly) + 1)).stacks += 1;
+		}
+		else
+		{
+
 		}
 	}
 }
