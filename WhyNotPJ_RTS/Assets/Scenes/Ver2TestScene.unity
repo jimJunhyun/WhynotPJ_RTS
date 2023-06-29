@@ -269,7 +269,8 @@ MonoBehaviour:
   ranges:
   - xDistance: 1
     yDistance: 0
-    atk: 5
+    atk: 3
+    anomaly: 0
 --- !u!1 &1284204937
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,27 +533,35 @@ MonoBehaviour:
   - xDistance: 1
     yDistance: 0
     atk: 2
+    anomaly: -1
   - xDistance: -1
     yDistance: 0
     atk: 2
+    anomaly: -1
   - xDistance: 0
     yDistance: 1
     atk: 2
+    anomaly: -1
   - xDistance: 0
     yDistance: -1
     atk: 2
+    anomaly: -1
   - xDistance: 2
     yDistance: 1
     atk: 1
+    anomaly: -1
   - xDistance: -2
     yDistance: 1
     atk: 1
+    anomaly: -1
   - xDistance: -2
     yDistance: -1
     atk: 1
+    anomaly: -1
   - xDistance: 2
     yDistance: -1
     atk: 1
+    anomaly: -1
 --- !u!1 &1458662772
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,6 +574,7 @@ GameObject:
   - component: {fileID: 1458662774}
   - component: {fileID: 1458662773}
   - component: {fileID: 1458662776}
+  - component: {fileID: 1458662777}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -671,6 +681,19 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &1458662777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458662772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618189302e9ccd3499760b86f4dc066c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allAnomalies: {fileID: 11400000, guid: b9c19dd654a837046b6947f41c1f006c, type: 2}
 --- !u!1 &2095571935
 GameObject:
   m_ObjectHideFlags: 0

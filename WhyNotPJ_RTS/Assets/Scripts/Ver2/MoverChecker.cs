@@ -10,6 +10,8 @@ public class AttackRange
     public int xDistance;
     public int yDistance;
     public int atk;
+	public AnomalyIndex anomaly;
+	public int anomalyAmount;
 }
 
 public class MoverChecker : MonoBehaviour
@@ -30,12 +32,20 @@ public class MoverChecker : MonoBehaviour
 				{
 					foundUnit.attackedBy.Add(ranges[i]);
 					rangeAttackingPair.Add(ranges[i], foundUnit);
+					if(ranges[i].anomaly != AnomalyIndex.None)
+					{
+						foundUnit.InflictDistort(this, ranges[i].anomaly, ranges[i].anomalyAmount);
+					}
 				}
 			}
 			else
 			{
 				if (rangeAttackingPair.ContainsKey(ranges[i]))
 				{
+					if (ranges[i].anomaly != AnomalyIndex.None)
+					{
+						rangeAttackingPair[ranges[i]].DisflictDistort(this, ranges[i].anomaly, ranges[i].anomalyAmount);
+					}
 					rangeAttackingPair[ranges[i]].attackedBy.Remove(ranges[i]);
 					rangeAttackingPair.Remove(ranges[i]);
 				}
@@ -55,9 +65,7 @@ public class MoverChecker : MonoBehaviour
 				return true;
 			}
 		}
-		
 		return false;
-		
 	}
 
 	public void OnDrawGizmos()

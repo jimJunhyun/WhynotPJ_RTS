@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-
+using UnityEngine.Events;
 
 public enum AnomalyIndex
 {
@@ -12,6 +11,8 @@ public enum AnomalyIndex
     Vital,
     Revive,
     Charge,
+    Plague,
+    SoulLink,
 }
 
 class InflictedAnomaly
@@ -19,20 +20,25 @@ class InflictedAnomaly
     public Anomaly info;
     public int stacks;
 
+    public InflictedAnomaly(Anomaly anInfo, int stk)
+    {
+        info = anInfo;
+        stacks = stk;
+    }
 }
 
 [System.Serializable]
-class Anomaly
+public class Anomaly
 {
     public int Id;
     public string name;
     public bool isBuff;
     public int minActivate;
     public int maxActivate;
+
+    //효과를 받은 사람 , 효과를 부여한 사람
+    public UnityAction<UnitMover, MoverChecker> onActivated;
+    public UnityAction<UnitMover, MoverChecker> onDisactivated;
 }
 
-[CreateAssetMenu(fileName = "Status Anomaly Table")]
-class Anomalies : ScriptableObject
-{
-    public List<Anomaly> allAnomalies;
-}
+

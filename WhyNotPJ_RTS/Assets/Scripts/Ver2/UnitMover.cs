@@ -105,16 +105,54 @@ public class UnitMover : MonoBehaviour
 		}
 	}
 
-	public void InflictDistort(AnomalyIndex anomaly)
+	public void Immobilize()
+	{
+		movable = false;
+	}
+
+	public void Moblize()
+	{
+		movable = true;
+	}
+
+	public void InflictDistort(MoverChecker inflicter, AnomalyIndex anomaly, int amt = 1)
 	{
 		if(curStatus.Exists(item => item.info.Id == (((int)anomaly) + 1)))
 		{
-			//if()
-			curStatus.Find(item => item.info.Id == (((int)anomaly) + 1)).stacks += 1;
+			InflictedAnomaly found = curStatus.Find(item => item.info.Id == (((int)anomaly) + 1));
+			if(found != null && found.stacks < StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].maxActivate)
+			{
+				bool prevActivate = found.stacks >= StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].minActivate;
+				found.stacks += amt;
+				if(!prevActivate && found.stacks >= StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].minActivate)
+				{
+					found.info.onActivated?.Invoke(this, inflicter);
+				}
+			}
 		}
 		else
 		{
-
+			curStatus.Add(new InflictedAnomaly(StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)], 1));
+		}
+	}
+	public void DisflictDistort(MoverChecker inflicter, AnomalyIndex anomaly, int amt = 1)
+	{
+		if (curStatus.Exists(item => item.info.Id == (((int)anomaly) + 1)))
+		{
+			InflictedAnomaly found = curStatus.Find(item => item.info.Id == (((int)anomaly) + 1));
+			if (found != null)
+			{
+				bool prevActivate = found.stacks >= StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].minActivate;
+				found.stacks -= amt;
+				if (prevActivate && found.stacks < StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].minActivate)
+				{
+					found.info.onDisactivated?.Invoke(this, inflicter);
+				}
+				if (found.stacks <= 0)
+				{
+					curStatus.Remove(found);
+				}
+			}
 		}
 	}
 }
