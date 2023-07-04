@@ -270,7 +270,9 @@ MonoBehaviour:
   - xDistance: 1
     yDistance: 0
     atk: 3
-    anomaly: 0
+    atkModifier: 0
+    anomaly: 1
+    anomalyAmount: 2
 --- !u!1 &1284204937
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,35 +535,51 @@ MonoBehaviour:
   - xDistance: 1
     yDistance: 0
     atk: 2
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: -1
     yDistance: 0
     atk: 2
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: 0
     yDistance: 1
     atk: 2
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: 0
     yDistance: -1
     atk: 2
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: 2
     yDistance: 1
     atk: 1
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: -2
     yDistance: 1
     atk: 1
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: -2
     yDistance: -1
     atk: 1
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
   - xDistance: 2
     yDistance: -1
     atk: 1
+    atkModifier: 0
     anomaly: -1
+    anomalyAmount: 0
 --- !u!1 &1458662772
 GameObject:
   m_ObjectHideFlags: 0

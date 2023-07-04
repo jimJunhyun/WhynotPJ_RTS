@@ -10,6 +10,8 @@ public class AttackRange
     public int xDistance;
     public int yDistance;
     public int atk;
+	public int atkModifier;
+	public int totalAtk { get => atk + atkModifier;}
 	public AnomalyIndex anomaly;
 	public int anomalyAmount;
 }
@@ -19,8 +21,10 @@ public class MoverChecker : MonoBehaviour
     public List<AttackRange> ranges;
 	Dictionary<AttackRange, UnitMover> rangeAttackingPair = new Dictionary<AttackRange, UnitMover>();
 
-
-
+	private void Awake()
+	{
+		
+	}
 
 	private void Update()
 	{

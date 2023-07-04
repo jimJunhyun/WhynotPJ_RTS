@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+
 
 public class UnitMover : MonoBehaviour
 {
@@ -10,6 +13,38 @@ public class UnitMover : MonoBehaviour
 	public float rayDist = 0.5f;
 
 	public int hp;
+	public RefableInt hpModifier
+	{
+		get
+		{
+			RefableInt sum = new RefableInt(0);
+			for (int i = 0; i < hpScopes.Count; i++)
+			{
+				sum += hpScopes[i].val;
+			}
+			return sum;
+		}
+		set
+		{
+			hpScopes.Add(value);
+		}
+	}
+	public RefableInt atkModifier 
+	{
+		get
+		{
+			RefableInt sum = new RefableInt(0);
+			for (int i = 0; i < hpScopes.Count; i++)
+			{
+				sum += atkScopes[i];
+			}
+			return sum;
+		}
+		set
+		{
+			atkScopes.Add(value);
+		}
+	}
 	public int CurHp
 	{
 		get
@@ -19,7 +54,7 @@ public class UnitMover : MonoBehaviour
 			{
 				sum += attackedBy[i].atk;
 			}
-			return hp - sum;
+			return hp + hpModifier.val - sum;
 		}
 	}
 
@@ -27,7 +62,12 @@ public class UnitMover : MonoBehaviour
 
 	public List<AttackRange> attackedBy;
 
-	List<InflictedAnomaly> curStatus = new List<InflictedAnomaly>();
+	public List<InflictedAnomaly> curStatus = new List<InflictedAnomaly>();
+	List<RefableInt> hpScopes = new List<RefableInt>();
+	List<RefableInt> atkScopes = new List<RefableInt>();
+	
+
+	MoverChecker mover;
 
 	bool movable = true;
 	float prevMove;
@@ -35,11 +75,12 @@ public class UnitMover : MonoBehaviour
 	private void Awake()
 	{
 		prevMove = 0;
+		mover = GetComponent<MoverChecker>();
 	}
 
 	private void Update()
 	{
-		if (controlable)
+		if (controlable) //Temp
 		{
 			if (Time.time - prevMove >= moveGap)
 			{
@@ -110,13 +151,25 @@ public class UnitMover : MonoBehaviour
 		movable = false;
 	}
 
-	public void Moblize()
+	public void Mobilize()
 	{
 		movable = true;
 	}
 
+	public void RemoveHpScope(RefableInt val)
+	{
+		hpScopes.Remove(val);
+	}
+
+	public void RemoveAtkScope(RefableInt val)
+	{
+		atkScopes.Remove(val);
+	}
+
 	public void InflictDistort(MoverChecker inflicter, AnomalyIndex anomaly, int amt = 1)
 	{
+		if(amt <= 0)
+			return;
 		if(curStatus.Exists(item => item.info.Id == (((int)anomaly) + 1)))
 		{
 			InflictedAnomaly found = curStatus.Find(item => item.info.Id == (((int)anomaly) + 1));
@@ -132,11 +185,18 @@ public class UnitMover : MonoBehaviour
 		}
 		else
 		{
-			curStatus.Add(new InflictedAnomaly(StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)], 1));
+			InflictedAnomaly ano = new InflictedAnomaly(StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)], amt);
+			curStatus.Add(ano);
+			if(amt >= StatusManager.instance.allAnomalies.allAnomalies[((int)anomaly)].minActivate)
+			{
+				ano.info.onActivated?.Invoke(this, inflicter);
+			}
 		}
 	}
 	public void DisflictDistort(MoverChecker inflicter, AnomalyIndex anomaly, int amt = 1)
 	{
+		if(amt <= 0)
+			return;
 		if (curStatus.Exists(item => item.info.Id == (((int)anomaly) + 1)))
 		{
 			InflictedAnomaly found = curStatus.Find(item => item.info.Id == (((int)anomaly) + 1));
